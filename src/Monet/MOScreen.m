@@ -62,7 +62,7 @@
 	atexit(&SDL_Quit);
 
 	// Create screen
-	surface = SDL_SetVideoMode(size.width, size.height, 32, SDL_SWSURFACE);
+	surface = SDL_SetVideoMode(size.w, size.h, 32, SDL_SWSURFACE);
 	if(!surface)
 		[NSException raise:@"SDLException" format:@"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
 

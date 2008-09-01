@@ -4,11 +4,8 @@
 #import <Monet/MOPoint.h>
 #import <Monet/MOSize.h>
 
-typedef struct _MORect {
-	MOPoint	origin;
-	MOSize	size;
-} MORect;
+typedef SDL_Rect MORect;
 
-MORect MOMakeRect(SInt16 aX, SInt16 aY, UInt16 aWidth, UInt16 aHeight);
+MORect MOMakeRect(SInt16 aX, SInt16 aY, UInt16 aW, UInt16 aH);
 
 void MOFillRect(MORect aRect, MOColor aColor);

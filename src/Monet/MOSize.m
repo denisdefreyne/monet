@@ -1,11 +1,11 @@
 #import <Monet/MOSize.h>
 
-MOSize MOMakeSize(UInt16 aWidth, UInt16 aHeight)
+MOSize MOMakeSize(UInt16 aW, UInt16 aH)
 {
 	MOSize size;
 
-	size.width	= aWidth;
-	size.height	= aHeight;
+	size.w	= aW;
+	size.h	= aH;
 
 	return size;
 }

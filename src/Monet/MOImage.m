@@ -62,16 +62,18 @@
 	SDL_Surface *srcSurface	= surface;
 	SDL_Surface *dstSurface	= [context surface];
 
+	// Get clip rect
+	MORect clipRect = [context rect];
+
 	// Get destination rect
-	MORect rect = [context rect];
-	SDL_Rect dstRect;
-	dstRect.x = rect.origin.x + aPoint.x;
-	dstRect.y = rect.origin.y + aPoint.y;
-	dstRect.w = rect.size.width;
-	dstRect.h = rect.size.height;
+	MORect dstRect = [context rect];
+	dstRect.x += aPoint.x;
+	dstRect.y += aPoint.y;
 
 	// Blit
+	SDL_SetClipRect(dstSurface, &clipRect);
 	SDL_BlitSurface(srcSurface, NULL, dstSurface, &dstRect);
+	SDL_SetClipRect(dstSurface, NULL);
 }
 
 @end

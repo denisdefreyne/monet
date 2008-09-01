@@ -12,8 +12,8 @@
 	{
 		frame = aFrame;
 
-		bounds.origin = MOMakePoint(0, 0);
-		bounds.size = frame.size;
+		bounds.w = frame.w;
+		bounds.h = frame.h;
 
 		subviews = [[NSMutableArray alloc] init];
 	}
@@ -72,7 +72,7 @@
 
 - (MOPoint)absoluteOrigin
 {
-	return [superview convertPointToScreen:frame.origin];
+	return [superview convertPointToScreen:MOMakePoint(frame.x, frame.y)];
 }
 
 - (MOPoint)convertPointFromScreen:(MOPoint)aPoint
@@ -120,7 +120,7 @@
 
 		// Get clipping rectangle
 		MOPoint absoluteOrigin = [self absoluteOrigin];
-		MORect rect = MOMakeRect(absoluteOrigin.x, absoluteOrigin.y, frame.size.width, frame.size.height);
+		MORect rect = MOMakeRect(absoluteOrigin.x, absoluteOrigin.y, frame.w, frame.h);
 
 		// Create graphics context
 		graphicsContext = [[MOGraphicsContext alloc] initWithSurface:surface rect:rect];
