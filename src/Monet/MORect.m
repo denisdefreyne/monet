@@ -19,13 +19,15 @@ void MOFillRect(MORect aRect, MOColor aColor)
 	SDL_Surface			*surface			= [graphicsContext surface];
 	MORect				rect				= [graphicsContext rect];
 
-	// Update draw rect
-	aRect.x = rect.x;
-	aRect.y = rect.y;
+	// Translate source rect
+	aRect.x += rect.x;
+	aRect.y += rect.y;
 
 	// Convert color
 	Uint32 sdlColor = SDL_MapRGB(surface->format, aColor.color.r, aColor.color.g, aColor.color.b);
 
 	// Fill
-	SDL_FillRect(surface, &rect, sdlColor);
+	SDL_SetClipRect(surface, &rect);
+	SDL_FillRect(surface, &aRect, sdlColor);
+	SDL_SetClipRect(surface, NULL);
 }
