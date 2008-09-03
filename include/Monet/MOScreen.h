@@ -40,6 +40,7 @@
 - (void)enterRunloop;
 - (void)close;
 
+- (void)screenReady;
 - (void)update;
 
 @end

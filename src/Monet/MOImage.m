@@ -12,9 +12,16 @@
 {
 	if(self = [super init])
 	{
-		surface = IMG_Load([aFilename UTF8String]);
-		if(!surface)
+		// Load file
+		SDL_Surface *tmpSurface = IMG_Load([aFilename UTF8String]);
+		if(!tmpSurface)
 			[NSException raise:@"SDLException" format:@"IMG_Load failed: %s\n", SDL_GetError()];
+
+		// Optimize surface
+		surface = SDL_DisplayFormat(tmpSurface);
+		if(!surface)
+			[NSException raise:@"SDLException" format:@"SDL_DisplayFormat failed: %s\n", SDL_GetError()];
+		SDL_FreeSurface(tmpSurface);
 	}
 
 	return self;

@@ -50,12 +50,15 @@
 	atexit(&SDL_Quit);
 
 	// Create screen
-	surface = SDL_SetVideoMode(size.w, size.h, 32, SDL_SWSURFACE);
+	surface = SDL_SetVideoMode(size.w, size.h, 32, SDL_SWSURFACE | SDL_FULLSCREEN);
 	if(!surface)
 		[NSException raise:@"SDLException" format:@"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
 
 	// We're open!
 	isOpen = YES;
+
+	// Notify
+	[self screenReady];
 }
 
 #define TICKS_PER_SECOND	(30)
@@ -138,6 +141,11 @@
 }
 
 #pragma mark -
+
+- (void)screenReady
+{
+	// Do nothing by default
+}
 
 - (void)update
 {
