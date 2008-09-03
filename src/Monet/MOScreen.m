@@ -28,8 +28,6 @@
 	[aContentView retain];
 	[contentView release];
 	contentView = aContentView;
-
-	[contentView setScreen:self];
 }
 
 - (MOSize)size

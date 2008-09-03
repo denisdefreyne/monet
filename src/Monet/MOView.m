@@ -6,11 +6,13 @@
 
 @implementation MOView
 
-- (id)initWithFrame:(MORect)aFrame
+- (id)initWithFrame:(MORect)aFrame screen:(MOScreen *)aScreen
 {
 	if(self = [super init])
 	{
 		frame = aFrame;
+
+		screen = aScreen;
 
 		bounds.w = frame.w;
 		bounds.h = frame.h;
@@ -38,12 +40,6 @@
 		screen = [superview screen];
 
 	return screen;
-}
-
-- (void)setScreen:(MOScreen *)aScreen
-{
-	// Don't retain
-	screen = aScreen;
 }
 
 - (MOView *)superview

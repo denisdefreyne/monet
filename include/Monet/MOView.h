@@ -18,10 +18,9 @@
 	MOGraphicsContext	*graphicsContext;
 }
 
-- (id)initWithFrame:(MORect)aFrame;
+- (id)initWithFrame:(MORect)aFrame screen:(MOScreen *)aScreen;
 
 - (MOScreen *)screen;
-- (void)setScreen:(MOScreen *)aScreen;
 - (MOView *)superview;
 - (NSMutableArray *)subviews;
 - (void)addSubview:(MOView *)aSubview;
