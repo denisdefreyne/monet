@@ -40,16 +40,6 @@
 	size = aSize;
 }
 
-- (UInt8)ticksPerSecond
-{
-	return ticksPerSecond;
-}
-
-- (void)setTicksPerSecond:(UInt8)aTicksPerSecond
-{
-	ticksPerSecond = aTicksPerSecond;
-}
-
 #pragma mark -
 
 - (void)open

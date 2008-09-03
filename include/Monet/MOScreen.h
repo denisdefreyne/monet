@@ -16,10 +16,6 @@
 	// Image and buffer
 	SDL_Surface		*surface;
 
-	// Timer stuff
-	unsigned int	ticksPerSecond;
-	SDL_TimerID		timerID;
-
 	// Running or not?
 	BOOL			isOpen;
 
@@ -39,8 +35,6 @@
 - (void)setContentView:(MOView *)aContentView;
 - (MOSize)size;
 - (void)setSize:(MOSize)aSize;
-- (UInt8)ticksPerSecond;
-- (void)setTicksPerSecond:(UInt8)aTicksPerSecond;
 
 - (void)open;
 - (void)enterRunloop;
