@@ -50,9 +50,16 @@
 	atexit(&SDL_Quit);
 
 	// Create screen
-	surface = SDL_SetVideoMode(size.w, size.h, 32, SDL_SWSURFACE | SDL_FULLSCREEN);
-	if(!surface)
-		[NSException raise:@"SDLException" format:@"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
+	Uint32 flags = SDL_SWSURFACE | SDL_HWACCEL | SDL_ASYNCBLIT | SDL_RLEACCEL | SDL_FULLSCREEN;
+	if(SDL_VideoModeOK(size.w, size.h, 32, flags))
+		surface = SDL_SetVideoMode(size.w, size.h, 32, flags);
+	else
+	{
+		NSLog(@"Falling back to software surface");
+		surface = SDL_SetVideoMode(size.w, size.h, 32, SDL_SWSURFACE);
+		if(!surface)
+			[NSException raise:@"SDLException" format:@"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
+	}
 
 	// We're open!
 	isOpen = YES;
