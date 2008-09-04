@@ -40,6 +40,16 @@
 	size = aSize;
 }
 
+- (BOOL)isFullscreen
+{
+	return isFullscreen;
+}
+
+- (void)setFullscreen:(BOOL)aIsFullscreen
+{
+	isFullscreen = aIsFullscreen;
+}
+
 #pragma mark -
 
 - (void)open
@@ -50,7 +60,7 @@
 	atexit(&SDL_Quit);
 
 	// Create screen
-	Uint32 flags = SDL_SWSURFACE | SDL_HWACCEL | SDL_ASYNCBLIT | SDL_RLEACCEL | SDL_FULLSCREEN;
+	Uint32 flags = SDL_SWSURFACE | SDL_HWACCEL | SDL_ASYNCBLIT | SDL_RLEACCEL | (isFullscreen ? SDL_FULLSCREEN : 0);
 	if(SDL_VideoModeOK(size.w, size.h, 32, flags))
 		surface = SDL_SetVideoMode(size.w, size.h, 32, flags);
 	else

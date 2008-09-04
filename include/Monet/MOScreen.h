@@ -12,6 +12,7 @@
 {
 	// Dimensions
 	MOSize			size;
+	BOOL			isFullscreen;
 
 	// Image and buffer
 	SDL_Surface		*surface;
@@ -35,6 +36,8 @@
 - (void)setContentView:(MOView *)aContentView;
 - (MOSize)size;
 - (void)setSize:(MOSize)aSize;
+- (BOOL)isFullscreen;
+- (void)setFullscreen:(BOOL)aIsFullscreen;
 
 - (void)open;
 - (void)enterRunloop;
