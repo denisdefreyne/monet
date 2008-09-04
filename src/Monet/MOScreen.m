@@ -71,6 +71,16 @@
 			[NSException raise:@"SDLException" format:@"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
 	}
 
+	// Ignore unused events
+	SDL_EventState(SDL_JOYAXISMOTION,	SDL_IGNORE);
+	SDL_EventState(SDL_JOYBALLMOTION,	SDL_IGNORE);
+	SDL_EventState(SDL_JOYHATMOTION,	SDL_IGNORE);
+	SDL_EventState(SDL_JOYBUTTONDOWN,	SDL_IGNORE);
+	SDL_EventState(SDL_JOYBUTTONUP,		SDL_IGNORE);
+	SDL_EventState(SDL_SYSWMEVENT,		SDL_IGNORE);
+	SDL_EventState(SDL_VIDEORESIZE,		SDL_IGNORE);
+	SDL_EventState(SDL_VIDEOEXPOSE,		SDL_IGNORE);
+
 	// We're open!
 	isOpen = YES;
 
