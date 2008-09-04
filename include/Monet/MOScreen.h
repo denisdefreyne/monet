@@ -43,7 +43,7 @@
 - (void)enterRunloop;
 - (void)close;
 
-- (void)screenReady;
+- (void)screenDidLoad;
 - (void)update;
 
 @end

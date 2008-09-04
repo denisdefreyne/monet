@@ -75,7 +75,7 @@
 	isOpen = YES;
 
 	// Notify
-	[self screenReady];
+	[self screenDidLoad];
 }
 
 #define TICKS_PER_SECOND	(30)
@@ -159,7 +159,7 @@
 
 #pragma mark -
 
-- (void)screenReady
+- (void)screenDidLoad
 {
 	// Do nothing by default
 }
