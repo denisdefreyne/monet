@@ -1,7 +1,11 @@
 #import <Monet/MOScreen.h>
 
+#import <Foundation/Foundation.h>
+
+#import <Monet/MOEvent.h>
 #import <Monet/MOSpeedCounter.h>
 #import <Monet/MOView.h>
+#import <Monet/Private.h>
 
 @implementation MOScreen
 
@@ -81,6 +85,9 @@
 	SDL_EventState(SDL_VIDEORESIZE,		SDL_IGNORE);
 	SDL_EventState(SDL_VIDEOEXPOSE,		SDL_IGNORE);
 
+	// Make sure key down event have unicode
+	SDL_EnableUNICODE(1);
+
 	// We're open!
 	isOpen = YES;
 
@@ -119,10 +126,48 @@
 						break;
 
 					case SDL_KEYDOWN:
-						[self close];
+						if(event.key.keysym.sym == SDLK_ESCAPE)
+							[self close];
+						else
+						{
+							// Get character
+							NSString *character;
+							if(event.key.keysym.unicode == 0)
+								character = @"";
+							else
+								character = [[NSString alloc] initWithCharacters:&event.key.keysym.unicode length:1];
+
+							// Create event
+							MOEvent *moEvent = [[MOEvent alloc] initKeyEventWithType:MOKeyDownEventType
+																modifiers:MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
+																character:character
+																key:MOSDLKeyToMOKey(event.key.keysym.sym)
+							];
+
+							// Dispatch event
+							[contentView keyDown:moEvent];
+
+							// Cleanup
+							[character release];
+							[moEvent release];
+						}
 						break;
 
 					case SDL_KEYUP:
+						{
+							// Create event
+							MOEvent *moEvent = [[MOEvent alloc] initKeyEventWithType:MOKeyUpEventType
+																modifiers:MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
+																character:0
+																key:MOSDLKeyToMOKey(event.key.keysym.sym)
+							];
+
+							// Dispatch event
+							[contentView keyUp:moEvent];
+
+							// Cleanup
+							[moEvent release];
+						}
 						break;
 
 					case SDL_MOUSEMOTION:

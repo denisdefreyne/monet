@@ -1,4 +1,6 @@
-#include <Monet/Monet.h>
+#import <Monet/Monet.h>
+
+#import <SDL/SDL.h>
 
 @interface MOGraphicsContext (Private)
 
@@ -13,3 +15,6 @@
 - (SDL_Surface *)surface;
 
 @end
+
+MOKey MOSDLKeyToMOKey(SDLKey aKey);
+MOKeyModifierMask MOSDLModToMOKeyModifierMask(SDLMod aMod);

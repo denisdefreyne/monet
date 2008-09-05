@@ -2,6 +2,7 @@
 
 #import <Monet/MORect.h>
 
+@class MOEvent;
 @class MOGraphicsContext;
 @class MOScreen;
 
@@ -36,5 +37,10 @@
 
 - (void)display;
 - (void)drawRect:(MORect)aRect;
+
+- (BOOL)keyDown:(MOEvent *)aEvent;
+- (BOOL)keyUp:(MOEvent *)aEvent;
+- (void)mouseDown:(MOEvent *)aEvent;
+- (void)mouseUp:(MOEvent *)aEvent;
 
 @end

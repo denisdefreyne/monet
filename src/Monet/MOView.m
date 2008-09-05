@@ -1,5 +1,6 @@
 #import <Monet/MOView.h>
 
+#import <Monet/MOEvent.h>
 #import <Monet/MOScreen.h>
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
@@ -149,6 +150,48 @@
 - (void)drawRect:(MORect)aRect
 {
 	// Do nothing by default
+}
+
+#pragma mark -
+
+- (BOOL)keyDown:(MOEvent *)aEvent
+{
+	NSEnumerator *enumerator = [subviews objectEnumerator];
+	MOView *subview = nil;
+	BOOL isHandled = NO;
+	while(subview = [enumerator nextObject])
+	{
+		isHandled = [subview keyDown:aEvent];
+		if(isHandled)
+			break;
+	}
+
+	return isHandled;
+}
+
+- (BOOL)keyUp:(MOEvent *)aEvent
+{
+	NSEnumerator *enumerator = [subviews objectEnumerator];
+	MOView *subview = nil;
+	BOOL isHandled = NO;
+	while(subview = [enumerator nextObject])
+	{
+		isHandled = [subview keyUp:aEvent];
+		if(isHandled)
+			break;
+	}
+
+	return isHandled;
+}
+
+- (void)mouseDown:(MOEvent *)aEvent
+{
+	;
+}
+
+- (void)mouseUp:(MOEvent *)aEvent
+{
+	;
 }
 
 @end
