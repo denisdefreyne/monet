@@ -92,3 +92,15 @@ MOKeyModifierMask MOSDLModToMOKeyModifierMask(SDLMod aMod)
 
 	return keyModifierMask;
 }
+
+MOMouseButton MOSDLMouseButtonToMOMouseButton(Uint8 aButton)
+{
+	switch(aButton)
+	{
+		case SDL_BUTTON_LEFT:	return MOLeftMouseButton;
+		case SDL_BUTTON_MIDDLE:	return MOLeftMouseButton;
+		case SDL_BUTTON_RIGHT:	return MOLeftMouseButton;
+
+		default:				return MOUnknownMouseButton;
+	}
+}

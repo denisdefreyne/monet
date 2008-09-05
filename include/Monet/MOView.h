@@ -29,6 +29,9 @@
 - (MOPoint)convertPointFromScreen:(MOPoint)aPoint;
 - (MOPoint)convertPointToScreen:(MOPoint)aPoint;
 
+- (MOView *)subviewAtPoint:(MOPoint)aPoint;
+- (MOView *)deepestSubviewAtPoint:(MOPoint)aPoint;
+
 - (MORect)frame;
 - (MORect)bounds;
 

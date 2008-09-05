@@ -1,5 +1,7 @@
 #import <Foundation/Foundation.h>
 
+#import <Monet/MOPoint.h>
+
 // Keyboard events example:
 //
 // Support you type SHIFT-OPTION-O to get an Ø character. The following
@@ -29,6 +31,8 @@ typedef enum _MOEventType {
 } MOEventType;
 
 typedef enum _MOMouseButton {
+	MOUnknownMouseButton = 0,
+
 	MOLeftMouseButton,
 	MOMiddleMouseButton,
 	MORightMouseButton
@@ -88,11 +92,12 @@ typedef enum _MOKeyModifierMask {
 	MOKey			key;
 
 	MOMouseButton	mouseButton;
+	MOPoint			mouseLocation;
 	UInt8			clickCount;
 }
 
 - (id)initKeyEventWithType:(MOEventType)aType modifiers:(UInt8)aModifiers character:(NSString *)aCharacter key:(MOKey)aKey;
-- (id)initMouseButtonEventWithType:(MOEventType)aType modifiers:(UInt8)aModifiers mouseButton:(MOMouseButton)aMouseButton clickCount:(UInt8)aClickCount;
+- (id)initMouseButtonEventWithType:(MOEventType)aType modifiers:(UInt8)aModifiers mouseButton:(MOMouseButton)aMouseButton mouseLocation:(MOPoint)aMouseLocation clickCount:(UInt8)aClickCount;
 
 // General
 

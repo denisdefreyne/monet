@@ -31,3 +31,9 @@ void MOFillRect(MORect aRect, MOColor aColor)
 	SDL_FillRect(surface, &aRect, sdlColor);
 	SDL_SetClipRect(surface, NULL);
 }
+
+BOOL MORectContainsPoint(MORect aRect, MOPoint aPoint)
+{
+	return	(aPoint.x >= aRect.x && aPoint.x < aRect.x + aRect.w) &&
+			(aPoint.y >= aRect.y && aPoint.y < aRect.y + aRect.h);
+}

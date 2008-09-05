@@ -96,6 +96,39 @@
 
 #pragma mark -
 
+// aPoint is relative to the screen here, not the view.
+- (MOView *)subviewAtPoint:(MOPoint)aPoint
+{
+	NSEnumerator *enumerator = [subviews objectEnumerator];
+	MOView *subview = nil;
+	while(subview = [enumerator nextObject])
+	{
+		if(MORectContainsPoint([subview bounds], [subview convertPointFromScreen:aPoint]))
+			return subview;
+	}
+
+	return nil;
+}
+
+// aPoint is relative to the screen here, not the view.
+- (MOView *)deepestSubviewAtPoint:(MOPoint)aPoint
+{
+	// Find deepest subview
+	MOView *subview = self;
+	while(YES)
+	{
+		MOView *newSubview = [subview subviewAtPoint:aPoint];
+		if(newSubview)
+			subview = newSubview;
+		else
+			break;
+	}
+
+	return subview;
+}
+
+#pragma mark -
+
 - (MORect)frame
 {
 	return frame;
@@ -186,12 +219,12 @@
 
 - (void)mouseDown:(MOEvent *)aEvent
 {
-	;
+	[superview mouseDown:aEvent];
 }
 
 - (void)mouseUp:(MOEvent *)aEvent
 {
-	;
+	[superview mouseUp:aEvent];
 }
 
 @end

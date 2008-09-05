@@ -174,9 +174,85 @@
 						break;
 
 					case SDL_MOUSEBUTTONDOWN:
+						{
+							// Get event information
+							MOPoint mouseLocation		= MOMakePoint(event.button.x, event.button.y);
+							MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
+							UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
+
+							// Find deepest subview
+							MOView *subview = [contentView deepestSubviewAtPoint:mouseLocation];
+
+							// Set last view receiving event
+							switch(mouseButton)
+							{
+								case MOLeftMouseButton:
+									lastLeftMouseButtonDownView = subview;
+									break;
+
+								case MOMiddleMouseButton:
+									lastMiddleMouseButtonDownView = subview;
+									break;
+
+								case MORightMouseButton:
+									lastRightMouseButtonDownView = subview;
+									break;
+							}
+
+							// Create event
+							MOEvent *moEvent = [[MOEvent alloc] initMouseButtonEventWithType:MOMouseButtonDownEventType
+																modifiers:modifiers
+																mouseButton:mouseButton
+																mouseLocation:mouseLocation
+																clickCount:1 // FIXME set correct click count
+							];
+
+							// Dispatch event
+							[subview mouseDown:moEvent];
+
+							// Cleanup
+							[moEvent release];
+						}
 						break;
 
 					case SDL_MOUSEBUTTONUP:
+						{
+							// Get event information
+							MOPoint mouseLocation		= MOMakePoint(event.button.x, event.button.y);
+							MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
+							UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
+
+							// Find subview
+							MOView *subview = nil;
+							switch(mouseButton)
+							{
+								case MOLeftMouseButton:
+									subview = lastLeftMouseButtonDownView;
+									break;
+
+								case MOMiddleMouseButton:
+									subview = lastMiddleMouseButtonDownView;
+									break;
+
+								case MORightMouseButton:
+									subview = lastRightMouseButtonDownView;
+									break;
+							}
+
+							// Create event
+							MOEvent *moEvent = [[MOEvent alloc] initMouseButtonEventWithType:MOMouseButtonUpEventType
+																modifiers:modifiers
+																mouseButton:mouseButton
+																mouseLocation:mouseLocation
+																clickCount:1 // FIXME set correct click count
+							];
+
+							// Dispatch event
+							[subview mouseUp:moEvent];
+
+							// Cleanup
+							[moEvent release];
+						}
 						break;
 
 					case SDL_QUIT:
@@ -210,6 +286,16 @@
 - (void)close
 {
 	isOpen = NO;
+}
+
+#pragma mark -
+
+- (MOPoint)mouseLocation
+{
+	int x,y;
+	SDL_GetMouseState(&x, &y);
+
+	return MOMakePoint(x, y);
 }
 
 #pragma mark -

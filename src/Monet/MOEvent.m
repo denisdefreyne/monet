@@ -16,15 +16,16 @@
 	return self;
 }
 
-- (id)initMouseButtonEventWithType:(MOEventType)aType modifiers:(UInt8)aModifiers mouseButton:(MOMouseButton)aMouseButton clickCount:(UInt8)aClickCount
+- (id)initMouseButtonEventWithType:(MOEventType)aType modifiers:(UInt8)aModifiers mouseButton:(MOMouseButton)aMouseButton mouseLocation:(MOPoint)aMouseLocation clickCount:(UInt8)aClickCount
 {
 	if(self = [super init])
 	{
-		type		= aType;
-		modifiers	= aModifiers;
+		type			= aType;
+		modifiers		= aModifiers;
 
-		mouseButton	= aMouseButton;
-		clickCount	= aClickCount;
+		mouseButton		= aMouseButton;
+		mouseLocation	= aMouseLocation;
+		clickCount		= aClickCount;
 	}
 
 	return self;
@@ -66,6 +67,11 @@
 - (MOMouseButton)mouseButton
 {
 	return mouseButton;
+}
+
+- (MOPoint)mouseLocation
+{
+	return mouseLocation;
 }
 
 - (UInt8)clickCount

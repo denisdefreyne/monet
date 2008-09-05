@@ -18,3 +18,4 @@
 
 MOKey MOSDLKeyToMOKey(SDLKey aKey);
 MOKeyModifierMask MOSDLModToMOKeyModifierMask(SDLMod aMod);
+MOMouseButton MOSDLMouseButtonToMOMouseButton(Uint8 aButton);

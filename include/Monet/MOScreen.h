@@ -21,15 +21,15 @@
 	BOOL			isOpen;
 
 	// Content view
-	Class			contentViewClass;
 	MOView			*contentView;
 
 	// FPS counter
 	MOSpeedCounter	*fpsCounter;
 
-	// State information
-	BOOL			leftMouseDown;
-	BOOL			rightMouseDown;
+	// Recent views receiving mouse button events
+	MOView			*lastLeftMouseButtonDownView;
+	MOView			*lastMiddleMouseButtonDownView;
+	MOView			*lastRightMouseButtonDownView;
 }
 
 - (MOView *)contentView;
