@@ -5,6 +5,12 @@
 #import <Monet/MOPoint.h>
 #import <Monet/MORect.h>
 
+typedef enum _MOTransparencyType {
+	MOOpaqueTransparencyType,
+	MOAlphaChannelTransparencyType,
+	MOColorKeyTransparencyType
+} MOTransparencyType;
+
 @class MOGraphicsContext;
 
 @interface MOImage : NSObject
@@ -15,6 +21,7 @@
 }
 
 - (id)initWithContentsOfFile:(NSString *)aFilename;
+- (id)initWithContentsOfFile:(NSString *)aFilename transparencyType:(MOTransparencyType)aTransparencytype;
 
 - (void)lockFocus;
 - (void)unlockFocus;

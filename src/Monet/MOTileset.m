@@ -5,6 +5,16 @@
 
 @implementation MOTileset
 
+- (id)initWithContentsOfFile:(NSString *)aFilename transparencyType:(MOTransparencyType)aTransparencytype tileSize:(MOSize)aTileSize
+{
+	if(self = [super initWithContentsOfFile:aFilename transparencyType:aTransparencytype])
+	{
+		tileSize = aTileSize;
+	}
+
+	return self;
+}
+
 - (id)initWithContentsOfFile:(NSString *)aFilename tileSize:(MOSize)aTileSize
 {
 	if(self = [super initWithContentsOfFile:aFilename])

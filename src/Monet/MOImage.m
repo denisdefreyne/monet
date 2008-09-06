@@ -10,6 +10,11 @@
 
 - (id)initWithContentsOfFile:(NSString *)aFilename
 {
+	return [self initWithContentsOfFile:aFilename transparencyType:MOOpaqueTransparencyType];
+}
+
+- (id)initWithContentsOfFile:(NSString *)aFilename transparencyType:(MOTransparencyType)aTransparencytype
+{
 	if(self = [super init])
 	{
 		// Load file
@@ -18,7 +23,20 @@
 			[NSException raise:@"SDLException" format:@"IMG_Load failed: %s\n", SDL_GetError()];
 
 		// Optimize surface
-		surface = SDL_DisplayFormat(tmpSurface);
+		switch(aTransparencytype)
+		{
+			case MOOpaqueTransparencyType:
+				surface = SDL_DisplayFormat(tmpSurface);
+				break;
+
+			case MOAlphaChannelTransparencyType:
+				surface = SDL_DisplayFormatAlpha(tmpSurface);
+				break;
+
+			case MOColorKeyTransparencyType:
+				// TODO implement
+				break;
+		}
 		if(!surface)
 			[NSException raise:@"SDLException" format:@"SDL_DisplayFormat failed: %s\n", SDL_GetError()];
 		SDL_FreeSurface(tmpSurface);

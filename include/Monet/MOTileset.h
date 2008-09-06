@@ -8,6 +8,7 @@
 }
 
 - (id)initWithContentsOfFile:(NSString *)aFilename tileSize:(MOSize)aTileSize;
+- (id)initWithContentsOfFile:(NSString *)aFilename transparencyType:(MOTransparencyType)aTransparencytype tileSize:(MOSize)aTileSize;
 
 - (MOSize)tileSize;
 
