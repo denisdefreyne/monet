@@ -2,6 +2,7 @@
 
 #import <SDL/SDL.h>
 
+#import <Monet/MOPoint.h>
 #import <Monet/MOSize.h>
 
 @class MOSpeedCounter;
@@ -45,6 +46,8 @@
 - (void)open;
 - (void)enterRunloop;
 - (void)close;
+
+- (MOPoint)mouseLocation;
 
 - (void)screenDidLoad;
 - (void)update;
