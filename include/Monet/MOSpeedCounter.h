@@ -1,5 +1,7 @@
 #import <Foundation/Foundation.h>
 
+#import <Monet/Types.h>
+
 @interface MOSpeedCounter : NSObject
 {
 	time_t	lastSecond;

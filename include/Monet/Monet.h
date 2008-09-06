@@ -1,3 +1,5 @@
+#import <Monet/Types.h>
+
 #import <Monet/MOColor.h>
 #import <Monet/MOEvent.h>
 #import <Monet/MOGraphicsContext.h>
