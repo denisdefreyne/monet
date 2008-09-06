@@ -1,8 +1,8 @@
 #import <Monet/MOButton.h>
 
-@implementation MOButton
+#import <Monet/MOScreen.h>
 
-// TODO track mouse enters/exits
+@implementation MOButton
 
 - (id)initWithFrame:(MORect)aFrame screen:(MOScreen *)aScreen
 {
@@ -19,8 +19,7 @@
 
 - (BOOL)isPressed
 {
-	//return (isMouseDown && isMouseInside);
-	return isMouseDown;
+	return isMouseDown && MORectContainsPoint([self bounds], [self convertPointFromScreen:[[self screen] mouseLocation]]);
 }
 
 - (void)clicked
