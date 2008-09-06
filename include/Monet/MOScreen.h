@@ -10,26 +10,29 @@
 
 @interface MOScreen : NSObject
 {
+	// Pool
+	NSAutoreleasePool	*autoreleasePool;
+
 	// Dimensions
-	MOSize			size;
-	BOOL			isFullscreen;
+	MOSize				size;
+	BOOL				isFullscreen;
 
 	// Image and buffer
-	SDL_Surface		*surface;
+	SDL_Surface			*surface;
 
 	// Running or not?
-	BOOL			isOpen;
+	BOOL				isOpen;
 
 	// Content view
-	MOView			*contentView;
+	MOView				*contentView;
 
 	// FPS counter
-	MOSpeedCounter	*fpsCounter;
+	MOSpeedCounter		*fpsCounter;
 
 	// Recent views receiving mouse button events
-	MOView			*lastLeftMouseButtonDownView;
-	MOView			*lastMiddleMouseButtonDownView;
-	MOView			*lastRightMouseButtonDownView;
+	MOView				*lastLeftMouseButtonDownView;
+	MOView				*lastMiddleMouseButtonDownView;
+	MOView				*lastRightMouseButtonDownView;
 }
 
 - (MOView *)contentView;

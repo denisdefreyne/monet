@@ -7,6 +7,22 @@
 #import <Monet/MOView.h>
 #import <Monet/Private.h>
 
+@interface MOScreen (Autoreleasing)
+
+- (void)refreshAutoreleasePool;
+
+@end
+
+@implementation MOScreen (Autoreleasing)
+
+- (void)refreshAutoreleasePool
+{
+	[autoreleasePool release];
+	autoreleasePool = [[NSAutoreleasePool alloc] init];
+}
+
+@end
+
 @implementation MOScreen
 
 - (void)dealloc
@@ -58,6 +74,9 @@
 
 - (void)open
 {
+	// Setup autorelease pool
+	[self refreshAutoreleasePool];
+
 	// Initialize SDL
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 		[NSException raise:@"SDLException" format:@"SDL_Init failed: %s\n", SDL_GetError()];
@@ -268,6 +287,9 @@
 			[updateSpeedCounter tick];
 			if([updateSpeedCounter isAtNewSecond])
 				printf("[speed update]    %u\n", [updateSpeedCounter ticksPerSecond]);
+
+			// Empty autorelease pool
+			[self refreshAutoreleasePool];
 
 			nextTick += TICK_LENGTH;
 		}
