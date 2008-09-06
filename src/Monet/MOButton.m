@@ -23,7 +23,7 @@
 	return isMouseDown;
 }
 
-- (void)buttonClicked
+- (void)clicked
 {
 	// Do nothing by default
 }
@@ -37,6 +37,9 @@
 
 - (void)mouseUp:(MOEvent *)aEvent
 {
+	if([self isPressed])
+		[self clicked];
+
 	isMouseDown = NO;
 }
 

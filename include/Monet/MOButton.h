@@ -8,6 +8,6 @@
 
 - (BOOL)isPressed;
 
-- (void)buttonClicked;
+- (void)button;
 
 @end
