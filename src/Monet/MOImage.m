@@ -45,6 +45,25 @@
 	return self;
 }
 
+- (id)initWithWidth:(UInt16)aWidth height:(UInt16)aHeight
+{
+	if(self = [super init])
+	{
+		// Create surface
+		SDL_Surface *tmpSurface = SDL_CreateRGBSurface(0, aWidth, aHeight, 32, 0, 0, 0, 0);
+		if(!tmpSurface)
+			[NSException raise:@"SDLException" format:@"SDL_CreateRGBSurface failed: %s\n", SDL_GetError()];
+
+		// Optimize surface
+		surface = SDL_DisplayFormat(tmpSurface);
+		if(!surface)
+			[NSException raise:@"SDLException" format:@"SDL_DisplayFormat failed: %s\n", SDL_GetError()];
+		SDL_FreeSurface(tmpSurface);
+	}
+
+	return self;
+}
+
 - (void)dealloc
 {
 	SDL_FreeSurface(surface);

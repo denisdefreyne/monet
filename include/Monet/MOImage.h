@@ -22,6 +22,7 @@ typedef enum _MOTransparencyType {
 
 - (id)initWithContentsOfFile:(NSString *)aFilename;
 - (id)initWithContentsOfFile:(NSString *)aFilename transparencyType:(MOTransparencyType)aTransparencytype;
+- (id)initWithWidth:(UInt16)aWidth height:(UInt16)aHeight;
 
 - (void)lockFocus;
 - (void)unlockFocus;
