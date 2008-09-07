@@ -32,6 +32,14 @@ void MOFillRect(MORect aRect, MOColor aColor)
 	SDL_SetClipRect(surface, NULL);
 }
 
+void MOStrokeRect(MORect aRect, MOColor aColor)
+{
+	MOFillRect(MOMakeRect(aRect.x,					aRect.y,				aRect.w,	1		), aColor);
+	MOFillRect(MOMakeRect(aRect.x,					aRect.y,				1,			aRect.h	), aColor);
+	MOFillRect(MOMakeRect(aRect.x,					aRect.y + aRect.h - 1,	aRect.w,	1		), aColor);
+	MOFillRect(MOMakeRect(aRect.x + aRect.w - 1,	aRect.y,				1,			aRect.h	), aColor);
+}
+
 BOOL MORectContainsPoint(MORect aRect, MOPoint aPoint)
 {
 	return	(aPoint.x >= aRect.x && aPoint.x < aRect.x + aRect.w) &&
