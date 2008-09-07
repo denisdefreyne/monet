@@ -25,6 +25,16 @@
 
 @implementation MOScreen
 
+- (id)init
+{
+	if(self = [super init])
+	{
+		ticksPerSecond = 30;
+	}
+
+	return self;
+}
+
 - (void)dealloc
 {
 	SDL_FreeSurface(surface);
@@ -68,6 +78,16 @@
 - (void)setFullscreen:(BOOL)aIsFullscreen
 {
 	isFullscreen = aIsFullscreen;
+}
+
+- (UInt8)ticksPerSecond
+{
+	return ticksPerSecond;
+}
+
+- (void)setTicksPerSecond:(UInt8)aTicksPerSecond
+{
+	ticksPerSecond = aTicksPerSecond;
 }
 
 #pragma mark -
@@ -114,10 +134,7 @@
 	[self screenDidLoad];
 }
 
-#define TICKS_PER_SECOND	(30)
 #define MAX_FRAMESKIP		(5)
-
-#define TICK_LENGTH			(1000/TICKS_PER_SECOND)
 
 - (void)enterRunloop
 {
@@ -125,7 +142,8 @@
 	MOSpeedCounter *updateSpeedCounter	= [[MOSpeedCounter alloc] init];
 	MOSpeedCounter *drawSpeedCounter	= [[MOSpeedCounter alloc] init];
 
-	Uint32 nextTick = SDL_GetTicks();
+	Uint32	tickLength		= 1000/ticksPerSecond;
+	Uint32	nextTick		= SDL_GetTicks();
 	while(isOpen)
 	{
 		int iteration;
@@ -291,7 +309,7 @@
 			// Empty autorelease pool
 			[self refreshAutoreleasePool];
 
-			nextTick += TICK_LENGTH;
+			nextTick += tickLength;
 		}
 
 		// Redraw
