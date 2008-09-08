@@ -28,7 +28,8 @@
 	MOView				*contentView;
 
 	// Timing
-	UInt8				ticksPerSecond;
+	UInt8				gameTicksPerSecond;
+	UInt8				scrollTicksPerSecond;
 
 	// FPS counter
 	MOSpeedCounter		*fpsCounter;
@@ -45,8 +46,10 @@
 - (void)setSize:(MOSize)aSize;
 - (BOOL)isFullscreen;
 - (void)setFullscreen:(BOOL)aIsFullscreen;
-- (UInt8)ticksPerSecond;
-- (void)setTicksPerSecond:(UInt8)aTicksPerSecond;
+- (UInt8)gameTicksPerSecond;
+- (void)setGameTicksPerSecond:(UInt8)aGameTicksPerSecond;
+- (UInt8)scrollTicksPerSecond;
+- (void)setScrollTicksPerSecond:(UInt8)aScrollTicksPerSecond;
 
 - (void)open;
 - (void)enterRunloop;

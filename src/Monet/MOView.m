@@ -166,6 +166,17 @@
 
 #pragma mark -
 
+- (void)scrollIfNecessary
+{
+	// Draw subviews
+	NSEnumerator *enumerator = [subviews objectEnumerator];
+	MOView *subview = nil;
+	while(subview = [enumerator nextObject])
+		[subview scrollIfNecessary];
+}
+
+#pragma mark -
+
 - (void)display
 {
 	// Draw this view

@@ -23,13 +23,175 @@
 
 @end
 
+@interface MOScreen (Runloop)
+
+- (void)handleEvents;
+
+@end
+
+@implementation MOScreen (Runloop)
+
+- (void)handleEvents
+{
+	SDL_Event event;
+	while(SDL_PollEvent(&event))
+	{
+		switch(event.type)
+		{
+			case SDL_ACTIVEEVENT:
+				if(event.active.gain)
+					; // Resume
+				else
+					; // Pause
+				break;
+
+			case SDL_KEYDOWN:
+				if(event.key.keysym.sym == SDLK_ESCAPE)
+					[self close];
+				else
+				{
+					// Get character
+					NSString *character;
+					if(event.key.keysym.unicode == 0)
+						character = @"";
+					else
+						character = [[NSString alloc] initWithCharacters:&event.key.keysym.unicode length:1];
+
+					// Create event
+					MOEvent *moEvent = [[MOEvent alloc] initKeyEventWithType:MOKeyDownEventType
+														modifiers:MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
+														character:character
+														key:MOSDLKeyToMOKey(event.key.keysym.sym)
+					];
+
+					// Dispatch event
+					[contentView keyDown:moEvent];
+
+					// Cleanup
+					[character release];
+					[moEvent release];
+				}
+				break;
+
+			case SDL_KEYUP:
+				{
+					// Create event
+					MOEvent *moEvent = [[MOEvent alloc] initKeyEventWithType:MOKeyUpEventType
+														modifiers:MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
+														character:0
+														key:MOSDLKeyToMOKey(event.key.keysym.sym)
+					];
+
+					// Dispatch event
+					[contentView keyUp:moEvent];
+
+					// Cleanup
+					[moEvent release];
+				}
+				break;
+
+			case SDL_MOUSEMOTION:
+				break;
+
+			case SDL_MOUSEBUTTONDOWN:
+				{
+					// Get event information
+					MOPoint mouseLocation		= MOMakePoint(event.button.x, event.button.y);
+					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
+					UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
+
+					// Find deepest subview
+					MOView *subview = [contentView deepestSubviewAtPoint:mouseLocation];
+
+					// Set last view receiving event
+					switch(mouseButton)
+					{
+						case MOLeftMouseButton:
+							lastLeftMouseButtonDownView = subview;
+							break;
+
+						case MOMiddleMouseButton:
+							lastMiddleMouseButtonDownView = subview;
+							break;
+
+						case MORightMouseButton:
+							lastRightMouseButtonDownView = subview;
+							break;
+					}
+
+					// Create event
+					MOEvent *moEvent = [[MOEvent alloc] initMouseButtonEventWithType:MOMouseButtonDownEventType
+														modifiers:modifiers
+														mouseButton:mouseButton
+														mouseLocation:mouseLocation
+														clickCount:1 // FIXME set correct click count
+					];
+
+					// Dispatch event
+					[subview mouseDown:moEvent];
+
+					// Cleanup
+					[moEvent release];
+				}
+				break;
+
+			case SDL_MOUSEBUTTONUP:
+				{
+					// Get event information
+					MOPoint mouseLocation		= MOMakePoint(event.button.x, event.button.y);
+					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
+					UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
+
+					// Find subview
+					MOView *subview = nil;
+					switch(mouseButton)
+					{
+						case MOLeftMouseButton:
+							subview = lastLeftMouseButtonDownView;
+							break;
+
+						case MOMiddleMouseButton:
+							subview = lastMiddleMouseButtonDownView;
+							break;
+
+						case MORightMouseButton:
+							subview = lastRightMouseButtonDownView;
+							break;
+					}
+
+					// Create event
+					MOEvent *moEvent = [[MOEvent alloc] initMouseButtonEventWithType:MOMouseButtonUpEventType
+														modifiers:modifiers
+														mouseButton:mouseButton
+														mouseLocation:mouseLocation
+														clickCount:1 // FIXME set correct click count
+					];
+
+					// Dispatch event
+					[subview mouseUp:moEvent];
+
+					// Cleanup
+					[moEvent release];
+				}
+				break;
+
+			case SDL_QUIT:
+				[self close];
+				break;
+		}
+	}
+}
+
+@end
+
 @implementation MOScreen
 
 - (id)init
 {
 	if(self = [super init])
 	{
-		ticksPerSecond = 30;
+		gameTicksPerSecond		= 30;
+		scrollTicksPerSecond	= 60;
 	}
 
 	return self;
@@ -80,14 +242,24 @@
 	isFullscreen = aIsFullscreen;
 }
 
-- (UInt8)ticksPerSecond
+- (UInt8)gameTicksPerSecond
 {
-	return ticksPerSecond;
+	return gameTicksPerSecond;
 }
 
-- (void)setTicksPerSecond:(UInt8)aTicksPerSecond
+- (void)setGameTicksPerSecond:(UInt8)aGameTicksPerSecond
 {
-	ticksPerSecond = aTicksPerSecond;
+	gameTicksPerSecond = aGameTicksPerSecond;
+}
+
+- (UInt8)scrollTicksPerSecond
+{
+	return scrollTicksPerSecond;
+}
+
+- (void)setScrollTicksPerSecond:(UInt8)aScrollTicksPerSecond
+{
+	scrollTicksPerSecond = aScrollTicksPerSecond;
 }
 
 #pragma mark -
@@ -138,179 +310,53 @@
 
 - (void)enterRunloop
 {
-	// Create update and draw FPS counters
-	MOSpeedCounter *updateSpeedCounter	= [[MOSpeedCounter alloc] init];
-	MOSpeedCounter *drawSpeedCounter	= [[MOSpeedCounter alloc] init];
+	// Three kind of ticks:
+	// - game tick: when the game advances one step
+	// - draw tick: when the screen is redrawn
+	// - scroll tick: when the view is scrolled (if necessary)
 
-	Uint32	tickLength		= 1000/ticksPerSecond;
-	Uint32	nextTick		= SDL_GetTicks();
+	// Create game and draw FPS counters
+	MOSpeedCounter *gameSpeedCounter	= [[MOSpeedCounter alloc] init];
+	MOSpeedCounter *drawSpeedCounter	= [[MOSpeedCounter alloc] init];
+	MOSpeedCounter *scrollSpeedCounter	= [[MOSpeedCounter alloc] init];
+
+	Uint32	gameTickLength		= 1000/gameTicksPerSecond;
+	Uint32	scrollTickLength	= 1000/scrollTicksPerSecond;
+
+	Uint32	nextGameTick		= SDL_GetTicks();
+	Uint32	nextScrollTick		= SDL_GetTicks();
+
 	while(isOpen)
 	{
-		int iteration;
-		for(iteration = 0; SDL_GetTicks() > nextTick && iteration < MAX_FRAMESKIP; ++iteration)
+		for(int i = 0; SDL_GetTicks() > nextGameTick && i < MAX_FRAMESKIP; ++i)
 		{
-			// Check events
-			SDL_Event event;
-			while(SDL_PollEvent(&event))
-			{
-				switch(event.type)
-				{
-					case SDL_ACTIVEEVENT:
-						if(event.active.gain)
-							; // Resume
-						else
-							; // Pause
-						break;
-
-					case SDL_KEYDOWN:
-						if(event.key.keysym.sym == SDLK_ESCAPE)
-							[self close];
-						else
-						{
-							// Get character
-							NSString *character;
-							if(event.key.keysym.unicode == 0)
-								character = @"";
-							else
-								character = [[NSString alloc] initWithCharacters:&event.key.keysym.unicode length:1];
-
-							// Create event
-							MOEvent *moEvent = [[MOEvent alloc] initKeyEventWithType:MOKeyDownEventType
-																modifiers:MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
-																character:character
-																key:MOSDLKeyToMOKey(event.key.keysym.sym)
-							];
-
-							// Dispatch event
-							[contentView keyDown:moEvent];
-
-							// Cleanup
-							[character release];
-							[moEvent release];
-						}
-						break;
-
-					case SDL_KEYUP:
-						{
-							// Create event
-							MOEvent *moEvent = [[MOEvent alloc] initKeyEventWithType:MOKeyUpEventType
-																modifiers:MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
-																character:0
-																key:MOSDLKeyToMOKey(event.key.keysym.sym)
-							];
-
-							// Dispatch event
-							[contentView keyUp:moEvent];
-
-							// Cleanup
-							[moEvent release];
-						}
-						break;
-
-					case SDL_MOUSEMOTION:
-						break;
-
-					case SDL_MOUSEBUTTONDOWN:
-						{
-							// Get event information
-							MOPoint mouseLocation		= MOMakePoint(event.button.x, event.button.y);
-							MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
-							UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
-
-							// Find deepest subview
-							MOView *subview = [contentView deepestSubviewAtPoint:mouseLocation];
-
-							// Set last view receiving event
-							switch(mouseButton)
-							{
-								case MOLeftMouseButton:
-									lastLeftMouseButtonDownView = subview;
-									break;
-
-								case MOMiddleMouseButton:
-									lastMiddleMouseButtonDownView = subview;
-									break;
-
-								case MORightMouseButton:
-									lastRightMouseButtonDownView = subview;
-									break;
-							}
-
-							// Create event
-							MOEvent *moEvent = [[MOEvent alloc] initMouseButtonEventWithType:MOMouseButtonDownEventType
-																modifiers:modifiers
-																mouseButton:mouseButton
-																mouseLocation:mouseLocation
-																clickCount:1 // FIXME set correct click count
-							];
-
-							// Dispatch event
-							[subview mouseDown:moEvent];
-
-							// Cleanup
-							[moEvent release];
-						}
-						break;
-
-					case SDL_MOUSEBUTTONUP:
-						{
-							// Get event information
-							MOPoint mouseLocation		= MOMakePoint(event.button.x, event.button.y);
-							MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
-							UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
-
-							// Find subview
-							MOView *subview = nil;
-							switch(mouseButton)
-							{
-								case MOLeftMouseButton:
-									subview = lastLeftMouseButtonDownView;
-									break;
-
-								case MOMiddleMouseButton:
-									subview = lastMiddleMouseButtonDownView;
-									break;
-
-								case MORightMouseButton:
-									subview = lastRightMouseButtonDownView;
-									break;
-							}
-
-							// Create event
-							MOEvent *moEvent = [[MOEvent alloc] initMouseButtonEventWithType:MOMouseButtonUpEventType
-																modifiers:modifiers
-																mouseButton:mouseButton
-																mouseLocation:mouseLocation
-																clickCount:1 // FIXME set correct click count
-							];
-
-							// Dispatch event
-							[subview mouseUp:moEvent];
-
-							// Cleanup
-							[moEvent release];
-						}
-						break;
-
-					case SDL_QUIT:
-						[self close];
-						break;
-				}
-			}
-
 			// Update game
 			[self update];
 
-			// Update FPS
-			[updateSpeedCounter tick];
-			if([updateSpeedCounter isAtNewSecond])
-				printf("[speed update]    %u\n", [updateSpeedCounter ticksPerSecond]);
+			// Update speed
+			[gameSpeedCounter tick];
+			if([gameSpeedCounter isAtNewSecond])
+				printf("[speed game]       %3u\n", [gameSpeedCounter ticksPerSecond]);
 
-			// Empty autorelease pool
-			[self refreshAutoreleasePool];
-
-			nextTick += tickLength;
+			nextGameTick += gameTickLength;
 		}
+
+		if(SDL_GetTicks() > nextScrollTick)
+		{
+			// Scroll
+			puts("scrolling");
+			[contentView scrollIfNecessary];
+
+			// Update speed
+			[scrollSpeedCounter tick];
+			if([scrollSpeedCounter isAtNewSecond])
+				printf("[speed scroll]         %3u\n", [scrollSpeedCounter ticksPerSecond]);
+
+			nextScrollTick += scrollTickLength;
+		}
+
+		// Handle events
+		[self handleEvents];
 
 		// Redraw
 		[contentView display];
@@ -319,7 +365,10 @@
 		// Update FPS
 		[drawSpeedCounter tick];
 		if([drawSpeedCounter isAtNewSecond])
-			printf("[speed draw]   %u\n", [drawSpeedCounter ticksPerSecond]);
+			printf("[speed draw]   %3u\n", [drawSpeedCounter ticksPerSecond]);
+
+		// Empty autorelease pool
+		[self refreshAutoreleasePool];
 	}
 }
 
