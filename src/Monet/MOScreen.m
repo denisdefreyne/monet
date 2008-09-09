@@ -270,7 +270,7 @@
 	[self refreshAutoreleasePool];
 
 	// Initialize SDL
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
 		[NSException raise:@"SDLException" format:@"SDL_Init failed: %s\n", SDL_GetError()];
 	atexit(&SDL_Quit);
 
