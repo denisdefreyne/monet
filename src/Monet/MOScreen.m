@@ -275,7 +275,8 @@
 	atexit(&SDL_Quit);
 
 	// Create screen
-	Uint32 flags = SDL_SWSURFACE | SDL_ASYNCBLIT | SDL_RLEACCEL | (isFullscreen ? SDL_FULLSCREEN : 0);
+	isFullscreen = YES;
+	Uint32 flags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_ASYNCBLIT | SDL_RLEACCEL | (isFullscreen ? SDL_FULLSCREEN : 0);
 	if(SDL_VideoModeOK(size.w, size.h, 32, flags))
 		surface = SDL_SetVideoMode(size.w, size.h, 32, flags);
 	else
@@ -355,7 +356,8 @@
 
 		// Redraw
 		[contentView display];
-		SDL_Flip(surface);
+		if(SDL_Flip(surface) != 0)
+			printf("Failed to flip screensurface!\n");
 
 		// Record speed
 		[drawSpeedCounter tick];
