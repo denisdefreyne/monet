@@ -11,4 +11,5 @@
 #import <Monet/MOSize.h>
 #import <Monet/MOSpeedCounter.h>
 #import <Monet/MOTileset.h>
+#import <Monet/MOTimer.h>
 #import <Monet/MOView.h>
