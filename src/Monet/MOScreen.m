@@ -282,9 +282,9 @@
 	{
 		NSLog(@"Falling back to software surface");
 		surface = SDL_SetVideoMode(size.w, size.h, 32, SDL_SWSURFACE);
-		if(!surface)
-			[NSException raise:@"SDLException" format:@"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
 	}
+	if(!surface)
+		[NSException raise:@"SDLException" format:@"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
 
 	// Ignore unused events
 	SDL_EventState(SDL_JOYAXISMOTION,	SDL_IGNORE);
