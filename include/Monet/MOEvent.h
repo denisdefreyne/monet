@@ -27,7 +27,7 @@ typedef enum _MOEventType {
 	MOMouseButtonDownEventType,
 	MOMouseButtonUpEventType,
 
-	MOMouseMovedEventType
+	MOMouseMotionEventType
 } MOEventType;
 
 typedef enum _MOMouseButton {
@@ -93,11 +93,13 @@ typedef enum _MOKeyModifierMask {
 
 	MOMouseButton	mouseButton;
 	MOPoint			mouseLocation;
+	MOPoint			relativeMouseMotion;
 	UInt8			clickCount;
 }
 
 - (id)initKeyEventWithType:(MOEventType)aType modifiers:(UInt8)aModifiers character:(NSString *)aCharacter key:(MOKey)aKey;
 - (id)initMouseButtonEventWithType:(MOEventType)aType modifiers:(UInt8)aModifiers mouseButton:(MOMouseButton)aMouseButton mouseLocation:(MOPoint)aMouseLocation clickCount:(UInt8)aClickCount;
+- (id)initMouseMotionEventWithModifiers:(UInt8)aModifiers mouseLocation:(MOPoint)aMouseLocation relativeMouseMotion:(MOPoint)aRelativeMouseMotion;
 
 // General
 
@@ -112,6 +114,8 @@ typedef enum _MOKeyModifierMask {
 // Mouse button-specific
 
 - (MOMouseButton)mouseButton;
+- (MOPoint)mouseLocation;
+- (MOPoint)relativeMouseMotion;
 - (UInt8)clickCount;
 
 @end

@@ -227,4 +227,9 @@
 	[superview mouseUp:aEvent];
 }
 
+- (void)mouseDragged:(MOEvent *)aEvent
+{
+	;
+}
+
 @end

@@ -31,6 +31,20 @@
 	return self;
 }
 
+- (id)initMouseMotionEventWithModifiers:(UInt8)aModifiers mouseLocation:(MOPoint)aMouseLocation relativeMouseMotion:(MOPoint)aRelativeMouseMotion
+{
+	if(self = [super init])
+	{
+		type				= MOMouseMotionEventType;
+		modifiers			= aModifiers;
+
+		mouseLocation		= aMouseLocation;
+		relativeMouseMotion	= aRelativeMouseMotion;
+	}
+
+	return self;
+}
+
 - (void)dealloc
 {
 	[character release];
@@ -72,6 +86,11 @@
 - (MOPoint)mouseLocation
 {
 	return mouseLocation;
+}
+
+- (MOPoint)relativeMouseMotion
+{
+	return relativeMouseMotion;
 }
 
 - (UInt8)clickCount

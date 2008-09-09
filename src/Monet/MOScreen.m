@@ -91,6 +91,24 @@
 				break;
 
 			case SDL_MOUSEMOTION:
+				{
+					// Create event
+					MOEvent *moEvent = [[MOEvent alloc] initMouseMotionEventWithModifiers:MOSDLModToMOKeyModifierMask(SDL_GetModState())
+														mouseLocation:MOMakePoint(event.motion.x, event.motion.y)
+														relativeMouseMotion:MOMakePoint(event.motion.xrel, event.motion.yrel)
+					];
+
+					// Dispatch event to subviews that want it
+					if(lastLeftMouseButtonDownView)
+						[lastLeftMouseButtonDownView mouseDragged:moEvent];
+					if(lastMiddleMouseButtonDownView)
+						[lastMiddleMouseButtonDownView mouseDragged:moEvent];
+					if(lastRightMouseButtonDownView)
+						[lastRightMouseButtonDownView mouseDragged:moEvent];
+
+					// Cleanup
+					[moEvent release];
+				}
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
@@ -169,6 +187,23 @@
 
 					// Dispatch event
 					[subview mouseUp:moEvent];
+
+					// Clear relevant subview
+					switch(mouseButton)
+					{
+						case MOLeftMouseButton:
+							lastLeftMouseButtonDownView = nil;
+							break;
+
+						case MOMiddleMouseButton:
+							lastMiddleMouseButtonDownView = nil;
+							break;
+
+						case MORightMouseButton:
+							lastRightMouseButtonDownView = nil;
+							break;
+					}
+					
 
 					// Cleanup
 					[moEvent release];

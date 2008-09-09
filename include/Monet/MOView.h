@@ -45,5 +45,6 @@
 - (BOOL)keyUp:(MOEvent *)aEvent;
 - (void)mouseDown:(MOEvent *)aEvent;
 - (void)mouseUp:(MOEvent *)aEvent;
+- (void)mouseDragged:(MOEvent *)aEvent;
 
 @end
