@@ -4,8 +4,6 @@ Uint32 timerCallback(Uint32 interval, void *param)
 {
 	MOTimer *timer = (MOTimer *)param;
 
-	puts(".");
-
 	[[timer target] performSelector:[timer selector] withObject:timer];
 
 	return [timer interval];
@@ -59,7 +57,6 @@ Uint32 timerCallback(Uint32 interval, void *param)
 
 - (void)start
 {
-	puts("starting");
 	timerID = SDL_AddTimer(interval, &timerCallback, self);
 }
 
