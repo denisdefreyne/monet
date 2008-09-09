@@ -275,7 +275,7 @@
 	atexit(&SDL_Quit);
 
 	// Create screen
-	Uint32 flags = SDL_SWSURFACE | SDL_HWACCEL | SDL_ASYNCBLIT | SDL_RLEACCEL | (isFullscreen ? SDL_FULLSCREEN : 0);
+	Uint32 flags = SDL_SWSURFACE | SDL_ASYNCBLIT | SDL_RLEACCEL | (isFullscreen ? SDL_FULLSCREEN : 0);
 	if(SDL_VideoModeOK(size.w, size.h, 32, flags))
 		surface = SDL_SetVideoMode(size.w, size.h, 32, flags);
 	else
