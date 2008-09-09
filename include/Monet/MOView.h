@@ -38,8 +38,6 @@
 - (void)lockFocus;
 - (void)unlockFocus;
 
-- (void)scrollIfNecessary;
-
 - (void)display;
 - (void)drawRect:(MORect)aRect;
 

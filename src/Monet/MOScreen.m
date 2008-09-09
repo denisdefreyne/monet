@@ -191,7 +191,6 @@
 	if(self = [super init])
 	{
 		gameTicksPerSecond		= 30;
-		scrollTicksPerSecond	= 60;
 	}
 
 	return self;
@@ -252,16 +251,6 @@
 	gameTicksPerSecond = aGameTicksPerSecond;
 }
 
-- (UInt8)scrollTicksPerSecond
-{
-	return scrollTicksPerSecond;
-}
-
-- (void)setScrollTicksPerSecond:(UInt8)aScrollTicksPerSecond
-{
-	scrollTicksPerSecond = aScrollTicksPerSecond;
-}
-
 #pragma mark -
 
 - (void)open
@@ -310,21 +299,12 @@
 
 - (void)enterRunloop
 {
-	// Three kind of ticks:
-	// - game tick: when the game advances one step
-	// - draw tick: when the screen is redrawn
-	// - scroll tick: when the view is scrolled (if necessary)
-
 	// Create game and draw FPS counters
 	MOSpeedCounter *gameSpeedCounter	= [[MOSpeedCounter alloc] init];
 	MOSpeedCounter *drawSpeedCounter	= [[MOSpeedCounter alloc] init];
-	MOSpeedCounter *scrollSpeedCounter	= [[MOSpeedCounter alloc] init];
 
 	Uint32	gameTickLength		= 1000/gameTicksPerSecond;
-	Uint32	scrollTickLength	= 1000/scrollTicksPerSecond;
-
 	Uint32	nextGameTick		= SDL_GetTicks();
-	Uint32	nextScrollTick		= SDL_GetTicks();
 
 	while(isOpen)
 	{
@@ -337,17 +317,6 @@
 			[gameSpeedCounter tick];
 		
 			nextGameTick += gameTickLength;
-		}
-
-		if(SDL_GetTicks() > nextScrollTick)
-		{
-			// Scroll
-			[contentView scrollIfNecessary];
-
-			// Record speed
-			[scrollSpeedCounter tick];
-
-			nextScrollTick += scrollTickLength;
 		}
 
 		// Handle events
@@ -363,9 +332,8 @@
 		// Show speeds
 		if([drawSpeedCounter isAtNewSecond])
 			printf(
-				"[speed] game=%u  scroll=%u  draw=%u\n",
+				"[speed] game=%u  draw=%u\n",
 				[gameSpeedCounter ticksPerSecond],
-				[scrollSpeedCounter ticksPerSecond],
 				[drawSpeedCounter ticksPerSecond]
 			);
 

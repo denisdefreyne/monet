@@ -29,7 +29,6 @@
 
 	// Timing
 	UInt8				gameTicksPerSecond;
-	UInt8				scrollTicksPerSecond;
 
 	// FPS counter
 	MOSpeedCounter		*fpsCounter;
@@ -48,8 +47,6 @@
 - (void)setFullscreen:(BOOL)aIsFullscreen;
 - (UInt8)gameTicksPerSecond;
 - (void)setGameTicksPerSecond:(UInt8)aGameTicksPerSecond;
-- (UInt8)scrollTicksPerSecond;
-- (void)setScrollTicksPerSecond:(UInt8)aScrollTicksPerSecond;
 
 - (void)open;
 - (void)enterRunloop;
