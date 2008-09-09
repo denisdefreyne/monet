@@ -4,12 +4,8 @@ To Do
 Miscellaneous
 ------------
 
-* Scrolling should have its own speed
-
-Cursors
--------
-
-...
+* Prevent tearing
+* Cursors
 
 Events
 ------
