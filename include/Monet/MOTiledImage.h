@@ -2,7 +2,7 @@
 #import <Monet/MOSize.h>
 #import <Monet/MOPoint.h>
 
-@interface MOTileset : MOImage
+@interface MOTiledImage : MOImage
 {
 	MOSize tileSize;
 }

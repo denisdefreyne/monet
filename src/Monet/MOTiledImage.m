@@ -1,9 +1,9 @@
-#import <Monet/MOTileset.h>
+#import <Monet/MOTiledImage.h>
 
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
 
-@implementation MOTileset
+@implementation MOTiledImage
 
 - (id)initWithContentsOfFile:(NSString *)aFilename transparencyType:(MOTransparencyType)aTransparencytype tileSize:(MOSize)aTileSize
 {
