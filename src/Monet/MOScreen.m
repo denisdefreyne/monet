@@ -332,25 +332,20 @@
 		{
 			// Update game
 			[self update];
-
-			// Update speed
+		
+			// Record speed
 			[gameSpeedCounter tick];
-			if([gameSpeedCounter isAtNewSecond])
-				printf("[speed game]       %3u\n", [gameSpeedCounter ticksPerSecond]);
-
+		
 			nextGameTick += gameTickLength;
 		}
 
 		if(SDL_GetTicks() > nextScrollTick)
 		{
 			// Scroll
-			puts("scrolling");
 			[contentView scrollIfNecessary];
 
-			// Update speed
+			// Record speed
 			[scrollSpeedCounter tick];
-			if([scrollSpeedCounter isAtNewSecond])
-				printf("[speed scroll]         %3u\n", [scrollSpeedCounter ticksPerSecond]);
 
 			nextScrollTick += scrollTickLength;
 		}
@@ -362,10 +357,17 @@
 		[contentView display];
 		SDL_Flip(surface);
 
-		// Update FPS
+		// Record speed
 		[drawSpeedCounter tick];
+
+		// Show speeds
 		if([drawSpeedCounter isAtNewSecond])
-			printf("[speed draw]   %3u\n", [drawSpeedCounter ticksPerSecond]);
+			printf(
+				"[speed] game=%u  scroll=%u  draw=%u\n",
+				[gameSpeedCounter ticksPerSecond],
+				[scrollSpeedCounter ticksPerSecond],
+				[drawSpeedCounter ticksPerSecond]
+			);
 
 		// Empty autorelease pool
 		[self refreshAutoreleasePool];
