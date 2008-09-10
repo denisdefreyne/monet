@@ -1,3 +1,5 @@
+#import <Foundation/Foundation.h>
+
 #import <Monet/MOImage.h>
 #import <Monet/MOSize.h>
 #import <Monet/MOPoint.h>
