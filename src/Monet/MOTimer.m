@@ -1,4 +1,4 @@
-#import "MOTimer.h"
+#import "Monet/MOTimer.h"
 
 Uint32 timerCallback(Uint32 interval, void *param)
 {

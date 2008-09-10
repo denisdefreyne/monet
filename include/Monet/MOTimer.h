@@ -1,5 +1,7 @@
 #import <Foundation/Foundation.h>
 
+#import <Monet/Types.h>
+
 #import <SDL/SDL.h>
 
 @interface MOTimer : NSObject
