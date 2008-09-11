@@ -7,8 +7,7 @@
 
 typedef enum _MOTransparencyType {
 	MOOpaqueTransparencyType,
-	MOAlphaChannelTransparencyType,
-	MOColorKeyTransparencyType
+	MOAlphaChannelTransparencyType
 } MOTransparencyType;
 
 @class MOGraphicsContext;

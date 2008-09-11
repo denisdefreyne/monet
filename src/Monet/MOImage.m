@@ -32,10 +32,6 @@
 			case MOAlphaChannelTransparencyType:
 				surface = SDL_DisplayFormatAlpha(tmpSurface);
 				break;
-
-			case MOColorKeyTransparencyType:
-				// TODO implement
-				break;
 		}
 		if(!surface)
 			[NSException raise:@"SDLException" format:@"SDL_DisplayFormat failed: %s\n", SDL_GetError()];
