@@ -9,7 +9,12 @@ Requirements
 * SDL
 * Foundation
 
-Foundation is part of Cocoa, which comes with Mac OS X. It can also be obtained as part of [Cocotron](http://www.cocotron.org/).
+Foundation is part of Cocoa, which comes with Mac OS X. There are several open-source implementations for Foundation:
+
+* [Cocotron](http://www.cocotron.org/) (probably the most complete)
+* [libFoundation](http://www.geocities.com/SiliconValley/Monitor/7464/libFoundation/) (likely outdated)
+* [nuFound](http://github.com/timburks/nufound/tree/master) (possibly incomplete)
+* [GNUstep](http://www.gnustep.org/)
 
 Usage
 -----
