@@ -45,3 +45,14 @@ BOOL MORectContainsPoint(MORect aRect, MOPoint aPoint)
 	return	(aPoint.x >= aRect.x && aPoint.x < aRect.x + aRect.w) &&
 			(aPoint.y >= aRect.y && aPoint.y < aRect.y + aRect.h);
 }
+
+BOOL MORectIntersectsRect(MORect aRect1, MORect aRect2)
+{
+	if(aRect1.x + aRect1.w <= aRect2.x || aRect2.x + aRect2.w <= aRect1.x)
+		return NO;
+
+	if(aRect1.y + aRect1.h <= aRect2.y || aRect2.y + aRect2.h <= aRect1.y)
+		return NO;
+
+	return YES;
+}
