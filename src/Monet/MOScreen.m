@@ -203,7 +203,7 @@
 							lastRightMouseButtonDownView = nil;
 							break;
 					}
-					
+
 
 					// Cleanup
 					[moEvent release];
@@ -347,10 +347,10 @@
 		{
 			// Update game
 			[self update];
-		
+
 			// Record speed
 			[gameSpeedCounter tick];
-		
+
 			nextGameTick += gameTickLength;
 		}
 
