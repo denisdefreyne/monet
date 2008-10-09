@@ -40,7 +40,6 @@
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
 	glBegin(GL_POLYGON);
 	{
-		// FIXME [OpenGL] clip
 		// FIXME [OpenGL] allow drawing into textures
 
 		// bottom left

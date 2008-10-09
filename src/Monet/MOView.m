@@ -148,7 +148,7 @@
 		// Get surface
 		SDL_Surface *surface = [[self screen] surface];
 
-		// Get clipping rectangle
+		// Get destination rectangle
 		MOPoint absoluteOrigin = [self absoluteOrigin];
 		MORect rect = MOMakeRect(absoluteOrigin.x, absoluteOrigin.y, frame.w, frame.h);
 
@@ -168,6 +168,15 @@
 
 - (void)display
 {
+	// Set up clipping
+	MORect scissorRect = MOMakeRect(
+		[self absoluteOrigin].x,
+		[[self screen] size].h - [self absoluteOrigin].y - bounds.h, // projection matrix is irrelevant
+		bounds.w,
+		bounds.h
+	);
+	glScissor(scissorRect.x, scissorRect.y, scissorRect.w, scissorRect.h);
+
 	// Draw this view
 	[self lockFocus];
 	[self drawRect:[self bounds]];
