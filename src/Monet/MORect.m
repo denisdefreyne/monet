@@ -14,6 +14,9 @@ MORect MOMakeRect(SInt16 aX, SInt16 aY, UInt16 aW, UInt16 aH)
 
 void MOFillRect(MORect aRect, MOColor aColor)
 {
+	// TODO [OpenGL] reimplement
+	return;
+
 	// Get surface and clip rect
 	MOGraphicsContext	*graphicsContext	= [MOGraphicsContext currentContext];
 	SDL_Surface			*surface			= [graphicsContext surface];

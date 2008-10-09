@@ -10,32 +10,49 @@
 
 - (id)initWithContentsOfFile:(NSString *)aFilename
 {
-	return [self initWithContentsOfFile:aFilename transparencyType:MOOpaqueTransparencyType];
-}
-
-- (id)initWithContentsOfFile:(NSString *)aFilename transparencyType:(MOTransparencyType)aTransparencytype
-{
 	if(self = [super init])
 	{
 		// Load file
-		SDL_Surface *tmpSurface = IMG_Load([aFilename UTF8String]);
-		if(!tmpSurface)
+		surface = IMG_Load([aFilename UTF8String]);
+		if(!surface)
 			[NSException raise:@"SDLException" format:@"IMG_Load failed: %s\n", SDL_GetError()];
 
-		// Optimize surface
-		switch(aTransparencytype)
-		{
-			case MOOpaqueTransparencyType:
-				surface = SDL_DisplayFormat(tmpSurface);
-				break;
+		// Create texture
+		glGenTextures(1, &textureName);
+		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
+		//glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		//glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-			case MOAlphaChannelTransparencyType:
-				surface = SDL_DisplayFormatAlpha(tmpSurface);
-				break;
+		// Get number of colors and texture format
+		GLint	numberOfColors = surface->format->BytesPerPixel;
+		GLenum	textureFormat;
+		if(numberOfColors == 4)
+		{
+			if (surface->format->Rmask == 0x000000ff)
+				textureFormat = GL_RGBA;
+			else
+				textureFormat = GL_BGRA;
 		}
-		if(!surface)
-			[NSException raise:@"SDLException" format:@"SDL_DisplayFormat failed: %s\n", SDL_GetError()];
-		SDL_FreeSurface(tmpSurface);
+		else if(numberOfColors == 3)
+		{
+			if (surface->format->Rmask == 0x000000ff)
+				textureFormat = GL_RGB;
+			else
+				textureFormat = GL_BGR;
+		}
+		else
+			// TODO handle gracefully
+			[NSException raise:@"OpenGLException" format:@"glTexImage2D preparation failed: image is not in truecolor (filename = %@)\n", aFilename];
+
+		// Set size
+		size = MOMakeSize(surface->w, surface->h);
+
+		// Load image into texture
+		SDL_LockSurface(surface);
+		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, surface->w, surface->h, 0, textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
+		SDL_UnlockSurface(surface);
 	}
 
 	return self;
@@ -45,6 +62,9 @@
 {
 	if(self = [super init])
 	{
+		// TODO [OpenGL] reimplement
+		return nil;
+
 		// Create surface
 		SDL_Surface *tmpSurface = SDL_CreateRGBSurface(0, aWidth, aHeight, 32, 0, 0, 0, 0);
 		if(!tmpSurface)
@@ -63,6 +83,7 @@
 - (void)dealloc
 {
 	SDL_FreeSurface(surface);
+	glDeleteTextures(1, &textureName);
 
 	[graphicsContext release];
 
@@ -95,25 +116,35 @@
 
 - (void)drawAtPoint:(MOPoint)aPoint
 {
-	// Get context
-	MOGraphicsContext *context = [MOGraphicsContext currentContext];
+	// Get absolute destination
+	MORect dstRect = [[MOGraphicsContext currentContext] rect];
+	MOPoint dstPoint = MOMakePoint(dstRect.x + aPoint.x, dstRect.y + aPoint.y);
 
-	// Get surfaces
-	SDL_Surface *srcSurface	= surface;
-	SDL_Surface *dstSurface	= [context surface];
+	// TODO [OpenGL] translate using matrixes
 
-	// Get clip rect
-	MORect clipRect = [context rect];
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
+	glBegin(GL_QUADS);
+	{
+		// FIXME [OpenGL] clip
+		// FIXME [OpenGL] allow drawing into textures
 
-	// Get destination rect
-	MORect dstRect = [context rect];
-	dstRect.x += aPoint.x;
-	dstRect.y += aPoint.y;
+		// bottom left
+		glTexCoord2i(	0,							0);
+		glVertex2i(		dstPoint.x,					dstPoint.y);
 
-	// Blit
-	SDL_SetClipRect(dstSurface, &clipRect);
-	SDL_BlitSurface(srcSurface, NULL, dstSurface, &dstRect);
-	SDL_SetClipRect(dstSurface, NULL);
+		// bottom right
+		glTexCoord2i(	size.w,						0);
+		glVertex2i(		dstPoint.x + size.w,		dstPoint.y);
+
+		// top right
+		glTexCoord2i(	size.w,						size.h);
+		glVertex2i(		dstPoint.x + size.w,		dstPoint.y + size.h);
+
+		// top left
+		glTexCoord2i(	0,							size.h);
+		glVertex2i(		dstPoint.x,					dstPoint.y + size.h);
+	}
+	glEnd();
 }
 
 @end

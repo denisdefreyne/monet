@@ -5,22 +5,22 @@
 #import <Monet/MOPoint.h>
 #import <Monet/MORect.h>
 
-typedef enum _MOTransparencyType {
-	MOOpaqueTransparencyType,
-	MOAlphaChannelTransparencyType
-} MOTransparencyType;
+#import <OpenGL/gl.h>
+#import <OpenGL/glu.h>
 
 @class MOGraphicsContext;
 
 @interface MOImage : NSObject
 {
 	SDL_Surface			*surface;
+	GLuint				textureName;
+
+	MOSize				size;
 
 	MOGraphicsContext	*graphicsContext;
 }
 
 - (id)initWithContentsOfFile:(NSString *)aFilename;
-- (id)initWithContentsOfFile:(NSString *)aFilename transparencyType:(MOTransparencyType)aTransparencytype;
 - (id)initWithWidth:(UInt16)aWidth height:(UInt16)aHeight;
 
 - (void)lockFocus;

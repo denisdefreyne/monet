@@ -5,16 +5,6 @@
 
 @implementation MOTiledImage
 
-- (id)initWithContentsOfFile:(NSString *)aFilename transparencyType:(MOTransparencyType)aTransparencytype tileSize:(MOSize)aTileSize
-{
-	if(self = [super initWithContentsOfFile:aFilename transparencyType:aTransparencytype])
-	{
-		tileSize = aTileSize;
-	}
-
-	return self;
-}
-
 - (id)initWithContentsOfFile:(NSString *)aFilename tileSize:(MOSize)aTileSize
 {
 	if(self = [super initWithContentsOfFile:aFilename])
@@ -36,32 +26,40 @@
 
 - (void)drawTile:(MOPoint)aTilePoint atPoint:(MOPoint)aPoint
 {
-	// Get context
-	MOGraphicsContext *context = [MOGraphicsContext currentContext];
+	// Get absolute destination
+	MORect dstRect = [[MOGraphicsContext currentContext] rect];
+	MOPoint dstPoint = MOMakePoint(dstRect.x + aPoint.x, dstRect.y + aPoint.y);
 
-	// Get surfaces
-	SDL_Surface *srcSurface	= surface;
-	SDL_Surface *dstSurface	= [context surface];
+	// Get tile origin
+	MOPoint tileOrigin;
+	tileOrigin.x = aTilePoint.x * tileSize.w;
+	tileOrigin.y = aTilePoint.y * tileSize.h;
 
-	// Get clip rect
-	MORect clipRect = [context rect];
+	// TODO [OpenGL] translate using matrixes
 
-	// Get source rect
-	MORect srcRect;
-	srcRect.x = aTilePoint.x * tileSize.w;
-	srcRect.y = aTilePoint.y * tileSize.h;
-	srcRect.w = tileSize.w;
-	srcRect.h = tileSize.h;
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
+	glBegin(GL_POLYGON);
+	{
+		// FIXME [OpenGL] clip
+		// FIXME [OpenGL] allow drawing into textures
 
-	// Get destination rect
-	MORect dstRect = [context rect];
-	dstRect.x += aPoint.x;
-	dstRect.y += aPoint.y;
+		// bottom left
+		glTexCoord2i(	tileOrigin.x,				tileOrigin.y);
+		glVertex2i(		dstPoint.x,					dstPoint.y);
 
-	// Blit
-	SDL_SetClipRect(dstSurface, &clipRect);
-	SDL_BlitSurface(srcSurface, &srcRect, dstSurface, &dstRect);
-	SDL_SetClipRect(dstSurface, NULL);
+		// bottom right
+		glTexCoord2i(	tileOrigin.x + tileSize.w,	tileOrigin.y);
+		glVertex2i(		dstPoint.x + tileSize.w,	dstPoint.y);
+
+		// top right
+		glTexCoord2i(	tileOrigin.x + tileSize.w,	tileOrigin.y + tileSize.h);
+		glVertex2i(		dstPoint.x + tileSize.w,	dstPoint.y + tileSize.h);
+
+		// top left
+		glTexCoord2i(	tileOrigin.x,				tileOrigin.y + tileSize.h);
+		glVertex2i(		dstPoint.x,					dstPoint.y + tileSize.h);
+	}
+	glEnd();
 }
 
 @end

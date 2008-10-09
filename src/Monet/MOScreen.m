@@ -7,6 +7,9 @@
 #import <Monet/MOView.h>
 #import <Monet/Private.h>
 
+#import <OpenGL/gl.h>
+#import <OpenGL/glu.h>
+
 @interface MOScreen (Autoreleasing)
 
 - (void)refreshAutoreleasePool;
@@ -298,17 +301,42 @@
 		[NSException raise:@"SDLException" format:@"SDL_Init failed: %s\n", SDL_GetError()];
 	atexit(&SDL_Quit);
 
+	// Setup OpenGL attributes
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
 	// Create screen
-	Uint32 flags = SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_ASYNCBLIT | SDL_RLEACCEL | (isFullscreen ? SDL_FULLSCREEN : 0);
-	if(SDL_VideoModeOK(size.w, size.h, 32, flags))
-		surface = SDL_SetVideoMode(size.w, size.h, 32, flags);
-	else
-	{
-		NSLog(@"Falling back to software surface");
-		surface = SDL_SetVideoMode(size.w, size.h, 32, SDL_SWSURFACE);
-	}
+	Uint32 flags = SDL_OPENGL | (isFullscreen ? SDL_FULLSCREEN : 0);
+	surface = SDL_SetVideoMode(size.w, size.h, 0, flags);
 	if(!surface)
 		[NSException raise:@"SDLException" format:@"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
+
+	// Optimize for 2D drawing
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_LIGHTING);
+
+	// Set up texturing
+	//glEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_RECTANGLE_EXT);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	if(!gluCheckExtension("GL_EXT_texture_rectangle", glGetString(GL_EXTENSIONS)))
+		[NSException raise:@"OpenGLException" format:@"Unsupported extension: GL_EXT_texture_rectangle"];
+
+	// Set clear color
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+
+	// Enable blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Set projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0, surface->w, surface->h, 0); // origin in top left corner
+
+	// Set modelview matrix
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 	// Ignore unused events
 	SDL_EventState(SDL_JOYAXISMOTION,	SDL_IGNORE);
@@ -358,9 +386,9 @@
 		[self handleEvents];
 
 		// Redraw
+		glClear(GL_COLOR_BUFFER_BIT);
 		[contentView display];
-		if(SDL_Flip(surface) != 0)
-			printf("Failed to flip screensurface!\n");
+		SDL_GL_SwapBuffers();
 
 		// Record speed
 		[drawSpeedCounter tick];
