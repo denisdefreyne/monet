@@ -144,6 +144,7 @@
 		glVertex2i(		dstPoint.x,					dstPoint.y + size.h);
 	}
 	glEnd();
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
 }
 
 @end
