@@ -38,7 +38,7 @@
 	// TODO [OpenGL] translate using matrixes
 
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 	{
 		// FIXME [OpenGL] allow drawing into textures
 
