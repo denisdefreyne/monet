@@ -5,7 +5,9 @@
 #import <SDL/SDL.h>
 
 typedef struct _MOColor {
-	SDL_Color color;
+	float red;
+	float green;
+	float blue;
 } MOColor;
 
-MOColor MOMakeColor(UInt8 aRed, UInt8 aGreen, UInt8 aBlue);
+MOColor MOMakeColor(float aRed, float aGreen, float aBlue);

@@ -1,12 +1,12 @@
 #import <Monet/MOColor.h>
 
-MOColor MOMakeColor(UInt8 aRed, UInt8 aGreen, UInt8 aBlue)
+MOColor MOMakeColor(float aRed, float aGreen, float aBlue)
 {
 	MOColor color;
 
-	color.color.r = aRed;
-	color.color.g = aGreen;
-	color.color.b = aBlue;
+	color.red	= aRed;
+	color.green	= aGreen;
+	color.blue	= aBlue;
 
 	return color;
 }
