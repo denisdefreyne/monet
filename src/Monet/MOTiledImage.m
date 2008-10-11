@@ -59,6 +59,7 @@
 		glVertex2i(		dstPoint.x,					dstPoint.y + tileSize.h);
 	}
 	glEnd();
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
 }
 
 @end
