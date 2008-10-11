@@ -145,15 +145,12 @@
 {
 	if(!graphicsContext)
 	{
-		// Get surface
-		SDL_Surface *surface = [[self screen] surface];
-
 		// Get destination rectangle
 		MOPoint absoluteOrigin = [self absoluteOrigin];
 		MORect rect = MOMakeRect(absoluteOrigin.x, absoluteOrigin.y, frame.w, frame.h);
 
 		// Create graphics context
-		graphicsContext = [[MOGraphicsContext alloc] initWithSurface:surface rect:rect];
+		graphicsContext = [[MOGraphicsContext alloc] initWithTextureName:0 rect:rect];
 	}
 
 	[[MOGraphicsContext stack] addObject:graphicsContext];

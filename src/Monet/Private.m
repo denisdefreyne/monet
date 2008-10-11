@@ -2,23 +2,20 @@
 
 @implementation MOGraphicsContext (Private)
 
-- (id)initWithSurface:(SDL_Surface *)aSurface rect:(MORect)aRect;
+- (id)initWithTextureName:(GLuint)aTextureName rect:(MORect)aRect
 {
 	if(self = [super init])
 	{
-		if(!aSurface)
-			[NSException raise:NSInvalidArgumentException format:@"MOGraphicsContext requires a SDL_Surface"];
-
-		surface = aSurface;
-		rect = aRect;
+		textureName	= aTextureName;
+		rect		= aRect;
 	}
 
 	return self;
 }
 
-- (SDL_Surface *)surface
+- (GLuint)textureName
 {
-	return surface;
+	return textureName;
 }
 
 @end

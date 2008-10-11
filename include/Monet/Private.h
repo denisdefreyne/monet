@@ -1,12 +1,13 @@
 #import <Monet/Monet.h>
 
+#import <OpenGL/gl.h>
 #import <SDL/SDL.h>
 
 @interface MOGraphicsContext (Private)
 
-- (id)initWithSurface:(SDL_Surface *)aSurface rect:(MORect)aRect;
+- (id)initWithTextureName:(GLuint)aTextureName rect:(MORect)aRect;
 
-- (SDL_Surface *)surface;
+- (GLuint)textureName;
 
 @end
 
