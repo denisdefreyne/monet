@@ -13,15 +13,13 @@
 	if(self = [super init])
 	{
 		// Load file
-		surface = IMG_Load([aFilename UTF8String]);
+		SDL_Surface *surface = IMG_Load([aFilename UTF8String]);
 		if(!surface)
 			[NSException raise:@"SDLException" format:@"IMG_Load failed: %s\n", SDL_GetError()];
 
 		// Create texture
 		glGenTextures(1, &textureName);
 		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
-		//glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		//glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -53,6 +51,9 @@
 		SDL_LockSurface(surface);
 		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, surface->w, surface->h, 0, textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
 		SDL_UnlockSurface(surface);
+
+		// Cleanup
+		SDL_FreeSurface(surface);
 	}
 
 	return self;
@@ -65,16 +66,16 @@
 		// TODO [OpenGL] reimplement
 		return nil;
 
-		// Create surface
-		SDL_Surface *tmpSurface = SDL_CreateRGBSurface(0, aWidth, aHeight, 32, 0, 0, 0, 0);
-		if(!tmpSurface)
-			[NSException raise:@"SDLException" format:@"SDL_CreateRGBSurface failed: %s\n", SDL_GetError()];
-
-		// Optimize surface
-		surface = SDL_DisplayFormat(tmpSurface);
-		if(!surface)
-			[NSException raise:@"SDLException" format:@"SDL_DisplayFormat failed: %s\n", SDL_GetError()];
-		SDL_FreeSurface(tmpSurface);
+		// // Create surface
+		// SDL_Surface *tmpSurface = SDL_CreateRGBSurface(0, aWidth, aHeight, 32, 0, 0, 0, 0);
+		// if(!tmpSurface)
+		// 	[NSException raise:@"SDLException" format:@"SDL_CreateRGBSurface failed: %s\n", SDL_GetError()];
+		// 
+		// // Optimize surface
+		// surface = SDL_DisplayFormat(tmpSurface);
+		// if(!surface)
+		// 	[NSException raise:@"SDLException" format:@"SDL_DisplayFormat failed: %s\n", SDL_GetError()];
+		// SDL_FreeSurface(tmpSurface);
 	}
 
 	return self;
@@ -82,7 +83,6 @@
 
 - (void)dealloc
 {
-	SDL_FreeSurface(surface);
 	glDeleteTextures(1, &textureName);
 
 	[graphicsContext release];
@@ -95,7 +95,7 @@
 - (void)lockFocus
 {
 	if(!graphicsContext)
-		graphicsContext = [[MOGraphicsContext alloc] initWithSurface:surface rect:[self bounds]];
+		graphicsContext = [[MOGraphicsContext alloc] initWithTextureName:textureName rect:[self bounds]];
 
 	[[MOGraphicsContext stack] addObject:graphicsContext];
 }
@@ -109,7 +109,7 @@
 
 - (MORect)bounds
 {
-	return MOMakeRect(0, 0, surface->w, surface->h);
+	return MOMakeRect(0, 0, size.w, size.h);
 }
 
 #pragma mark -

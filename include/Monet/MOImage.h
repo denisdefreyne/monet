@@ -12,7 +12,6 @@
 
 @interface MOImage : NSObject
 {
-	SDL_Surface			*surface;
 	GLuint				textureName;
 
 	MOSize				size;
