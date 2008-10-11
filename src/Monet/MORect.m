@@ -14,33 +14,27 @@ MORect MOMakeRect(SInt16 aX, SInt16 aY, UInt16 aW, UInt16 aH)
 
 void MOFillRect(MORect aRect, MOColor aColor)
 {
-	// TODO [OpenGL] reimplement
-	return;
-
-	// Get surface and clip rect
-	MOGraphicsContext	*graphicsContext	= [MOGraphicsContext currentContext];
-	SDL_Surface			*surface			= [graphicsContext surface];
-	MORect				rect				= [graphicsContext rect];
-
-	// Translate source rect
-	aRect.x += rect.x;
-	aRect.y += rect.y;
-
-	// Convert color
-	Uint32 sdlColor = SDL_MapRGB(surface->format, aColor.color.r, aColor.color.g, aColor.color.b);
-
-	// Fill
-	SDL_SetClipRect(surface, &rect);
-	SDL_FillRect(surface, &aRect, sdlColor);
-	SDL_SetClipRect(surface, NULL);
+	glColor3f(aColor.red, aColor.green, aColor.blue);
+	glRecti(aRect.x, aRect.y, aRect.x + aRect.w, aRect.y + aRect.h);
 }
 
 void MOStrokeRect(MORect aRect, MOColor aColor)
 {
-	MOFillRect(MOMakeRect(aRect.x,					aRect.y,				aRect.w,	1		), aColor);
-	MOFillRect(MOMakeRect(aRect.x,					aRect.y,				1,			aRect.h	), aColor);
-	MOFillRect(MOMakeRect(aRect.x,					aRect.y + aRect.h - 1,	aRect.w,	1		), aColor);
-	MOFillRect(MOMakeRect(aRect.x + aRect.w - 1,	aRect.y,				1,			aRect.h	), aColor);
+	// Get absolute destination
+	MORect dstRect = [[MOGraphicsContext currentContext] rect];
+	aRect.x += dstRect.x;
+	aRect.y += dstRect.y;
+
+	// Stroke rect
+	glColor3f(aColor.red, aColor.green, aColor.blue);
+	glBegin(GL_LINE_LOOP);
+	{
+		glVertex2i(aRect.x,				aRect.y);
+		glVertex2i(aRect.x + aRect.w,	aRect.y);
+		glVertex2i(aRect.x + aRect.w,	aRect.y + aRect.h);
+		glVertex2i(aRect.x,				aRect.y + aRect.h);
+	}
+	glEnd();
 }
 
 BOOL MORectContainsPoint(MORect aRect, MOPoint aPoint)
