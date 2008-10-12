@@ -64,19 +64,18 @@
 {
 	if(self = [super init])
 	{
-		// TODO [OpenGL] reimplement
-		return nil;
+		// Set size
+		size = MOMakeSize(aWidth, aHeight);
 
-		// // Create surface
-		// SDL_Surface *tmpSurface = SDL_CreateRGBSurface(0, aWidth, aHeight, 32, 0, 0, 0, 0);
-		// if(!tmpSurface)
-		// 	[NSException raise:@"SDLException" format:@"SDL_CreateRGBSurface failed: %s\n", SDL_GetError()];
-		// 
-		// // Optimize surface
-		// surface = SDL_DisplayFormat(tmpSurface);
-		// if(!surface)
-		// 	[NSException raise:@"SDLException" format:@"SDL_DisplayFormat failed: %s\n", SDL_GetError()];
-		// SDL_FreeSurface(tmpSurface);
+		// Create texture
+		glGenTextures(1, &textureName);
+		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
+		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, size.w, size.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+		// Cleanup
+		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
 	}
 
 	return self;
@@ -127,8 +126,6 @@
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
 	glBegin(GL_QUADS);
 	{
-		// FIXME [OpenGL] allow drawing into textures
-
 		// bottom left
 		glTexCoord2i(	0,							0);
 		glVertex2i(		dstPoint.x,					dstPoint.y);
