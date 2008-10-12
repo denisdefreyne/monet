@@ -10,7 +10,6 @@
 
 @interface MOGraphicsContext : NSObject
 {
-	GLuint		textureName;
 	MORect		rect;
 }
 

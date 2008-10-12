@@ -2,20 +2,14 @@
 
 @implementation MOGraphicsContext (Private)
 
-- (id)initWithTextureName:(GLuint)aTextureName rect:(MORect)aRect
+- (id)initWithRect:(MORect)aRect
 {
 	if(self = [super init])
 	{
-		textureName	= aTextureName;
-		rect		= aRect;
+		rect = aRect;
 	}
 
 	return self;
-}
-
-- (GLuint)textureName
-{
-	return textureName;
 }
 
 @end

@@ -94,8 +94,9 @@
 
 - (void)lockFocus
 {
+	// Create graphics context if necessary
 	if(!graphicsContext)
-		graphicsContext = [[MOGraphicsContext alloc] initWithTextureName:textureName rect:[self bounds]];
+		graphicsContext = [[MOGraphicsContext alloc] initWithRect:[self bounds]];
 
 	[[MOGraphicsContext stack] addObject:graphicsContext];
 }

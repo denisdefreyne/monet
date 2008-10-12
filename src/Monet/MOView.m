@@ -156,7 +156,7 @@
 		MORect rect = MOMakeRect(absoluteOrigin.x, absoluteOrigin.y, frame.w, frame.h);
 
 		// Create graphics context
-		graphicsContext = [[MOGraphicsContext alloc] initWithTextureName:0 rect:rect];
+		graphicsContext = [[MOGraphicsContext alloc] initWithRect:rect];
 	}
 
 	[[MOGraphicsContext stack] addObject:graphicsContext];

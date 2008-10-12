@@ -5,9 +5,7 @@
 
 @interface MOGraphicsContext (Private)
 
-- (id)initWithTextureName:(GLuint)aTextureName rect:(MORect)aRect;
-
-- (GLuint)textureName;
+- (id)initWithRect:(MORect)aRect;
 
 @end
 
