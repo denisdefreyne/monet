@@ -47,13 +47,14 @@
 		// Set size
 		size = MOMakeSize(surface->w, surface->h);
 
-		// Load image into texture
+		// Fill texture
 		SDL_LockSurface(surface);
-		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, surface->w, surface->h, 0, textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
+		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, size.w, size.h, 0, textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
 		SDL_UnlockSurface(surface);
 
 		// Cleanup
 		SDL_FreeSurface(surface);
+		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
 	}
 
 	return self;

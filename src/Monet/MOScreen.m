@@ -228,7 +228,7 @@
 {
 	if(self = [super init])
 	{
-		gameTicksPerSecond		= 30;
+		gameTicksPerSecond = 30;
 	}
 
 	return self;
@@ -311,11 +311,10 @@
 		[NSException raise:@"SDLException" format:@"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
 
 	// Set up texturing
-	//glEnable(GL_TEXTURE_2D);
-	glEnable(GL_TEXTURE_RECTANGLE_EXT);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	if(!gluCheckExtension("GL_EXT_texture_rectangle", glGetString(GL_EXTENSIONS)))
 		[NSException raise:@"OpenGLException" format:@"Unsupported extension: GL_EXT_texture_rectangle"];
+	glEnable(GL_TEXTURE_RECTANGLE_EXT);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	// Set clear color
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -364,8 +363,8 @@
 	MOSpeedCounter *gameSpeedCounter	= [[MOSpeedCounter alloc] init];
 	MOSpeedCounter *drawSpeedCounter	= [[MOSpeedCounter alloc] init];
 
-	Uint32	gameTickLength		= 1000/gameTicksPerSecond;
-	Uint32	nextGameTick		= SDL_GetTicks();
+	Uint32	gameTickLength	= 1000/gameTicksPerSecond;
+	Uint32	nextGameTick	= SDL_GetTicks();
 
 	while(isOpen)
 	{
