@@ -27,6 +27,8 @@
 
 - (MORect)bounds;
 
+- (void)takeImageFromRect:(MORect)aRect;
+
 - (void)drawAtPoint:(MOPoint)aPoint;
 
 @end

@@ -115,6 +115,20 @@
 
 #pragma mark -
 
+- (void)takeImageFromRect:(MORect)aRect
+{
+	// Bind
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
+
+	// Copy
+	glCopyTexSubImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, 0, 0, aRect.x, aRect.y, aRect.w, aRect.h);
+
+	// Unbind
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
+}
+
+#pragma mark -
+
 - (void)drawAtPoint:(MOPoint)aPoint
 {
 	// Get absolute destination
