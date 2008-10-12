@@ -139,6 +139,12 @@
 	return bounds;
 }
 
+- (MORect)boundsRelativeToWindow
+{
+	MOPoint absoluteOrigin = [self absoluteOrigin];
+	return MOMakeRect(absoluteOrigin.x, absoluteOrigin.y, bounds.w, bounds.h);
+}
+
 #pragma mark -
 
 - (void)lockFocus
@@ -184,6 +190,11 @@
 	MOView *subview = nil;
 	while(subview = [enumerator nextObject])
 		[subview display];
+}
+
+- (void)clear
+{
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 - (void)drawRect:(MORect)aRect

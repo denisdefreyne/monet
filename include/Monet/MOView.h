@@ -34,11 +34,13 @@
 
 - (MORect)frame;
 - (MORect)bounds;
+- (MORect)boundsRelativeToWindow;
 
 - (void)lockFocus;
 - (void)unlockFocus;
 
 - (void)display;
+- (void)clear;
 - (void)drawRect:(MORect)aRect;
 
 - (BOOL)keyDown:(MOEvent *)aEvent;
