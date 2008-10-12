@@ -14,18 +14,28 @@ MORect MOMakeRect(SInt16 aX, SInt16 aY, UInt16 aW, UInt16 aH)
 
 void MOFillRect(MORect aRect, MOColor aColor)
 {
+	// Save
+	glPushAttrib(GL_CURRENT_BIT);
+
+	// Draw
 	glColor3f(aColor.red, aColor.green, aColor.blue);
 	glRecti(aRect.x, aRect.y, aRect.x + aRect.w, aRect.y + aRect.h);
+
+	// Restore
+	glPopAttrib();
 }
 
 void MOStrokeRect(MORect aRect, MOColor aColor)
 {
+	// Save
+	glPushAttrib(GL_CURRENT_BIT);
+
 	// Get absolute destination
 	MORect dstRect = [[MOGraphicsContext currentContext] rect];
 	aRect.x += dstRect.x;
 	aRect.y += dstRect.y;
 
-	// Stroke rect
+	// Draw
 	glColor3f(aColor.red, aColor.green, aColor.blue);
 	glBegin(GL_LINE_LOOP);
 	{
@@ -35,6 +45,9 @@ void MOStrokeRect(MORect aRect, MOColor aColor)
 		glVertex2i(aRect.x,				aRect.y + aRect.h);
 	}
 	glEnd();
+
+	// Restore
+	glPopAttrib();
 }
 
 BOOL MORectContainsPoint(MORect aRect, MOPoint aPoint)
