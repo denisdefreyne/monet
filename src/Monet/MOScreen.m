@@ -97,7 +97,7 @@
 				{
 					// Create event
 					MOEvent *moEvent = [[MOEvent alloc] initMouseMotionEventWithModifiers:MOSDLModToMOKeyModifierMask(SDL_GetModState())
-														mouseLocation:MOMakePoint(event.motion.x, event.motion.y)
+														mouseLocation:MOMakePoint(event.motion.x, size.h-event.motion.y-1)
 														relativeMouseMotion:MOMakePoint(event.motion.xrel, event.motion.yrel)
 					];
 
@@ -117,7 +117,7 @@
 			case SDL_MOUSEBUTTONDOWN:
 				{
 					// Get event information
-					MOPoint mouseLocation		= MOMakePoint(event.button.x, event.button.y);
+					MOPoint mouseLocation		= MOMakePoint(event.button.x, size.h-event.button.y-1);
 					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
 					UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
@@ -159,7 +159,7 @@
 			case SDL_MOUSEBUTTONUP:
 				{
 					// Get event information
-					MOPoint mouseLocation		= MOMakePoint(event.button.x, event.button.y);
+					MOPoint mouseLocation		= MOMakePoint(event.button.x, size.h-event.button.y-1);
 					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
 					UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
@@ -329,7 +329,7 @@
 	// Set projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0, surface->w, surface->h, 0); // origin in top left corner
+	gluOrtho2D(0, surface->w, 0, surface->h);
 
 	// Set modelview matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -415,7 +415,7 @@
 	int x,y;
 	SDL_GetMouseState(&x, &y);
 
-	return MOMakePoint(x, y);
+	return MOMakePoint(x, size.h-y-1);
 }
 
 #pragma mark -

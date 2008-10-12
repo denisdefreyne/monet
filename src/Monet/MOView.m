@@ -172,13 +172,7 @@
 - (void)display
 {
 	// Set up clipping
-	MORect scissorRect = MOMakeRect(
-		[self absoluteOrigin].x,
-		[[self screen] size].h - [self absoluteOrigin].y - bounds.h, // projection matrix is irrelevant
-		bounds.w,
-		bounds.h
-	);
-	glScissor(scissorRect.x, scissorRect.y, scissorRect.w, scissorRect.h);
+	glScissor([self absoluteOrigin].x, [self absoluteOrigin].y, bounds.w, bounds.h);
 
 	// Draw this view
 	[self lockFocus];

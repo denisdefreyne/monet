@@ -128,19 +128,19 @@
 	{
 		// bottom left
 		glTexCoord2i(	0,							0);
-		glVertex2i(		dstPoint.x,					dstPoint.y);
+		glVertex2i(		dstPoint.x,					dstPoint.y + size.h);
 
 		// bottom right
 		glTexCoord2i(	size.w,						0);
-		glVertex2i(		dstPoint.x + size.w,		dstPoint.y);
+		glVertex2i(		dstPoint.x + size.w,		dstPoint.y + size.h);
 
 		// top right
 		glTexCoord2i(	size.w,						size.h);
-		glVertex2i(		dstPoint.x + size.w,		dstPoint.y + size.h);
+		glVertex2i(		dstPoint.x + size.w,		dstPoint.y);
 
 		// top left
 		glTexCoord2i(	0,							size.h);
-		glVertex2i(		dstPoint.x,					dstPoint.y + size.h);
+		glVertex2i(		dstPoint.x,					dstPoint.y);
 	}
 	glEnd();
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);

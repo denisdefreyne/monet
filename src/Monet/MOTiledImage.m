@@ -40,23 +40,21 @@
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
 	glBegin(GL_QUADS);
 	{
-		// FIXME [OpenGL] allow drawing into textures
-
 		// bottom left
 		glTexCoord2i(	tileOrigin.x,				tileOrigin.y);
-		glVertex2i(		dstPoint.x,					dstPoint.y);
+		glVertex2i(		dstPoint.x,					dstPoint.y + tileSize.h);
 
 		// bottom right
 		glTexCoord2i(	tileOrigin.x + tileSize.w,	tileOrigin.y);
-		glVertex2i(		dstPoint.x + tileSize.w,	dstPoint.y);
+		glVertex2i(		dstPoint.x + tileSize.w,	dstPoint.y + tileSize.h);
 
 		// top right
 		glTexCoord2i(	tileOrigin.x + tileSize.w,	tileOrigin.y + tileSize.h);
-		glVertex2i(		dstPoint.x + tileSize.w,	dstPoint.y + tileSize.h);
+		glVertex2i(		dstPoint.x + tileSize.w,	dstPoint.y);
 
 		// top left
 		glTexCoord2i(	tileOrigin.x,				tileOrigin.y + tileSize.h);
-		glVertex2i(		dstPoint.x,					dstPoint.y + tileSize.h);
+		glVertex2i(		dstPoint.x,					dstPoint.y);
 	}
 	glEnd();
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
