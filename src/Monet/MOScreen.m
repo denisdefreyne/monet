@@ -310,11 +310,6 @@
 	if(!surface)
 		[NSException raise:@"SDLException" format:@"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
 
-	// Optimize for 2D drawing
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_LIGHTING);
-
 	// Set up texturing
 	//glEnable(GL_TEXTURE_2D);
 	glEnable(GL_TEXTURE_RECTANGLE_EXT);
