@@ -6,7 +6,10 @@
 #import <Monet/MOPoint.h>
 #import <Monet/MOSize.h>
 
-typedef SDL_Rect MORect;
+typedef struct _MORect {
+	SInt16 x, y;
+	UInt16 w, h;
+} MORect;
 
 MORect MOMakeRect(SInt16 aX, SInt16 aY, UInt16 aW, UInt16 aH);
 
