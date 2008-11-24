@@ -2,8 +2,6 @@
 
 #import <Monet/Types.h>
 
-#import <SDL/SDL.h>
-
 typedef struct _MOColor {
 	float red;
 	float green;

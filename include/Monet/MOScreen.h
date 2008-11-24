@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 
+// FIXME remove these headers
 #import <SDL/SDL.h>
 
 #import <Monet/MOPoint.h>

@@ -1,6 +1,5 @@
 #import <Monet/Monet.h>
 
-#import <OpenGL/gl.h>
 #import <SDL/SDL.h>
 
 @interface MOGraphicsContext (Private)

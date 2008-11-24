@@ -1,12 +1,11 @@
 #import <Foundation/Foundation.h>
 
-#import <SDL/SDL.h>
+// FIXME remove these headers
+#import <OpenGL/gl.h>
+#import <OpenGL/glu.h>
 
 #import <Monet/MOPoint.h>
 #import <Monet/MORect.h>
-
-#import <OpenGL/gl.h>
-#import <OpenGL/glu.h>
 
 @class MOGraphicsContext;
 

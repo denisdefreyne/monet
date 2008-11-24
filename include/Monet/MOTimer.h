@@ -2,6 +2,7 @@
 
 #import <Monet/Types.h>
 
+// FIXME remove these headers
 #import <SDL/SDL.h>
 
 @interface MOTimer : NSObject

@@ -4,8 +4,6 @@
 #import <Monet/MOPoint.h>
 #import <Monet/MORect.h>
 
-#import <OpenGL/gl.h>
-
 @class MOImage;
 
 @interface MOGraphicsContext : NSObject
