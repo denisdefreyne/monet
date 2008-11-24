@@ -17,7 +17,7 @@
 // 2. type = key up,   mod = shift,        char = '', key = option
 // 3. type = key up,   mod = -,            char = '', key = shift
 
-typedef enum _MOEventType {
+enum {
 	MOFocusGainedEventType,
 	MOFocusLostEventType,
 
@@ -28,17 +28,19 @@ typedef enum _MOEventType {
 	MOMouseButtonUpEventType,
 
 	MOMouseMotionEventType
-} MOEventType;
+};
+typedef UInt8 MOEventType;
 
-typedef enum _MOMouseButton {
+enum {
 	MOUnknownMouseButton = 0,
 
 	MOLeftMouseButton,
 	MOMiddleMouseButton,
 	MORightMouseButton
-} MOMouseButton;
+};
+typedef UInt8 MOMouseButton;
 
-typedef enum _MOKey {
+enum {
 	MOUnknownKey = 0,
 
 	MOUpArrowKey,
@@ -74,14 +76,16 @@ typedef enum _MOKey {
 
 	MOBackspaceKey,
 	MODeleteKey
-} MOKey;
+};
+typedef UInt8 MOKey;
 
-typedef enum _MOKeyModifierMask {
+enum {
 	MOCapsLockKeyMask	= 0x01,
 	MOShiftKeyMask		= 0x02,
 	MOControlKeyMask	= 0x04,
 	MOAlternateKeyMask	= 0x08
-} MOKeyModifierMask;
+};
+typedef UInt8 MOKeyModifierMask;
 
 @interface MOEvent : NSObject
 {
