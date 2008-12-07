@@ -291,6 +291,18 @@
 
 #pragma mark -
 
+- (float)interpolation
+{
+	return interpolation;
+}
+
+- (void)setInterpolation:(float)aInterpolation
+{
+	interpolation = aInterpolation;
+}
+
+#pragma mark -
+
 - (void)open
 {
 	// Setup autorelease pool
@@ -381,6 +393,9 @@
 
 		// Handle events
 		[self handleEvents];
+
+		// Calculate interpolation
+		[self setInterpolation:(float)(SDL_GetTicks() + gameTickLength - nextGameTick)/(float)gameTickLength];
 
 		// Redraw
 		glClear(GL_COLOR_BUFFER_BIT);

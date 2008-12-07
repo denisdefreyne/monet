@@ -30,6 +30,7 @@
 
 	// Timing
 	UInt8				gameTicksPerSecond;
+	float				interpolation;
 
 	// FPS counter
 	MOSpeedCounter		*fpsCounter;
@@ -48,6 +49,9 @@
 - (void)setFullscreen:(BOOL)aIsFullscreen;
 - (UInt8)gameTicksPerSecond;
 - (void)setGameTicksPerSecond:(UInt8)aGameTicksPerSecond;
+
+- (float)interpolation;
+- (void)setInterpolation:(float)aInterpolation;
 
 - (void)open;
 - (void)enterRunloop;
