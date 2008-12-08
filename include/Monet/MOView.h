@@ -43,10 +43,14 @@
 - (void)clear;
 - (void)drawRect:(MORect)aRect;
 
+// TODO move this into the controller
 - (BOOL)keyDown:(MOEvent *)aEvent;
 - (BOOL)keyUp:(MOEvent *)aEvent;
 - (void)mouseDown:(MOEvent *)aEvent;
 - (void)mouseUp:(MOEvent *)aEvent;
 - (void)mouseDragged:(MOEvent *)aEvent;
+
+// TODO move this into the controller
+- (void)tick;
 
 @end

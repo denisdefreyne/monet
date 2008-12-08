@@ -15,12 +15,10 @@
 	// Pool
 	NSAutoreleasePool	*autoreleasePool;
 
-	// Dimensions
+	// Surface
+	SDL_Surface			*surface;
 	MOSize				size;
 	BOOL				isFullscreen;
-
-	// Image and buffer
-	SDL_Surface			*surface;
 
 	// Running or not?
 	BOOL				isOpen;
@@ -60,6 +58,5 @@
 - (MOPoint)mouseLocation;
 
 - (void)screenDidLoad;
-- (void)update;
 
 @end

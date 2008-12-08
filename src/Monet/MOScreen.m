@@ -383,7 +383,8 @@
 		for(int i = 0; SDL_GetTicks() > nextGameTick && i < MAX_FRAMESKIP; ++i)
 		{
 			// Update game
-			[self update];
+			// TODO make this [model tick] and [controller tick]
+			[contentView tick];
 
 			// Record speed
 			[gameSpeedCounter tick];
@@ -436,11 +437,6 @@
 #pragma mark -
 
 - (void)screenDidLoad
-{
-	// Do nothing by default
-}
-
-- (void)update
 {
 	// Do nothing by default
 }
