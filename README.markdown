@@ -35,6 +35,15 @@ Usage
 
 ...
 
+### Starting
+
+1. Create a `MOScreen`
+2. Configure the screen (`setSize:`, `setFullscreen:`, ...)
+3. Set the model, if any (`setModel:`)
+4. Open the screen (`open`)
+5. Create the content view (`setContentView:`)
+6. Enter runloop (`enterRunloop`)
+
 ### Drawing
 
 The `-[MOView drawRect:]` method should be implemented in subclasses. This method should draw the view. The rect argument specifies the rectangle that should be drawn (at the moment of writing, the rectangle isn't set, so the entire view must always be redrawn).
