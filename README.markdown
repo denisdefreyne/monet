@@ -33,13 +33,13 @@ It is not necessary to explicitly draw the subviews; this will be done automatic
 
 ### Event handling
 
-### Mouse events
+#### Mouse events
 
 Mouse events are sent immediately to the deepest subview.
 
 When a view has successfully handled an event, the event should be discarded. When a view can't handle the specific event, the method handling the event should forward the event to the superview (which is what the default implementation does).
 
-### Key events
+#### Key events
 
 Key events are sent to the screen's content view, unless there is a first responder, in which case the even will be sent immediately to the first responder.
 
