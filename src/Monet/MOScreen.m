@@ -247,6 +247,18 @@
 
 #pragma mark -
 
+- (NSObject *)model
+{
+	return model;
+}
+
+- (void)setModel:(NSObject *)aModel
+{
+	[aModel retain];
+	[model release];
+	model = aModel;
+}
+
 - (MOView *)contentView
 {
 	return contentView;
@@ -384,6 +396,8 @@
 		{
 			// Update game
 			// TODO make this [model tick] and [controller tick]
+			if([model respondsToSelector:@selector(tick)])
+				[model performSelector:@selector(tick)];
 			[contentView tick];
 
 			// Record speed

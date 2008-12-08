@@ -23,7 +23,10 @@
 	// Running or not?
 	BOOL				isOpen;
 
-	// Content view
+	// Model
+	id					model;
+
+	// View
 	MOView				*contentView;
 
 	// Timing
@@ -39,6 +42,8 @@
 	MOView				*lastRightMouseButtonDownView;
 }
 
+- (id)model;
+- (void)setModel:(id)aModel;
 - (MOView *)contentView;
 - (void)setContentView:(MOView *)aContentView;
 - (MOSize)size;
