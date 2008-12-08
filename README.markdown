@@ -18,6 +18,18 @@ Foundation is part of Cocoa, which comes with Mac OS X. There are several open-s
 * [nuFound](http://github.com/timburks/nufound/tree/master) (possibly incomplete)
 * [GNUstep](http://www.gnustep.org/)
 
+Goals
+-----
+
+Monet's goal is to be an Objective-C wrapper for SDL, inspired by Cocoa's AppKit.
+
+Ideally, an application that uses Monet should be able to do everything it needs without needing to interface with SDL directly. However, not all functionality from SDL will be available in Monet; features that are not used in Llama will be left out.
+
+History
+------
+
+First, there was Gosu-Monet (Gosu + Ruby). Then, there was Allegro-Monet (Allegro + Obj-C). Now, there is SDL-Monet (SDL + Obj-C).
+
 Usage
 -----
 
@@ -44,18 +56,6 @@ When a view has successfully handled an event, the event should be discarded. Wh
 Key events are sent to the screen's content view, unless there is a first responder, in which case the even will be sent immediately to the first responder.
 
 When a view successfully handles an event, the event is discarded. When a view receiving a key event does not know how to handle it, it will sequentially forward the event to all of its subviews, until either it wasn't handled by any subviews, or it was handled by one subview, in which case the event will not be forwarded to the remaining subviews but will be discarded instead.
-
-Goals
------
-
-Monet's goal is to be an Objective-C wrapper for SDL, inspired by Cocoa's AppKit.
-
-Ideally, an application that uses Monet should be able to do everything it needs without needing to interface with SDL directly. However, not all functionality from SDL will be available in Monet; features that are not used in Llama will be left out.
-
-History
-------
-
-First, there was Gosu-Monet (Gosu + Ruby). Then, there was Allegro-Monet (Allegro + Obj-C). Now, there is SDL-Monet (SDL + Obj-C).
 
 Relationships with Other Frameworks
 -----------------------------------
