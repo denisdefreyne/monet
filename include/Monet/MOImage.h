@@ -1,21 +1,12 @@
 #import <Foundation/Foundation.h>
 
-// FIXME remove these headers
-#import <OpenGL/gl.h>
-#import <OpenGL/glu.h>
-
 #import <Monet/MOPoint.h>
 #import <Monet/MORect.h>
 
-@class MOGraphicsContext;
-
 @interface MOImage : NSObject
 {
-	GLuint				textureName;
-
-	MOSize				size;
-
-	MOGraphicsContext	*graphicsContext;
+@protected
+	struct MOImageData *imageData;
 }
 
 - (id)initWithContentsOfFile:(NSString *)aFilename;

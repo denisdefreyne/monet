@@ -2,14 +2,24 @@
 
 #import <Monet/MOApplication.h>
 
+struct MOButtonData
+{
+	BOOL isMouseDown;
+	BOOL isMouseInside;
+};
+
 @implementation MOButton
 
 - (id)initWithFrame:(MORect)aFrame app:(MOApplication *)aApp
 {
 	if(self = [super initWithFrame:aFrame app:aApp])
 	{
-		isMouseDown		= NO;
-		isMouseInside	= NO;
+		// Create data
+		buttonData = calloc(1, sizeof (struct MOButtonData));
+
+		// Set default values
+		buttonData->isMouseDown   = NO;
+		buttonData->isMouseInside = NO;
 	}
 
 	return self;
@@ -19,7 +29,7 @@
 
 - (BOOL)isPressed
 {
-	return isMouseDown && MORectContainsPoint([self bounds], [self convertPointFromScreen:[[self app] mouseLocation]]);
+	return buttonData->isMouseDown && MORectContainsPoint([self bounds], [self convertPointFromScreen:[[self app] mouseLocation]]);
 }
 
 - (void)clicked
@@ -31,7 +41,7 @@
 
 - (void)mouseDown:(MOEvent *)aEvent
 {
-	isMouseDown = YES;
+	buttonData->isMouseDown = YES;
 }
 
 - (void)mouseUp:(MOEvent *)aEvent
@@ -39,7 +49,7 @@
 	if([self isPressed])
 		[self clicked];
 
-	isMouseDown = NO;
+	buttonData->isMouseDown = NO;
 }
 
 @end

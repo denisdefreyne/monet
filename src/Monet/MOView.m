@@ -1,9 +1,25 @@
 #import <Monet/MOView.h>
 
+#import <OpenGL/gl.h>
+#import <OpenGL/glu.h>
+
 #import <Monet/MOEvent.h>
 #import <Monet/MOApplication.h>
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
+
+struct MOViewData
+{
+	MOApplication		*app;
+
+	MOView				*superview;
+	NSMutableArray		*subviews;
+
+	MORect				frame;
+	MORect				bounds;
+
+	MOGraphicsContext	*graphicsContext;
+};
 
 @implementation MOView
 
@@ -11,14 +27,16 @@
 {
 	if(self = [super init])
 	{
-		frame = aFrame;
+		viewData = calloc(1, sizeof (struct MOViewData));
 
-		app = aApp;
+		viewData->frame = aFrame;
 
-		bounds.w = frame.w;
-		bounds.h = frame.h;
+		viewData->app = aApp;
 
-		subviews = [[NSMutableArray alloc] init];
+		viewData->bounds.w = viewData->frame.w;
+		viewData->bounds.h = viewData->frame.h;
+
+		viewData->subviews = [[NSMutableArray alloc] init];
 	}
 
 	return self;
@@ -26,9 +44,9 @@
 
 - (void)dealloc
 {
-	[subviews release];
+	[viewData->subviews release];
 
-	[graphicsContext release];
+	[viewData->graphicsContext release];
 
 	[super dealloc];
 }
@@ -37,31 +55,31 @@
 
 - (MOApplication *)app
 {
-	if(!app)
-		app = [superview app];
+	if(!viewData->app)
+		viewData->app = [viewData->superview app];
 
-	return app;
+	return viewData->app;
 }
 
 - (MOView *)superview
 {
-	return superview;
+	return viewData->superview;
 }
 
 - (void)setSuperview:(MOView *)aSuperview
 {
 	// Don't retain
-	superview = aSuperview;
+	viewData->superview = aSuperview;
 }
 
 - (NSMutableArray *)subviews
 {
-	return subviews;
+	return viewData->subviews;
 }
 
 - (void)addSubview:(MOView *)aSubview
 {
-	[subviews addObject:aSubview];
+	[viewData->subviews addObject:aSubview];
 	[aSubview setSuperview:self];
 }
 
@@ -69,12 +87,12 @@
 
 - (MOPoint)absoluteOrigin
 {
-	return [superview convertPointToScreen:MOMakePoint(frame.x, frame.y)];
+	return [viewData->superview convertPointToScreen:MOMakePoint(viewData->frame.x, viewData->frame.y)];
 }
 
 - (MOPoint)convertPointFromScreen:(MOPoint)aPoint
 {
-	if(!superview)
+	if(!viewData->superview)
 		return aPoint;
 	else
 	{
@@ -85,7 +103,7 @@
 
 - (MOPoint)convertPointToScreen:(MOPoint)aPoint
 {
-	if(!superview)
+	if(!viewData->superview)
 		return aPoint;
 	else
 	{
@@ -99,7 +117,7 @@
 // aPoint is relative to the screen here, not the view.
 - (MOView *)subviewAtPoint:(MOPoint)aPoint
 {
-	NSEnumerator *enumerator = [subviews objectEnumerator];
+	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
 	MOView *subview = nil;
 	while(subview = [enumerator nextObject])
 	{
@@ -131,35 +149,35 @@
 
 - (MORect)frame
 {
-	return frame;
+	return viewData->frame;
 }
 
 - (MORect)bounds
 {
-	return bounds;
+	return viewData->bounds;
 }
 
 - (MORect)boundsRelativeToWindow
 {
 	MOPoint absoluteOrigin = [self absoluteOrigin];
-	return MOMakeRect(absoluteOrigin.x, absoluteOrigin.y, bounds.w, bounds.h);
+	return MOMakeRect(absoluteOrigin.x, absoluteOrigin.y, viewData->bounds.w, viewData->bounds.h);
 }
 
 #pragma mark -
 
 - (void)lockFocus
 {
-	if(!graphicsContext)
+	if(!viewData->graphicsContext)
 	{
 		// Get destination rectangle
 		MOPoint absoluteOrigin = [self absoluteOrigin];
-		MORect rect = MOMakeRect(absoluteOrigin.x, absoluteOrigin.y, frame.w, frame.h);
+		MORect rect = MOMakeRect(absoluteOrigin.x, absoluteOrigin.y, viewData->frame.w, viewData->frame.h);
 
 		// Create graphics context
-		graphicsContext = [[MOGraphicsContext alloc] initWithRect:rect];
+		viewData->graphicsContext = [[MOGraphicsContext alloc] initWithRect:rect];
 	}
 
-	[[MOGraphicsContext stack] addObject:graphicsContext];
+	[[MOGraphicsContext stack] addObject:viewData->graphicsContext];
 }
 
 - (void)unlockFocus
@@ -172,7 +190,7 @@
 - (void)display
 {
 	// Set up clipping
-	glScissor([self absoluteOrigin].x, [self absoluteOrigin].y, bounds.w, bounds.h);
+	glScissor([self absoluteOrigin].x, [self absoluteOrigin].y, viewData->bounds.w, viewData->bounds.h);
 
 	// Draw this view
 	[self lockFocus];
@@ -180,7 +198,7 @@
 	[self unlockFocus];
 
 	// Draw subviews
-	NSEnumerator *enumerator = [subviews objectEnumerator];
+	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
 	MOView *subview = nil;
 	while(subview = [enumerator nextObject])
 		[subview display];
@@ -200,7 +218,7 @@
 
 - (BOOL)keyDown:(MOEvent *)aEvent
 {
-	NSEnumerator *enumerator = [subviews objectEnumerator];
+	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
 	MOView *subview = nil;
 	BOOL isHandled = NO;
 	while(subview = [enumerator nextObject])
@@ -215,7 +233,7 @@
 
 - (BOOL)keyUp:(MOEvent *)aEvent
 {
-	NSEnumerator *enumerator = [subviews objectEnumerator];
+	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
 	MOView *subview = nil;
 	BOOL isHandled = NO;
 	while(subview = [enumerator nextObject])
@@ -230,12 +248,12 @@
 
 - (void)mouseDown:(MOEvent *)aEvent
 {
-	[superview mouseDown:aEvent];
+	[viewData->superview mouseDown:aEvent];
 }
 
 - (void)mouseUp:(MOEvent *)aEvent
 {
-	[superview mouseUp:aEvent];
+	[viewData->superview mouseUp:aEvent];
 }
 
 - (void)mouseDragged:(MOEvent *)aEvent

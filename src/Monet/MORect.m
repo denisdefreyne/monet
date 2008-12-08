@@ -1,6 +1,8 @@
 #import <Monet/MORect.h>
 
 #import <SDL/SDL.h>
+#import <OpenGL/gl.h>
+#import <OpenGL/glu.h>
 
 #import <Monet/MOColor.h>
 #import <Monet/MOGraphicsContext.h>

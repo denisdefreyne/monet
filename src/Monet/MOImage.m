@@ -2,6 +2,8 @@
 
 #import <SDL/SDL.h>
 #import <SDL_image/SDL_image.h>
+#import <OpenGL/gl.h>
+#import <OpenGL/glu.h>
 
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
@@ -12,20 +14,23 @@
 {
 	if(self = [super init])
 	{
+		// Create data
+		imageData = calloc(1, sizeof (struct MOImageData));
+
 		// Load file
 		SDL_Surface *surface = IMG_Load([aFilename UTF8String]);
 		if(!surface)
 			[NSException raise:@"SDLException" format:@"IMG_Load failed: %s\n", SDL_GetError()];
 
 		// Create texture
-		glGenTextures(1, &textureName);
-		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
+		glGenTextures(1, &imageData->textureName);
+		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, imageData->textureName);
 		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		// Get number of colors and texture format
-		GLint	numberOfColors = surface->format->BytesPerPixel;
-		GLenum	textureFormat;
+		GLint  numberOfColors = surface->format->BytesPerPixel;
+		GLenum textureFormat;
 		if(numberOfColors == 4)
 		{
 			if (surface->format->Rmask == 0x000000ff)
@@ -45,11 +50,11 @@
 			[NSException raise:@"OpenGLException" format:@"glTexImage2D preparation failed: image is not in truecolor (filename = %@)\n", aFilename];
 
 		// Set size
-		size = MOMakeSize(surface->w, surface->h);
+		imageData->size = MOMakeSize(surface->w, surface->h);
 
 		// Fill texture
 		SDL_LockSurface(surface);
-		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, size.w, size.h, 0, textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
+		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, imageData->size.w, imageData->size.h, 0, textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
 		SDL_UnlockSurface(surface);
 
 		// Cleanup
@@ -65,14 +70,14 @@
 	if(self = [super init])
 	{
 		// Set size
-		size = MOMakeSize(aWidth, aHeight);
+		imageData->size = MOMakeSize(aWidth, aHeight);
 
 		// Create texture
-		glGenTextures(1, &textureName);
-		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
+		glGenTextures(1, &imageData->textureName);
+		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, imageData->textureName);
 		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, size.w, size.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, imageData->size.w, imageData->size.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 		// Cleanup
 		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
@@ -83,9 +88,9 @@
 
 - (void)dealloc
 {
-	glDeleteTextures(1, &textureName);
+	glDeleteTextures(1, &imageData->textureName);
 
-	[graphicsContext release];
+	[imageData->graphicsContext release];
 
 	[super dealloc];
 }
@@ -95,10 +100,10 @@
 - (void)lockFocus
 {
 	// Create graphics context if necessary
-	if(!graphicsContext)
-		graphicsContext = [[MOGraphicsContext alloc] initWithRect:[self bounds]];
+	if(!imageData->graphicsContext)
+		imageData->graphicsContext = [[MOGraphicsContext alloc] initWithRect:[self bounds]];
 
-	[[MOGraphicsContext stack] addObject:graphicsContext];
+	[[MOGraphicsContext stack] addObject:imageData->graphicsContext];
 }
 
 - (void)unlockFocus
@@ -110,7 +115,7 @@
 
 - (MORect)bounds
 {
-	return MOMakeRect(0, 0, size.w, size.h);
+	return MOMakeRect(0, 0, imageData->size.w, imageData->size.h);
 }
 
 #pragma mark -
@@ -118,7 +123,7 @@
 - (void)takeImageFromRect:(MORect)aRect
 {
 	// Bind
-	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, imageData->textureName);
 
 	// Copy
 	glCopyTexSubImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, 0, 0, aRect.x, aRect.y, aRect.w, aRect.h);
@@ -137,23 +142,23 @@
 
 	// TODO [OpenGL] translate using matrixes
 
-	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, imageData->textureName);
 	glBegin(GL_QUADS);
 	{
 		// bottom left
 		glTexCoord2i(	0,							0);
-		glVertex2i(		dstPoint.x,					dstPoint.y + size.h);
+		glVertex2i(		dstPoint.x,					dstPoint.y + imageData->size.h);
 
 		// bottom right
-		glTexCoord2i(	size.w,						0);
-		glVertex2i(		dstPoint.x + size.w,		dstPoint.y + size.h);
+		glTexCoord2i(	imageData->size.w,				0);
+		glVertex2i(		dstPoint.x + imageData->size.w,	dstPoint.y + imageData->size.h);
 
 		// top right
-		glTexCoord2i(	size.w,						size.h);
-		glVertex2i(		dstPoint.x + size.w,		dstPoint.y);
+		glTexCoord2i(	imageData->size.w,				imageData->size.h);
+		glVertex2i(		dstPoint.x + imageData->size.w,	dstPoint.y);
 
 		// top left
-		glTexCoord2i(	0,							size.h);
+		glTexCoord2i(	0,							imageData->size.h);
 		glVertex2i(		dstPoint.x,					dstPoint.y);
 	}
 	glEnd();

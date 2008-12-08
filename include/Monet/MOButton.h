@@ -4,8 +4,8 @@
 
 @interface MOButton : MOView
 {
-	BOOL isMouseDown;
-	BOOL isMouseInside;
+@protected
+	struct MOButtonData *buttonData;
 }
 
 - (BOOL)isPressed;

@@ -1,45 +1,14 @@
 #import <Foundation/Foundation.h>
 
-// FIXME remove these headers
-#import <SDL/SDL.h>
-
 #import <Monet/MOPoint.h>
 #import <Monet/MOSize.h>
 
-@class MOSpeedCounter;
 @class MOView;
-@class MOImage;
 
 @interface MOApplication : NSObject
 {
-	// Pool
-	NSAutoreleasePool	*autoreleasePool;
-
-	// Surface
-	SDL_Surface			*surface;
-	MOSize				screenSize;
-	BOOL				isFullscreen;
-
-	// Running or not?
-	BOOL				isOpen;
-
-	// Model
-	id					model;
-
-	// View
-	MOView				*mainView;
-
-	// Timing
-	UInt8				gameTicksPerSecond;
-	float				interpolation;
-
-	// FPS counter
-	MOSpeedCounter		*fpsCounter;
-
-	// Recent views receiving mouse button events
-	MOView				*lastLeftMouseButtonDownView;
-	MOView				*lastMiddleMouseButtonDownView;
-	MOView				*lastRightMouseButtonDownView;
+@protected
+	struct MOApplicationData *applicationData;
 }
 
 - (id)model;

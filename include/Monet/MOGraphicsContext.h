@@ -8,7 +8,8 @@
 
 @interface MOGraphicsContext : NSObject
 {
-	MORect		rect;
+@protected
+	struct MOGraphicsContextData *graphicsContextData;
 }
 
 + (NSMutableArray *)stack;

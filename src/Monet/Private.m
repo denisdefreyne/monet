@@ -6,19 +6,12 @@
 {
 	if(self = [super init])
 	{
-		rect = aRect;
+		graphicsContextData = calloc(1, sizeof (struct MOGraphicsContextData));
+
+		graphicsContextData->rect = aRect;
 	}
 
 	return self;
-}
-
-@end
-
-@implementation MOApplication (Private)
-
-- (SDL_Surface *)surface
-{
-	return surface;
 }
 
 @end

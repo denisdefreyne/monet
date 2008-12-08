@@ -2,19 +2,9 @@
 
 #import <Monet/Types.h>
 
-// FIXME remove these headers
-#import <SDL/SDL.h>
-
 @interface MOTimer : NSObject
 {
-	SDL_TimerID	timerID;
-
-	UInt32		interval;
-
-	id			target;
-	SEL			selector;
-
-	void		*userInfo;
+	struct MOTimerData *timerData;
 }
 
 - (id)initWithTarget:(id)aTarget selector:(SEL)aSelector interval:(UInt32)aInterval userInfo:(void *)aUserInfo;

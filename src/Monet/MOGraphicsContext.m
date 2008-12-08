@@ -1,5 +1,7 @@
 #import <Monet/MOGraphicsContext.h>
 
+#import <Monet/Private.h>
+
 @implementation MOGraphicsContext
 
 + (NSMutableArray *)stack
@@ -21,7 +23,7 @@
 
 - (MORect)rect
 {
-	return rect;
+	return graphicsContextData->rect;
 }
 
 @end

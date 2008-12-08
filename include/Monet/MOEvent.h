@@ -89,16 +89,8 @@ typedef UInt8 MOKeyModifierMask;
 
 @interface MOEvent : NSObject
 {
-	MOEventType		type;
-	UInt8			modifiers;
-
-	NSString		*character;
-	MOKey			key;
-
-	MOMouseButton	mouseButton;
-	MOPoint			mouseLocation;
-	MOPoint			relativeMouseMotion;
-	UInt8			clickCount;
+@protected
+	struct MOEventData *eventData;
 }
 
 - (id)initKeyEventWithType:(MOEventType)aType modifiers:(UInt8)aModifiers character:(NSString *)aCharacter key:(MOKey)aKey;

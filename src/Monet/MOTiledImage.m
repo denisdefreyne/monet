@@ -1,7 +1,15 @@
 #import <Monet/MOTiledImage.h>
 
+#import <OpenGL/gl.h>
+#import <OpenGL/glu.h>
+
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
+
+struct MOTiledImageData
+{
+	MOSize tileSize;
+};
 
 @implementation MOTiledImage
 
@@ -9,7 +17,9 @@
 {
 	if(self = [super initWithContentsOfFile:aFilename])
 	{
-		tileSize = aTileSize;
+		tiledImageData = calloc(1, sizeof (struct MOTiledImageData));
+
+		tiledImageData->tileSize = aTileSize;
 	}
 
 	return self;
@@ -19,7 +29,7 @@
 
 - (MOSize)tileSize
 {
-	return tileSize;
+	return tiledImageData->tileSize;
 }
 
 #pragma mark -
@@ -32,29 +42,29 @@
 
 	// Get tile origin
 	MOPoint tileOrigin;
-	tileOrigin.x = aTilePoint.x * tileSize.w;
-	tileOrigin.y = aTilePoint.y * tileSize.h;
+	tileOrigin.x = aTilePoint.x * tiledImageData->tileSize.w;
+	tileOrigin.y = aTilePoint.y * tiledImageData->tileSize.h;
 
 	// TODO [OpenGL] translate using matrixes
 
-	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureName);
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, imageData->textureName);
 	glBegin(GL_QUADS);
 	{
 		// bottom left
-		glTexCoord2i(	tileOrigin.x,				tileOrigin.y);
-		glVertex2i(		dstPoint.x,					dstPoint.y + tileSize.h);
+		glTexCoord2i(	tileOrigin.x,								tileOrigin.y);
+		glVertex2i(		dstPoint.x,									dstPoint.y + tiledImageData->tileSize.h);
 
 		// bottom right
-		glTexCoord2i(	tileOrigin.x + tileSize.w,	tileOrigin.y);
-		glVertex2i(		dstPoint.x + tileSize.w,	dstPoint.y + tileSize.h);
+		glTexCoord2i(	tileOrigin.x + tiledImageData->tileSize.w,	tileOrigin.y);
+		glVertex2i(		dstPoint.x + tiledImageData->tileSize.w,	dstPoint.y + tiledImageData->tileSize.h);
 
 		// top right
-		glTexCoord2i(	tileOrigin.x + tileSize.w,	tileOrigin.y + tileSize.h);
-		glVertex2i(		dstPoint.x + tileSize.w,	dstPoint.y);
+		glTexCoord2i(	tileOrigin.x + tiledImageData->tileSize.w,	tileOrigin.y + tiledImageData->tileSize.h);
+		glVertex2i(		dstPoint.x + tiledImageData->tileSize.w,	dstPoint.y);
 
 		// top left
-		glTexCoord2i(	tileOrigin.x,				tileOrigin.y + tileSize.h);
-		glVertex2i(		dstPoint.x,					dstPoint.y);
+		glTexCoord2i(	tileOrigin.x,								tileOrigin.y + tiledImageData->tileSize.h);
+		glVertex2i(		dstPoint.x,									dstPoint.y);
 	}
 	glEnd();
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);

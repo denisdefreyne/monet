@@ -1,16 +1,32 @@
 #import <Monet/MOEvent.h>
 
+struct MOEventData
+{
+	MOEventType     type;
+	UInt8           modifiers;
+    
+	NSString        *character;
+	MOKey           key;
+    
+	MOMouseButton   mouseButton;
+	MOPoint         mouseLocation;
+	MOPoint         relativeMouseMotion;
+	UInt8           clickCount;
+};
+
 @implementation MOEvent
 
 - (id)initKeyEventWithType:(MOEventType)aType modifiers:(UInt8)aModifiers character:(NSString *)aCharacter key:(MOKey)aKey
 {
 	if(self = [super init])
 	{
-		type		= aType;
-		modifiers	= aModifiers;
+		eventData = calloc(1, sizeof (struct MOEventData));
 
-		character	= [aCharacter retain];
-		key			= aKey;
+		eventData->type      = aType;
+		eventData->modifiers = aModifiers;
+
+		eventData->character = [aCharacter retain];
+		eventData->key       = aKey;
 	}
 
 	return self;
@@ -20,12 +36,14 @@
 {
 	if(self = [super init])
 	{
-		type			= aType;
-		modifiers		= aModifiers;
+		eventData = calloc(1, sizeof (struct MOEventData));
 
-		mouseButton		= aMouseButton;
-		mouseLocation	= aMouseLocation;
-		clickCount		= aClickCount;
+		eventData->type          = aType;
+		eventData->modifiers     = aModifiers;
+        
+		eventData->mouseButton   = aMouseButton;
+		eventData->mouseLocation = aMouseLocation;
+		eventData->clickCount    = aClickCount;
 	}
 
 	return self;
@@ -35,11 +53,13 @@
 {
 	if(self = [super init])
 	{
-		type				= MOMouseMotionEventType;
-		modifiers			= aModifiers;
+		eventData = calloc(1, sizeof (struct MOEventData));
 
-		mouseLocation		= aMouseLocation;
-		relativeMouseMotion	= aRelativeMouseMotion;
+		eventData->type                = MOMouseMotionEventType;
+		eventData->modifiers           = aModifiers;
+        
+		eventData->mouseLocation       = aMouseLocation;
+		eventData->relativeMouseMotion = aRelativeMouseMotion;
 	}
 
 	return self;
@@ -47,7 +67,7 @@
 
 - (void)dealloc
 {
-	[character release];
+	[eventData->character release];
 
 	[super dealloc];
 }
@@ -56,46 +76,46 @@
 
 - (MOEventType)type
 {
-	return type;
+	return eventData->type;
 }
 
 - (UInt8)modifiers
 {
-	return modifiers;
+	return eventData->modifiers;
 }
 
 #pragma mark -
 
 - (NSString *)character
 {
-	return character;
+	return eventData->character;
 }
 
 - (MOKey)key
 {
-	return key;
+	return eventData->key;
 }
 
 #pragma mark -
 
 - (MOMouseButton)mouseButton
 {
-	return mouseButton;
+	return eventData->mouseButton;
 }
 
 - (MOPoint)mouseLocation
 {
-	return mouseLocation;
+	return eventData->mouseLocation;
 }
 
 - (MOPoint)relativeMouseMotion
 {
-	return relativeMouseMotion;
+	return eventData->relativeMouseMotion;
 }
 
 - (UInt8)clickCount
 {
-	return clickCount;
+	return eventData->clickCount;
 }
 
 @end

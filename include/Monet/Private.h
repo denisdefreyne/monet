@@ -1,16 +1,26 @@
 #import <Monet/Monet.h>
 
 #import <SDL/SDL.h>
+#import <OpenGL/gl.h>
+#import <OpenGL/glu.h>
+
+struct MOGraphicsContextData
+{
+	MORect rect;
+};
+
+struct MOImageData
+{
+	GLuint				textureName;
+
+	MOSize				size;
+
+	MOGraphicsContext	*graphicsContext;
+};
 
 @interface MOGraphicsContext (Private)
 
 - (id)initWithRect:(MORect)aRect;
-
-@end
-
-@interface MOApplication (Private)
-
-- (SDL_Surface *)surface;
 
 @end
 

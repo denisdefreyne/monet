@@ -1,5 +1,19 @@
 #import <Monet/MOTimer.h>
 
+#import <SDL/SDL.h>
+
+struct MOTimerData
+{
+	SDL_TimerID	timerID;
+
+	UInt32		interval;
+
+	id			target;
+	SEL			selector;
+
+	void		*userInfo;
+};
+
 Uint32 timerCallback(Uint32 interval, void *param)
 {
 	MOTimer *timer = (MOTimer *)param;
@@ -15,12 +29,14 @@ Uint32 timerCallback(Uint32 interval, void *param)
 {
 	if(self = [super init])
 	{
-		target = aTarget;
-		selector = aSelector;
+		timerData = calloc(1, sizeof(struct MOTimerData));
 
-		interval = aInterval;
+		timerData->target = aTarget;
+		timerData->selector = aSelector;
 
-		userInfo = aUserInfo;
+		timerData->interval = aInterval;
+
+		timerData->userInfo = aUserInfo;
 	}
 
 	return self;
@@ -37,34 +53,34 @@ Uint32 timerCallback(Uint32 interval, void *param)
 
 - (id)target
 {
-	return target;
+	return timerData->target;
 }
 
 - (SEL)selector
 {
-	return selector;
+	return timerData->selector;
 }
 
 - (UInt32)interval
 {
-	return interval;
+	return timerData->interval;
 }
 
 - (void *)userInfo
 {
-	return userInfo;
+	return timerData->userInfo;
 }
 
 #pragma mark -
 
 - (void)start
 {
-	timerID = SDL_AddTimer(interval, &timerCallback, self);
+	timerData->timerID = SDL_AddTimer(timerData->interval, &timerCallback, self);
 }
 
 - (void)stop
 {
-	SDL_RemoveTimer(timerID);
+	SDL_RemoveTimer(timerData->timerID);
 }
 
 @end

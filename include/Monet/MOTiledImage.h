@@ -6,7 +6,8 @@
 
 @interface MOTiledImage : MOImage
 {
-	MOSize tileSize;
+@protected
+	struct MOTiledImageData *tiledImageData;
 }
 
 - (id)initWithContentsOfFile:(NSString *)aFilename tileSize:(MOSize)aTileSize;
