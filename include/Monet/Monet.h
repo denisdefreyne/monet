@@ -7,7 +7,7 @@
 #import <Monet/MOImage.h>
 #import <Monet/MOPoint.h>
 #import <Monet/MORect.h>
-#import <Monet/MOScreen.h>
+#import <Monet/MOApplication.h>
 #import <Monet/MOSize.h>
 #import <Monet/MOSpeedCounter.h>
 #import <Monet/MOTiledImage.h>

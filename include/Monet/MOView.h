@@ -4,11 +4,11 @@
 
 @class MOEvent;
 @class MOGraphicsContext;
-@class MOScreen;
+@class MOApplication;
 
 @interface MOView : NSObject
 {
-	MOScreen			*screen;
+	MOApplication		*app;
 
 	MOView				*superview;
 	NSMutableArray		*subviews;
@@ -19,9 +19,10 @@
 	MOGraphicsContext	*graphicsContext;
 }
 
-- (id)initWithFrame:(MORect)aFrame screen:(MOScreen *)aScreen;
+- (id)initWithFrame:(MORect)aFrame app:(MOApplication *)aApp;
 
-- (MOScreen *)screen;
+- (MOApplication *)app;
+
 - (MOView *)superview;
 - (NSMutableArray *)subviews;
 - (void)addSubview:(MOView *)aSubview;

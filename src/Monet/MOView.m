@@ -1,19 +1,19 @@
 #import <Monet/MOView.h>
 
 #import <Monet/MOEvent.h>
-#import <Monet/MOScreen.h>
+#import <Monet/MOApplication.h>
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
 
 @implementation MOView
 
-- (id)initWithFrame:(MORect)aFrame screen:(MOScreen *)aScreen
+- (id)initWithFrame:(MORect)aFrame app:(MOApplication *)aApp
 {
 	if(self = [super init])
 	{
 		frame = aFrame;
 
-		screen = aScreen;
+		app = aApp;
 
 		bounds.w = frame.w;
 		bounds.h = frame.h;
@@ -35,12 +35,12 @@
 
 #pragma mark -
 
-- (MOScreen *)screen
+- (MOApplication *)app
 {
-	if(!screen)
-		screen = [superview screen];
+	if(!app)
+		app = [superview app];
 
-	return screen;
+	return app;
 }
 
 - (MOView *)superview

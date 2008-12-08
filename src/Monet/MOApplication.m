@@ -1,4 +1,4 @@
-#import <Monet/MOScreen.h>
+#import <Monet/MOApplication.h>
 
 #import <Foundation/Foundation.h>
 
@@ -10,13 +10,13 @@
 #import <OpenGL/gl.h>
 #import <OpenGL/glu.h>
 
-@interface MOScreen (Autoreleasing)
+@interface MOApplication (Autoreleasing)
 
 - (void)refreshAutoreleasePool;
 
 @end
 
-@implementation MOScreen (Autoreleasing)
+@implementation MOApplication (Autoreleasing)
 
 - (void)refreshAutoreleasePool
 {
@@ -26,13 +26,13 @@
 
 @end
 
-@interface MOScreen (Runloop)
+@interface MOApplication (Runloop)
 
 - (void)handleEvents;
 
 @end
 
-@implementation MOScreen (Runloop)
+@implementation MOApplication (Runloop)
 
 - (void)handleEvents
 {
@@ -50,7 +50,7 @@
 
 			case SDL_KEYDOWN:
 				if(event.key.keysym.sym == SDLK_ESCAPE)
-					[self close];
+					[self closeScreen];
 				else
 				{
 					// Get character
@@ -68,7 +68,7 @@
 					];
 
 					// Dispatch event
-					[contentView keyDown:moEvent];
+					[mainView keyDown:moEvent];
 
 					// Cleanup
 					[character release];
@@ -86,7 +86,7 @@
 					];
 
 					// Dispatch event
-					[contentView keyUp:moEvent];
+					[mainView keyUp:moEvent];
 
 					// Cleanup
 					[moEvent release];
@@ -97,7 +97,7 @@
 				{
 					// Create event
 					MOEvent *moEvent = [[MOEvent alloc] initMouseMotionEventWithModifiers:MOSDLModToMOKeyModifierMask(SDL_GetModState())
-														mouseLocation:MOMakePoint(event.motion.x, size.h-event.motion.y-1)
+														mouseLocation:MOMakePoint(event.motion.x, screenSize.h-event.motion.y-1)
 														relativeMouseMotion:MOMakePoint(event.motion.xrel, event.motion.yrel)
 					];
 
@@ -117,12 +117,12 @@
 			case SDL_MOUSEBUTTONDOWN:
 				{
 					// Get event information
-					MOPoint mouseLocation		= MOMakePoint(event.button.x, size.h-event.button.y-1);
+					MOPoint mouseLocation		= MOMakePoint(event.button.x, screenSize.h-event.button.y-1);
 					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
 					UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
 					// Find deepest subview
-					MOView *subview = [contentView deepestSubviewAtPoint:mouseLocation];
+					MOView *subview = [mainView deepestSubviewAtPoint:mouseLocation];
 
 					// Set last view receiving event
 					switch(mouseButton)
@@ -159,7 +159,7 @@
 			case SDL_MOUSEBUTTONUP:
 				{
 					// Get event information
-					MOPoint mouseLocation		= MOMakePoint(event.button.x, size.h-event.button.y-1);
+					MOPoint mouseLocation		= MOMakePoint(event.button.x, screenSize.h-event.button.y-1);
 					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
 					UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
@@ -214,7 +214,7 @@
 				break;
 
 			case SDL_QUIT:
-				[self close];
+				[self closeScreen];
 				break;
 		}
 	}
@@ -222,7 +222,7 @@
 
 @end
 
-@implementation MOScreen
+@implementation MOApplication
 
 - (id)init
 {
@@ -239,7 +239,7 @@
 	SDL_FreeSurface(surface);
 	SDL_Quit();
 
-	[self setContentView:nil];
+	[self setMainView:nil];
 	[fpsCounter release];
 
 	[super dealloc];
@@ -259,26 +259,26 @@
 	model = aModel;
 }
 
-- (MOView *)contentView
+- (MOView *)mainView
 {
-	return contentView;
+	return mainView;
 }
 
-- (void)setContentView:(MOView *)aContentView
+- (void)setMainView:(MOView *)aMainView
 {
-	[aContentView retain];
-	[contentView release];
-	contentView = aContentView;
+	[aMainView retain];
+	[mainView release];
+	mainView = aMainView;
 }
 
-- (MOSize)size
+- (MOSize)screenSize
 {
-	return size;
+	return screenSize;
 }
 
-- (void)setSize:(MOSize)aSize
+- (void)setScreenSize:(MOSize)aScreenSize
 {
-	size = aSize;
+	screenSize = aScreenSize;
 }
 
 - (BOOL)isFullscreen
@@ -315,7 +315,7 @@
 
 #pragma mark -
 
-- (void)open
+- (void)openScreen
 {
 	// Setup autorelease pool
 	[self refreshAutoreleasePool];
@@ -330,7 +330,7 @@
 
 	// Create screen
 	Uint32 flags = SDL_OPENGL | (isFullscreen ? SDL_FULLSCREEN : 0);
-	surface = SDL_SetVideoMode(size.w, size.h, 0, flags);
+	surface = SDL_SetVideoMode(screenSize.w, screenSize.h, 0, flags);
 	if(!surface)
 		[NSException raise:@"SDLException" format:@"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
 
@@ -398,7 +398,7 @@
 			// TODO make this [model tick] and [controller tick]
 			if([model respondsToSelector:@selector(tick)])
 				[model performSelector:@selector(tick)];
-			[contentView tick];
+			[mainView tick];
 
 			// Record speed
 			[gameSpeedCounter tick];
@@ -414,7 +414,7 @@
 
 		// Redraw
 		glClear(GL_COLOR_BUFFER_BIT);
-		[contentView display];
+		[mainView display];
 		SDL_GL_SwapBuffers();
 
 		// Record speed
@@ -433,7 +433,7 @@
 	}
 }
 
-- (void)close
+- (void)closeScreen
 {
 	isOpen = NO;
 }
@@ -445,7 +445,7 @@
 	int x,y;
 	SDL_GetMouseState(&x, &y);
 
-	return MOMakePoint(x, size.h-y-1);
+	return MOMakePoint(x, screenSize.h-y-1);
 }
 
 #pragma mark -

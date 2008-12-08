@@ -10,14 +10,14 @@
 @class MOView;
 @class MOImage;
 
-@interface MOScreen : NSObject
+@interface MOApplication : NSObject
 {
 	// Pool
 	NSAutoreleasePool	*autoreleasePool;
 
 	// Surface
 	SDL_Surface			*surface;
-	MOSize				size;
+	MOSize				screenSize;
 	BOOL				isFullscreen;
 
 	// Running or not?
@@ -27,7 +27,7 @@
 	id					model;
 
 	// View
-	MOView				*contentView;
+	MOView				*mainView;
 
 	// Timing
 	UInt8				gameTicksPerSecond;
@@ -44,10 +44,10 @@
 
 - (id)model;
 - (void)setModel:(id)aModel;
-- (MOView *)contentView;
-- (void)setContentView:(MOView *)aContentView;
-- (MOSize)size;
-- (void)setSize:(MOSize)aSize;
+- (MOView *)mainView;
+- (void)setMainView:(MOView *)aMainView;
+- (MOSize)screenSize;
+- (void)setScreenSize:(MOSize)aSize;
 - (BOOL)isFullscreen;
 - (void)setFullscreen:(BOOL)aIsFullscreen;
 - (UInt8)gameTicksPerSecond;
@@ -56,9 +56,9 @@
 - (float)interpolation;
 - (void)setInterpolation:(float)aInterpolation;
 
-- (void)open;
+- (void)openScreen;
 - (void)enterRunloop;
-- (void)close;
+- (void)closeScreen;
 
 - (MOPoint)mouseLocation;
 

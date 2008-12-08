@@ -1,12 +1,12 @@
 #import <Monet/MOButton.h>
 
-#import <Monet/MOScreen.h>
+#import <Monet/MOApplication.h>
 
 @implementation MOButton
 
-- (id)initWithFrame:(MORect)aFrame screen:(MOScreen *)aScreen
+- (id)initWithFrame:(MORect)aFrame app:(MOApplication *)aApp
 {
-	if(self = [super initWithFrame:aFrame screen:aScreen])
+	if(self = [super initWithFrame:aFrame app:aApp])
 	{
 		isMouseDown		= NO;
 		isMouseInside	= NO;
@@ -19,7 +19,7 @@
 
 - (BOOL)isPressed
 {
-	return isMouseDown && MORectContainsPoint([self bounds], [self convertPointFromScreen:[[self screen] mouseLocation]]);
+	return isMouseDown && MORectContainsPoint([self bounds], [self convertPointFromScreen:[[self app] mouseLocation]]);
 }
 
 - (void)clicked

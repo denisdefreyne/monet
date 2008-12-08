@@ -8,7 +8,7 @@
 
 @end
 
-@interface MOScreen (Private)
+@interface MOApplication (Private)
 
 - (SDL_Surface *)surface;
 

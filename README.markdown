@@ -37,11 +37,11 @@ Usage
 
 ### Starting
 
-1. Create a `MOScreen`
-2. Configure the screen (`setSize:`, `setFullscreen:`, ...)
+1. Create a `MOApplication`
+2. Configure the application (`setScreenSize:`, `setFullscreen:`, ...)
 3. Set the model, if any (`setModel:`)
 4. Open the screen (`open`)
-5. Create the content view (`setContentView:`)
+5. Create the content view (`setMainView:`)
 6. Enter runloop (`enterRunloop`)
 
 ### Drawing

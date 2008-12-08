@@ -14,7 +14,7 @@
 
 @end
 
-@implementation MOScreen (Private)
+@implementation MOApplication (Private)
 
 - (SDL_Surface *)surface
 {
