@@ -26,6 +26,7 @@
 
 - (MORect)bounds;
 
+// FIXME allow drawing into a MOImage instead
 - (void)takeImageFromRect:(MORect)aRect;
 
 - (void)drawAtPoint:(MOPoint)aPoint;
