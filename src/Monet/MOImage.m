@@ -1,7 +1,7 @@
 #import <Monet/MOImage.h>
 
 #import <SDL/SDL.h>
-#import <SDL/SDL_image.h>
+#import <SDL_image/SDL_image.h>
 
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
