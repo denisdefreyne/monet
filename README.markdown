@@ -7,6 +7,8 @@ Requirements
 ------------
 
 * SDL
+* SDL_image
+* OpenGL
 * Foundation
 
 Foundation is part of Cocoa, which comes with Mac OS X. There are several open-source implementations for Foundation:
