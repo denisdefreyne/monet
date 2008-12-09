@@ -5,7 +5,6 @@
 
 @interface MOImage : NSObject
 {
-@protected
 	struct MOImageData *imageData;
 }
 

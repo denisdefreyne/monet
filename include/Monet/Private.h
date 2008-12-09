@@ -11,11 +11,9 @@ struct MOGraphicsContextData
 
 struct MOImageData
 {
-	GLuint				textureName;
-
-	MOSize				size;
-
-	MOGraphicsContext	*graphicsContext;
+	GLuint            textureName;
+	MOSize            size;
+	MOGraphicsContext *graphicsContext;
 };
 
 @interface MOGraphicsContext (Private)

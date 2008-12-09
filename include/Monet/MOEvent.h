@@ -80,16 +80,15 @@ enum {
 typedef UInt8 MOKey;
 
 enum {
-	MOCapsLockKeyMask	= 0x01,
-	MOShiftKeyMask		= 0x02,
-	MOControlKeyMask	= 0x04,
-	MOAlternateKeyMask	= 0x08
+	MOCapsLockKeyMask  = 0x01,
+	MOShiftKeyMask     = 0x02,
+	MOControlKeyMask   = 0x04,
+	MOAlternateKeyMask = 0x08
 };
 typedef UInt8 MOKeyModifierMask;
 
 @interface MOEvent : NSObject
 {
-@protected
 	struct MOEventData *eventData;
 }
 

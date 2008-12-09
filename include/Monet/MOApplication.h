@@ -7,7 +7,6 @@
 
 @interface MOApplication : NSObject
 {
-@protected
 	struct MOApplicationData *applicationData;
 }
 

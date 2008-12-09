@@ -8,7 +8,6 @@
 
 @interface MOGraphicsContext : NSObject
 {
-@protected
 	struct MOGraphicsContextData *graphicsContextData;
 }
 

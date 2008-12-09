@@ -6,7 +6,6 @@
 
 @interface MOTiledImage : MOImage
 {
-@protected
 	struct MOTiledImageData *tiledImageData;
 }
 

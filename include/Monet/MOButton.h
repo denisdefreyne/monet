@@ -4,7 +4,6 @@
 
 @interface MOButton : MOView
 {
-@protected
 	struct MOButtonData *buttonData;
 }
 

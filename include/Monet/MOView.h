@@ -7,7 +7,6 @@
 
 @interface MOView : NSObject
 {
-@protected
 	struct MOViewData *viewData;
 }
 
