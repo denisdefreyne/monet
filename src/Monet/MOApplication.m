@@ -3,7 +3,6 @@
 #import <Foundation/Foundation.h>
 
 #import <Monet/MOEvent.h>
-#import <Monet/MOSpeedCounter.h>
 #import <Monet/MOView.h>
 #import <Monet/Private.h>
 
@@ -32,9 +31,6 @@ struct MOApplicationData
 	// Timing
 	UInt8             gameTicksPerSecond;
 	float             interpolation;
-
-	// FPS counter
-	MOSpeedCounter    *fpsCounter;
 
 	// Recent views receiving mouse button events
 	MOView            *lastLeftMouseButtonDownView;
@@ -276,7 +272,6 @@ struct MOApplicationData
 	SDL_Quit();
 
 	[self setMainView:nil];
-	[applicationData->fpsCounter release];
 
 	[super dealloc];
 }
@@ -417,10 +412,6 @@ struct MOApplicationData
 
 - (void)enterRunloop
 {
-	// Create game and draw FPS counters
-	MOSpeedCounter *gameSpeedCounter	= [[MOSpeedCounter alloc] init];
-	MOSpeedCounter *drawSpeedCounter	= [[MOSpeedCounter alloc] init];
-
 	Uint32	gameTickLength	= 1000/applicationData->gameTicksPerSecond;
 	Uint32	nextGameTick	= SDL_GetTicks();
 
@@ -429,13 +420,9 @@ struct MOApplicationData
 		for(int i = 0; SDL_GetTicks() > nextGameTick && i < MAX_FRAMESKIP; ++i)
 		{
 			// Update game
-			// TODO make this [model tick] and [controller tick]
 			if([applicationData->model respondsToSelector:@selector(tick)])
 				[applicationData->model performSelector:@selector(tick)];
 			[applicationData->mainView tick];
-
-			// Record speed
-			[gameSpeedCounter tick];
 
 			nextGameTick += gameTickLength;
 		}
@@ -450,17 +437,6 @@ struct MOApplicationData
 		glClear(GL_COLOR_BUFFER_BIT);
 		[applicationData->mainView display];
 		SDL_GL_SwapBuffers();
-
-		// Record speed
-		[drawSpeedCounter tick];
-
-		// Show speeds
-		if([drawSpeedCounter isAtNewSecond])
-			printf(
-				"[speed] game=%u  draw=%u\n",
-				[gameSpeedCounter ticksPerSecond],
-				[drawSpeedCounter ticksPerSecond]
-			);
 
 		// Empty autorelease pool
 		[self refreshAutoreleasePool];
