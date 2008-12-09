@@ -4,7 +4,7 @@
 
 // Keyboard events example:
 //
-// Support you type SHIFT-OPTION-O to get an Ø character. The following
+// Suppose you type SHIFT-OPTION-O to get an Ø character. The following
 // events will be dispatched:
 //
 // 1. type = key down, mod = shift,        char = '',  key = shift
