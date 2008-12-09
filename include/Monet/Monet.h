@@ -9,7 +9,6 @@
 #import <Monet/MORect.h>
 #import <Monet/MOApplication.h>
 #import <Monet/MOSize.h>
-#import <Monet/MOSpeedCounter.h>
 #import <Monet/MOTiledImage.h>
 #import <Monet/MOTimer.h>
 #import <Monet/MOView.h>
