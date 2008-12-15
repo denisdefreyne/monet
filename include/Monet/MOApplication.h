@@ -30,6 +30,4 @@
 - (float)interpolation;
 - (MOPoint)mouseLocation;
 
-- (void)screenDidLoad;
-
 @end

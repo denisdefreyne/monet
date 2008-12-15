@@ -403,9 +403,6 @@ struct MOApplicationData
 
 	// We're open!
 	applicationData->isOpen = YES;
-
-	// Notify
-	[self screenDidLoad];
 }
 
 - (void)enterRunloop
@@ -459,13 +456,6 @@ struct MOApplicationData
 	SDL_GetMouseState(&x, &y);
 
 	return MOMakePoint(x, applicationData->screenSize.h-y-1);
-}
-
-#pragma mark -
-
-- (void)screenDidLoad
-{
-	// Do nothing by default
 }
 
 @end
