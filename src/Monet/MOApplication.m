@@ -29,6 +29,7 @@ struct MOApplicationData
 	MOView            *mainView;
 
 	// Timing
+	UInt8             maxFrameSkip;
 	UInt8             gameTicksPerSecond;
 	float             interpolation;
 
@@ -261,6 +262,7 @@ struct MOApplicationData
 
 		// Set default values
 		applicationData->gameTicksPerSecond = 30;
+		applicationData->maxFrameSkip       = 3;
 	}
 
 	return self;
@@ -328,6 +330,16 @@ struct MOApplicationData
 - (void)setGameTicksPerSecond:(UInt8)aGameTicksPerSecond
 {
 	applicationData->gameTicksPerSecond = aGameTicksPerSecond;
+}
+
+- (UInt8)maxFrameSkip
+{
+	return applicationData->maxFrameSkip;
+}
+
+- (void)setMaxFrameSkip:(UInt8)aMaxFrameSkip
+{
+	applicationData->maxFrameSkip = aMaxFrameSkip;
 }
 
 #pragma mark -
@@ -408,16 +420,14 @@ struct MOApplicationData
 	[self screenDidLoad];
 }
 
-#define MAX_FRAMESKIP		(5)
-
 - (void)enterRunloop
 {
-	Uint32	gameTickLength	= 1000/applicationData->gameTicksPerSecond;
-	Uint32	nextGameTick	= SDL_GetTicks();
+	Uint32 gameTickLength = 1000/applicationData->gameTicksPerSecond;
+	Uint32 nextGameTick   = SDL_GetTicks();
 
 	while(applicationData->isOpen)
 	{
-		for(int i = 0; SDL_GetTicks() > nextGameTick && i < MAX_FRAMESKIP; ++i)
+		for(int i = 0; SDL_GetTicks() > nextGameTick && i < applicationData->maxFrameSkip; ++i)
 		{
 			// Update game
 			if([applicationData->model respondsToSelector:@selector(tick)])

@@ -20,6 +20,8 @@
 - (void)setFullscreen:(BOOL)aIsFullscreen;
 - (UInt8)gameTicksPerSecond;
 - (void)setGameTicksPerSecond:(UInt8)aGameTicksPerSecond;
+- (UInt8)maxFrameSkip;
+- (void)setMaxFrameSkip:(UInt8)aMaxFrameSkip;
 
 - (float)interpolation;
 - (void)setInterpolation:(float)aInterpolation;
