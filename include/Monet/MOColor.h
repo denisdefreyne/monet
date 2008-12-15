@@ -2,10 +2,17 @@
 
 #import <Monet/Types.h>
 
-typedef struct _MOColor {
-	float red;
-	float green;
-	float blue;
-} MOColor;
+@interface MOColor : NSObject
+{
+	struct MOColorData *colorData;
+}
 
-MOColor MOColorMake(float aRed, float aGreen, float aBlue);
+- (id)initWithRed:(double)aRed green:(double)aGreen blue:(double)aBlue alpha:(double)alpha;
+- (id)initWithRed:(double)aRed green:(double)aGreen blue:(double)aBlue;
+
+- (double)red;
+- (double)green;
+- (double)blue;
+- (double)alpha;
+
+@end

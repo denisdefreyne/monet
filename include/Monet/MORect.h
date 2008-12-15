@@ -13,8 +13,8 @@ typedef struct _MORect {
 
 MORect MORectMake(SInt16 aX, SInt16 aY, UInt16 aW, UInt16 aH);
 
-void MOFillRect(MORect aRect, MOColor aColor);
-void MOStrokeRect(MORect aRect, MOColor aColor);
+void MOFillRect(MORect aRect, MOColor *aColor);
+void MOStrokeRect(MORect aRect, MOColor *aColor);
 
 BOOL MORectContainsPoint(MORect aRect, MOPoint aPoint);
 BOOL MORectIntersectsRect(MORect aRect1, MORect aRect2);
