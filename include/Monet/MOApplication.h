@@ -23,13 +23,11 @@
 - (UInt8)maxFrameSkip;
 - (void)setMaxFrameSkip:(UInt8)aMaxFrameSkip;
 
-- (float)interpolation;
-- (void)setInterpolation:(float)aInterpolation;
-
 - (void)openScreen;
 - (void)enterRunloop;
 - (void)closeScreen;
 
+- (float)interpolation;
 - (MOPoint)mouseLocation;
 
 - (void)screenDidLoad;

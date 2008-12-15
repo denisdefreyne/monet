@@ -344,18 +344,6 @@ struct MOApplicationData
 
 #pragma mark -
 
-- (float)interpolation
-{
-	return applicationData->interpolation;
-}
-
-- (void)setInterpolation:(float)aInterpolation
-{
-	applicationData->interpolation = aInterpolation;
-}
-
-#pragma mark -
-
 - (void)openScreen
 {
 	// Setup autorelease pool
@@ -441,7 +429,7 @@ struct MOApplicationData
 		[self handleEvents];
 
 		// Calculate interpolation
-		[self setInterpolation:(float)(SDL_GetTicks() + gameTickLength - nextGameTick)/(float)gameTickLength];
+		applicationData->interpolation = (float)(SDL_GetTicks() + gameTickLength - nextGameTick)/(float)gameTickLength;
 
 		// Redraw
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -459,6 +447,11 @@ struct MOApplicationData
 }
 
 #pragma mark -
+
+- (float)interpolation
+{
+	return applicationData->interpolation;
+}
 
 - (MOPoint)mouseLocation
 {
