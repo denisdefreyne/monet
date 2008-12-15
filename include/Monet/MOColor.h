@@ -1,7 +1,5 @@
 #import <Foundation/Foundation.h>
 
-#import <Monet/Types.h>
-
 @interface MOColor : NSObject
 {
 	struct MOColorData *colorData;

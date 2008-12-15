@@ -2,9 +2,9 @@
 
 #import <Monet/Types.h>
 
-#import <Monet/MOColor.h>
 #import <Monet/MOPoint.h>
-#import <Monet/MOSize.h>
+
+@class MOColor;
 
 typedef struct _MORect {
 	SInt16 x, y;
