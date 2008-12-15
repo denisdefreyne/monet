@@ -87,7 +87,7 @@ struct MOViewData
 
 - (MOPoint)absoluteOrigin
 {
-	return [viewData->superview convertPointToScreen:MOMakePoint(viewData->frame.x, viewData->frame.y)];
+	return [viewData->superview convertPointToScreen:MOPointMake(viewData->frame.x, viewData->frame.y)];
 }
 
 - (MOPoint)convertPointFromScreen:(MOPoint)aPoint
@@ -97,7 +97,7 @@ struct MOViewData
 	else
 	{
 		MOPoint absoluteOrigin = [self absoluteOrigin];
-		return MOMakePoint(aPoint.x - absoluteOrigin.x, aPoint.y - absoluteOrigin.y);
+		return MOPointMake(aPoint.x - absoluteOrigin.x, aPoint.y - absoluteOrigin.y);
 	}
 }
 
@@ -108,7 +108,7 @@ struct MOViewData
 	else
 	{
 		MOPoint absoluteOrigin = [self absoluteOrigin];
-		return MOMakePoint(aPoint.x + absoluteOrigin.x, aPoint.y + absoluteOrigin.y);
+		return MOPointMake(aPoint.x + absoluteOrigin.x, aPoint.y + absoluteOrigin.y);
 	}
 }
 
@@ -160,7 +160,7 @@ struct MOViewData
 - (MORect)boundsRelativeToWindow
 {
 	MOPoint absoluteOrigin = [self absoluteOrigin];
-	return MOMakeRect(absoluteOrigin.x, absoluteOrigin.y, viewData->bounds.w, viewData->bounds.h);
+	return MORectMake(absoluteOrigin.x, absoluteOrigin.y, viewData->bounds.w, viewData->bounds.h);
 }
 
 #pragma mark -
@@ -171,7 +171,7 @@ struct MOViewData
 	{
 		// Get destination rectangle
 		MOPoint absoluteOrigin = [self absoluteOrigin];
-		MORect rect = MOMakeRect(absoluteOrigin.x, absoluteOrigin.y, viewData->frame.w, viewData->frame.h);
+		MORect rect = MORectMake(absoluteOrigin.x, absoluteOrigin.y, viewData->frame.w, viewData->frame.h);
 
 		// Create graphics context
 		viewData->graphicsContext = [[MOGraphicsContext alloc] initWithRect:rect];

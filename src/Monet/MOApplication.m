@@ -126,8 +126,8 @@ struct MOApplicationData
 				{
 					// Create event
 					MOEvent *moEvent = [[MOEvent alloc] initMouseMotionEventWithModifiers:MOSDLModToMOKeyModifierMask(SDL_GetModState())
-														mouseLocation:MOMakePoint(event.motion.x, applicationData->screenSize.h-event.motion.y-1)
-														relativeMouseMotion:MOMakePoint(event.motion.xrel, event.motion.yrel)
+														mouseLocation:MOPointMake(event.motion.x, applicationData->screenSize.h-event.motion.y-1)
+														relativeMouseMotion:MOPointMake(event.motion.xrel, event.motion.yrel)
 					];
 
 					// Dispatch event to subviews that want it
@@ -146,7 +146,7 @@ struct MOApplicationData
 			case SDL_MOUSEBUTTONDOWN:
 				{
 					// Get event information
-					MOPoint mouseLocation		= MOMakePoint(event.button.x, applicationData->screenSize.h-event.button.y-1);
+					MOPoint mouseLocation		= MOPointMake(event.button.x, applicationData->screenSize.h-event.button.y-1);
 					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
 					UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
@@ -188,7 +188,7 @@ struct MOApplicationData
 			case SDL_MOUSEBUTTONUP:
 				{
 					// Get event information
-					MOPoint mouseLocation		= MOMakePoint(event.button.x, applicationData->screenSize.h-event.button.y-1);
+					MOPoint mouseLocation		= MOPointMake(event.button.x, applicationData->screenSize.h-event.button.y-1);
 					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
 					UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
@@ -455,7 +455,7 @@ struct MOApplicationData
 	int x,y;
 	SDL_GetMouseState(&x, &y);
 
-	return MOMakePoint(x, applicationData->screenSize.h-y-1);
+	return MOPointMake(x, applicationData->screenSize.h-y-1);
 }
 
 @end

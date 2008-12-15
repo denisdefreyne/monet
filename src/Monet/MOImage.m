@@ -50,7 +50,7 @@
 			[NSException raise:@"OpenGLException" format:@"glTexImage2D preparation failed: image is not in truecolor (filename = %@)\n", aFilename];
 
 		// Set size
-		imageData->size = MOMakeSize(surface->w, surface->h);
+		imageData->size = MOSizeMake(surface->w, surface->h);
 
 		// Fill texture
 		SDL_LockSurface(surface);
@@ -70,7 +70,7 @@
 	if(self = [super init])
 	{
 		// Set size
-		imageData->size = MOMakeSize(aWidth, aHeight);
+		imageData->size = MOSizeMake(aWidth, aHeight);
 
 		// Create texture
 		glGenTextures(1, &imageData->textureName);
@@ -115,7 +115,7 @@
 
 - (MORect)bounds
 {
-	return MOMakeRect(0, 0, imageData->size.w, imageData->size.h);
+	return MORectMake(0, 0, imageData->size.w, imageData->size.h);
 }
 
 #pragma mark -
@@ -138,7 +138,7 @@
 {
 	// Get absolute destination
 	MORect dstRect = [[MOGraphicsContext currentContext] rect];
-	MOPoint dstPoint = MOMakePoint(dstRect.x + aPoint.x, dstRect.y + aPoint.y);
+	MOPoint dstPoint = MOPointMake(dstRect.x + aPoint.x, dstRect.y + aPoint.y);
 
 	// TODO [OpenGL] translate using matrixes
 

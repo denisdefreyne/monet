@@ -11,7 +11,7 @@ typedef struct _MORect {
 	UInt16 w, h;
 } MORect;
 
-MORect MOMakeRect(SInt16 aX, SInt16 aY, UInt16 aW, UInt16 aH);
+MORect MORectMake(SInt16 aX, SInt16 aY, UInt16 aW, UInt16 aH);
 
 void MOFillRect(MORect aRect, MOColor aColor);
 void MOStrokeRect(MORect aRect, MOColor aColor);

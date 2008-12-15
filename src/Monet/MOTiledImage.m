@@ -38,7 +38,7 @@ struct MOTiledImageData
 {
 	// Get absolute destination
 	MORect dstRect = [[MOGraphicsContext currentContext] rect];
-	MOPoint dstPoint = MOMakePoint(dstRect.x + aPoint.x, dstRect.y + aPoint.y);
+	MOPoint dstPoint = MOPointMake(dstRect.x + aPoint.x, dstRect.y + aPoint.y);
 
 	// Get tile origin
 	MOPoint tileOrigin;

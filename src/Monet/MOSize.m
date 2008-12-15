@@ -1,6 +1,6 @@
 #import <Monet/MOSize.h>
 
-MOSize MOMakeSize(UInt16 aW, UInt16 aH)
+MOSize MOSizeMake(UInt16 aW, UInt16 aH)
 {
 	MOSize size;
 
