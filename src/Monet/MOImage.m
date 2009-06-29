@@ -69,6 +69,9 @@
 {
 	if(self = [super init])
 	{
+		// Create data
+		imageData = calloc(1, sizeof (struct MOImageData));
+
 		// Set size
 		imageData->size = MOSizeMake(aWidth, aHeight);
 
