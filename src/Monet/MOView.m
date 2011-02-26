@@ -4,6 +4,7 @@
 #import <OpenGL/glu.h>
 
 #import <Monet/MOEvent.h>
+#import <Monet/MOController.h>
 #import <Monet/MOApplication.h>
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
@@ -19,6 +20,8 @@ struct MOViewData
 	MORect				bounds;
 
 	MOGraphicsContext	*graphicsContext;
+
+	MOController		*controller;
 };
 
 @implementation MOView
@@ -30,13 +33,13 @@ struct MOViewData
 		viewData = calloc(1, sizeof (struct MOViewData));
 
 		viewData->frame = aFrame;
-
-		viewData->app = aApp;
+		viewData->app   = aApp;
 
 		viewData->bounds.w = viewData->frame.w;
 		viewData->bounds.h = viewData->frame.h;
 
-		viewData->subviews = [[NSMutableArray alloc] init];
+		viewData->subviews   = [[NSMutableArray alloc] init];
+		viewData->controller = nil;
 	}
 
 	return self;
@@ -47,6 +50,7 @@ struct MOViewData
 	[viewData->subviews release];
 
 	[viewData->graphicsContext release];
+	[viewData->controller release];
 
 	[super dealloc];
 }
@@ -216,56 +220,21 @@ struct MOViewData
 
 #pragma mark -
 
-- (BOOL)keyDown:(MOEvent *)aEvent
+- (Class)controllerClass
 {
-	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
-	MOView *subview = nil;
-	BOOL isHandled = NO;
-	while(subview = [enumerator nextObject])
-	{
-		isHandled = [subview keyDown:aEvent];
-		if(isHandled)
-			break;
-	}
-
-	return isHandled;
+	return Nil;
 }
 
-- (BOOL)keyUp:(MOEvent *)aEvent
+- (MOController *)controller
 {
-	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
-	MOView *subview = nil;
-	BOOL isHandled = NO;
-	while(subview = [enumerator nextObject])
-	{
-		isHandled = [subview keyUp:aEvent];
-		if(isHandled)
-			break;
-	}
+	Class controllerClass = [self controllerClass];
+	if (Nil == controllerClass)
+		return nil;
 
-	return isHandled;
-}
+	if (!viewData->controller)
+		viewData->controller = [[controllerClass alloc] initWithView: self];
 
-- (void)mouseDown:(MOEvent *)aEvent
-{
-	[viewData->superview mouseDown:aEvent];
-}
-
-- (void)mouseUp:(MOEvent *)aEvent
-{
-	[viewData->superview mouseUp:aEvent];
-}
-
-- (void)mouseDragged:(MOEvent *)aEvent
-{
-	;
-}
-
-#pragma mark -
-
-- (void)tick
-{
-	// Do nothing by default
+	return viewData->controller;
 }
 
 @end

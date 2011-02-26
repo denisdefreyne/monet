@@ -97,7 +97,7 @@ struct MOApplicationData
 					];
 
 					// Dispatch event
-					[applicationData->mainView keyDown:moEvent];
+					[[applicationData->mainView controller] keyDown:moEvent];
 
 					// Cleanup
 					[character release];
@@ -108,14 +108,15 @@ struct MOApplicationData
 			case SDL_KEYUP:
 				{
 					// Create event
-					MOEvent *moEvent = [[MOEvent alloc] initKeyEventWithType:MOKeyUpEventType
-														modifiers:MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
-														character:0
-														key:MOSDLKeyToMOKey(event.key.keysym.sym)
+					MOEvent *moEvent = [[MOEvent alloc]
+						initKeyEventWithType: MOKeyUpEventType
+						modifiers: MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
+						character: 0
+						key: MOSDLKeyToMOKey(event.key.keysym.sym)
 					];
 
 					// Dispatch event
-					[applicationData->mainView keyUp:moEvent];
+					[[applicationData->mainView controller] keyUp:moEvent];
 
 					// Cleanup
 					[moEvent release];
@@ -125,18 +126,19 @@ struct MOApplicationData
 			case SDL_MOUSEMOTION:
 				{
 					// Create event
-					MOEvent *moEvent = [[MOEvent alloc] initMouseMotionEventWithModifiers:MOSDLModToMOKeyModifierMask(SDL_GetModState())
-														mouseLocation:MOPointMake(event.motion.x, applicationData->screenSize.h-event.motion.y-1)
-														relativeMouseMotion:MOPointMake(event.motion.xrel, event.motion.yrel)
+					MOEvent *moEvent = [[MOEvent alloc]
+						initMouseMotionEventWithModifiers: MOSDLModToMOKeyModifierMask(SDL_GetModState())
+						mouseLocation: MOPointMake(event.motion.x, applicationData->screenSize.h-event.motion.y-1)
+						relativeMouseMotion: MOPointMake(event.motion.xrel, event.motion.yrel)
 					];
 
 					// Dispatch event to subviews that want it
 					if(applicationData->lastLeftMouseButtonDownView)
-						[applicationData->lastLeftMouseButtonDownView mouseDragged:moEvent];
+						[[applicationData->lastLeftMouseButtonDownView controller] mouseDragged:moEvent];
 					if(applicationData->lastMiddleMouseButtonDownView)
-						[applicationData->lastMiddleMouseButtonDownView mouseDragged:moEvent];
+						[[applicationData->lastMiddleMouseButtonDownView controller] mouseDragged:moEvent];
 					if(applicationData->lastRightMouseButtonDownView)
-						[applicationData->lastRightMouseButtonDownView mouseDragged:moEvent];
+						[[applicationData->lastRightMouseButtonDownView controller] mouseDragged:moEvent];
 
 					// Cleanup
 					[moEvent release];
@@ -170,15 +172,16 @@ struct MOApplicationData
 					}
 
 					// Create event
-					MOEvent *moEvent = [[MOEvent alloc] initMouseButtonEventWithType:MOMouseButtonDownEventType
-														modifiers:modifiers
-														mouseButton:mouseButton
-														mouseLocation:mouseLocation
-														clickCount:1 // FIXME set correct click count
+					MOEvent *moEvent = [[MOEvent alloc]
+						initMouseButtonEventWithType:MOMouseButtonDownEventType
+						modifiers:modifiers
+						mouseButton:mouseButton
+						mouseLocation:mouseLocation
+						clickCount:1 // FIXME set correct click count
 					];
 
 					// Dispatch event
-					[subview mouseDown:moEvent];
+					[[subview controller] mouseDown:moEvent];
 
 					// Cleanup
 					[moEvent release];
@@ -210,15 +213,16 @@ struct MOApplicationData
 					}
 
 					// Create event
-					MOEvent *moEvent = [[MOEvent alloc] initMouseButtonEventWithType:MOMouseButtonUpEventType
-														modifiers:modifiers
-														mouseButton:mouseButton
-														mouseLocation:mouseLocation
-														clickCount:1 // FIXME set correct click count
+					MOEvent *moEvent = [[MOEvent alloc]
+						initMouseButtonEventWithType:MOMouseButtonUpEventType
+						modifiers:modifiers
+						mouseButton:mouseButton
+						mouseLocation:mouseLocation
+						clickCount:1 // FIXME set correct click count
 					];
 
 					// Dispatch event
-					[subview mouseUp:moEvent];
+					[[subview controller] mouseUp:moEvent];
 
 					// Clear relevant subview
 					switch(mouseButton)
@@ -356,6 +360,8 @@ struct MOApplicationData
 
 	// Setup OpenGL attributes
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
 	// Create screen
 	Uint32 flags = SDL_OPENGL | (applicationData->isFullscreen ? SDL_FULLSCREEN : 0);
@@ -371,6 +377,9 @@ struct MOApplicationData
 
 	// Set clear color
 	glClearColor(0.0, 0.0, 0.0, 0.0);
+
+	// Enable multisampling
+	glEnable(GL_MULTISAMPLE);
 
 	// Enable blending
 	glEnable(GL_BLEND);
@@ -417,7 +426,7 @@ struct MOApplicationData
 			// Update game
 			if([applicationData->model respondsToSelector:@selector(tick)])
 				[applicationData->model performSelector:@selector(tick)];
-			[applicationData->mainView tick];
+			[[applicationData->mainView controller] tick];
 
 			nextGameTick += gameTickLength;
 		}

@@ -2,6 +2,7 @@
 
 #import <Monet/MORect.h>
 
+@class MOController;
 @class MOEvent;
 @class MOApplication;
 
@@ -35,14 +36,7 @@
 - (void)clear;
 - (void)drawRect:(MORect)aRect;
 
-// FIXME move this into the controller
-- (BOOL)keyDown:(MOEvent *)aEvent;
-- (BOOL)keyUp:(MOEvent *)aEvent;
-- (void)mouseDown:(MOEvent *)aEvent;
-- (void)mouseUp:(MOEvent *)aEvent;
-- (void)mouseDragged:(MOEvent *)aEvent;
-
-// FIXME move this into the controller
-- (void)tick;
+- (Class)controllerClass;
+- (MOController *)controller;
 
 @end
