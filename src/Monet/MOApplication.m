@@ -22,8 +22,8 @@ struct MOApplicationData
 	// Running or not?
 	BOOL              isOpen;
 
-	// Model
-	id                model;
+	// World
+	id                world;
 
 	// View
 	MOView            *mainView;
@@ -284,14 +284,14 @@ struct MOApplicationData
 
 #pragma mark -
 
-- (id)model
+- (id)world
 {
-	return applicationData->model;
+	return applicationData->world;
 }
 
-- (void)setModel:(id)aModel
+- (void)setWorld:(id)aWorld
 {
-	applicationData->model = aModel;
+	applicationData->world = aWorld;
 }
 
 - (MOView *)mainView
@@ -393,7 +393,7 @@ struct MOApplicationData
 	glLoadIdentity();
 	gluOrtho2D(0, applicationData->surface->w, 0, applicationData->surface->h);
 
-	// Set modelview matrix
+	// Set worldview matrix
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -424,8 +424,8 @@ struct MOApplicationData
 		for(int i = 0; SDL_GetTicks() > nextGameTick && i < applicationData->maxFrameSkip; ++i)
 		{
 			// Update game
-			if([applicationData->model respondsToSelector:@selector(tick)])
-				[applicationData->model performSelector:@selector(tick)];
+			if([applicationData->world respondsToSelector:@selector(tick)])
+				[applicationData->world performSelector:@selector(tick)];
 			[[applicationData->mainView controller] tick];
 
 			nextGameTick += gameTickLength;

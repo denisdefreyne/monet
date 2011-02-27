@@ -10,8 +10,8 @@
 	struct MOApplicationData *applicationData;
 }
 
-- (id)model;
-- (void)setModel:(id)aModel;
+- (id)world;
+- (void)setWorld:(id)aWorld;
 - (MOView *)mainView;
 - (void)setMainView:(MOView *)aMainView;
 - (MOSize)screenSize;

@@ -27,20 +27,20 @@ Usage
 
 `MOApplication` is the main class. It is responsible for creating a window (when using windowed mode) or managing the entire screen (when in fullscreen mode). It also contains the main game loop.
 
-Each application has a single model, which is a object that responds to a `tick` method. This method indicates that the game state should move a step forward.
+Each application has a single world, which is a object that responds to a `tick` method. This method indicates that the game state should move a step forward.
 
-Drawing is handled by `MOView`, which is meant to be subclassed for every kind of view. `MOView` also takes care of event handling. Views should base what they're drawing on the state of the model.
+Drawing is handled by `MOView`, which is meant to be subclassed for every kind of view. `MOView` also takes care of event handling. Views should base what they're drawing on the state of the world.
 
 ### Starting the game
 
 1. Create a `MOApplication`
 2. Configure the application (`setScreenSize:`, `setFullscreen:`, ...)
-3. Set the model, if any (`setModel:`)
+3. Set the world, if any (`setWorld:`)
 4. Open the screen (`openScreen`)
 5. Create the content view (`setMainView:`)
 6. Enter runloop (`enterRunloop`)
 
-### Views
+### Drawing & views
 
 Drawing is handled by views. Each view is a `MOView` subclass that overrides `-drawRect:` to perform the actual drawing.(The `rect` argument is currently unused.)
 
@@ -48,7 +48,9 @@ Inside this method, all drawing operations will be performed inside the view. Th
 
 A view can have subviews. It is not necessary to explicitly draw the subviews in the `-drawRect:` method; this will be done automatically. It is also not necessary to call `super` in the `-drawRect:` method.
 
-### Event handling
+### Event handling & controllers
+
+Events are handled by controllers. Each controller is linked to a view. It is possible to have a view without a controller, but not the other way around. Controllers are automatically generated for views: implement `-controllerClass` in the view and let it return the class of the controller.
 
 #### Mouse events
 
