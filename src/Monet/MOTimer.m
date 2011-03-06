@@ -18,16 +18,16 @@ Uint32 timerCallback(Uint32 interval, void *param)
 {
 	MOTimer *timer = (MOTimer *)param;
 
-	[[timer target] performSelector:[timer selector] withObject:timer];
+	[[timer target] performSelector: [timer selector] withObject: timer];
 
 	return [timer interval];
 }
 
 @implementation MOTimer
 
-- (id)initWithTarget:(id)aTarget selector:(SEL)aSelector interval:(UInt32)aInterval userInfo:(void *)aUserInfo
+- (id)initWithTarget: (id)aTarget selector: (SEL)aSelector interval: (UInt32)aInterval userInfo: (void *)aUserInfo
 {
-	if(self = [super init])
+	if (self = [super init])
 	{
 		timerData = calloc(1, sizeof(struct MOTimerData));
 

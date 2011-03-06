@@ -18,7 +18,7 @@ struct MOImageData
 
 @interface MOGraphicsContext (Private)
 
-- (id)initWithRect:(MORect)aRect;
+- (id)initWithRect: (MORect)aRect;
 
 @end
 

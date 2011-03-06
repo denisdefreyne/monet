@@ -9,10 +9,10 @@
 	struct MOTiledImageData *tiledImageData;
 }
 
-- (id)initWithContentsOfFile:(NSString *)aFilename tileSize:(MOSize)aTileSize;
+- (id)initWithContentsOfFile: (NSString *)aFilename tileSize: (MOSize)aTileSize;
 
 - (MOSize)tileSize;
 
-- (void)drawTile:(MOPoint)aTilePoint atPoint:(MOPoint)aPoint;
+- (void)drawTile: (MOPoint)aTilePoint atPoint: (MOPoint)aPoint;
 
 @end

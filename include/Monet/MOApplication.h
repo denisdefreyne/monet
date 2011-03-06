@@ -11,17 +11,17 @@
 }
 
 - (id)world;
-- (void)setWorld:(id)aWorld;
+- (void)setWorld: (id)aWorld;
 - (MOView *)mainView;
-- (void)setMainView:(MOView *)aMainView;
+- (void)setMainView: (MOView *)aMainView;
 - (MOSize)screenSize;
-- (void)setScreenSize:(MOSize)aSize;
+- (void)setScreenSize: (MOSize)aSize;
 - (BOOL)isFullscreen;
-- (void)setFullscreen:(BOOL)aIsFullscreen;
+- (void)setFullscreen: (BOOL)aIsFullscreen;
 - (UInt8)gameTicksPerSecond;
-- (void)setGameTicksPerSecond:(UInt8)aGameTicksPerSecond;
+- (void)setGameTicksPerSecond: (UInt8)aGameTicksPerSecond;
 - (UInt8)maxFrameSkip;
-- (void)setMaxFrameSkip:(UInt8)aMaxFrameSkip;
+- (void)setMaxFrameSkip: (UInt8)aMaxFrameSkip;
 
 - (void)openScreen;
 - (void)enterRunloop;

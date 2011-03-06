@@ -92,9 +92,9 @@ typedef UInt8 MOKeyModifierMask;
 	struct MOEventData *eventData;
 }
 
-- (id)initKeyEventWithType:(MOEventType)aType modifiers:(UInt8)aModifiers character:(NSString *)aCharacter key:(MOKey)aKey;
-- (id)initMouseButtonEventWithType:(MOEventType)aType modifiers:(UInt8)aModifiers mouseButton:(MOMouseButton)aMouseButton mouseLocation:(MOPoint)aMouseLocation clickCount:(UInt8)aClickCount;
-- (id)initMouseMotionEventWithModifiers:(UInt8)aModifiers mouseLocation:(MOPoint)aMouseLocation relativeMouseMotion:(MOPoint)aRelativeMouseMotion;
+- (id)initKeyEventWithType: (MOEventType)aType modifiers: (UInt8)aModifiers character: (NSString *)aCharacter key: (MOKey)aKey;
+- (id)initMouseButtonEventWithType: (MOEventType)aType modifiers: (UInt8)aModifiers mouseButton: (MOMouseButton)aMouseButton mouseLocation: (MOPoint)aMouseLocation clickCount: (UInt8)aClickCount;
+- (id)initMouseMotionEventWithModifiers: (UInt8)aModifiers mouseLocation: (MOPoint)aMouseLocation relativeMouseMotion: (MOPoint)aRelativeMouseMotion;
 
 // General
 

@@ -8,8 +8,8 @@
 	struct MOImageData *imageData;
 }
 
-- (id)initWithContentsOfFile:(NSString *)aFilename;
-- (id)initWithWidth:(UInt16)aWidth height:(UInt16)aHeight;
+- (id)initWithContentsOfFile: (NSString *)aFilename;
+- (id)initWithWidth: (UInt16)aWidth height: (UInt16)aHeight;
 
 - (void)lockFocus;
 - (void)unlockFocus;
@@ -17,8 +17,8 @@
 - (MORect)bounds;
 
 // FIXME allow drawing into a MOImage instead
-- (void)takeImageFromRect:(MORect)aRect;
+- (void)takeImageFromRect: (MORect)aRect;
 
-- (void)drawAtPoint:(MOPoint)aPoint;
+- (void)drawAtPoint: (MOPoint)aPoint;
 
 @end

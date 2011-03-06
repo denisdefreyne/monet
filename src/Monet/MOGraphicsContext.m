@@ -8,7 +8,7 @@
 {
 	static NSMutableArray *stack = nil;
 
-	if(!stack)
+	if (!stack)
 		stack = [[NSMutableArray alloc] init];
 
 	return stack;

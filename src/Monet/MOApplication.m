@@ -66,38 +66,38 @@ struct MOApplicationData
 - (void)handleEvents
 {
 	SDL_Event event;
-	while(SDL_PollEvent(&event))
+	while (SDL_PollEvent(&event))
 	{
 		switch(event.type)
 		{
 			case SDL_ACTIVEEVENT:
-				if(event.active.gain)
+				if (event.active.gain)
 					; // Resume
 				else
 					; // Pause
 				break;
 
 			case SDL_KEYDOWN:
-				if(event.key.keysym.sym == SDLK_ESCAPE)
+				if (event.key.keysym.sym == SDLK_ESCAPE)
 					[self closeScreen];
 				else
 				{
 					// Get character
 					NSString *character;
-					if(event.key.keysym.unicode == 0)
+					if (event.key.keysym.unicode == 0)
 						character = @"";
 					else
-						character = [[NSString alloc] initWithCharacters:&event.key.keysym.unicode length:1];
+						character = [[NSString alloc] initWithCharacters: &event.key.keysym.unicode length: 1];
 
 					// Create event
-					MOEvent *moEvent = [[MOEvent alloc] initKeyEventWithType:MOKeyDownEventType
+					MOEvent *moEvent = [[MOEvent alloc] initKeyEventWithType: MOKeyDownEventType
 														modifiers:MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
 														character:character
 														key:MOSDLKeyToMOKey(event.key.keysym.sym)
 					];
 
 					// Dispatch event
-					[[applicationData->mainView controller] keyDown:moEvent];
+					[[applicationData->mainView controller] keyDown: moEvent];
 
 					// Cleanup
 					[character release];
@@ -116,7 +116,7 @@ struct MOApplicationData
 					];
 
 					// Dispatch event
-					[[applicationData->mainView controller] keyUp:moEvent];
+					[[applicationData->mainView controller] keyUp: moEvent];
 
 					// Cleanup
 					[moEvent release];
@@ -133,12 +133,12 @@ struct MOApplicationData
 					];
 
 					// Dispatch event to subviews that want it
-					if(applicationData->lastLeftMouseButtonDownView)
-						[[applicationData->lastLeftMouseButtonDownView controller] mouseDragged:moEvent];
-					if(applicationData->lastMiddleMouseButtonDownView)
-						[[applicationData->lastMiddleMouseButtonDownView controller] mouseDragged:moEvent];
-					if(applicationData->lastRightMouseButtonDownView)
-						[[applicationData->lastRightMouseButtonDownView controller] mouseDragged:moEvent];
+					if (applicationData->lastLeftMouseButtonDownView)
+						[[applicationData->lastLeftMouseButtonDownView controller] mouseDragged: moEvent];
+					if (applicationData->lastMiddleMouseButtonDownView)
+						[[applicationData->lastMiddleMouseButtonDownView controller] mouseDragged: moEvent];
+					if (applicationData->lastRightMouseButtonDownView)
+						[[applicationData->lastRightMouseButtonDownView controller] mouseDragged: moEvent];
 
 					// Cleanup
 					[moEvent release];
@@ -153,7 +153,7 @@ struct MOApplicationData
 					UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
 					// Find deepest subview
-					MOView *subview = [applicationData->mainView deepestSubviewAtPoint:mouseLocation];
+					MOView *subview = [applicationData->mainView deepestSubviewAtPoint: mouseLocation];
 
 					// Set last view receiving event
 					switch(mouseButton)
@@ -181,7 +181,7 @@ struct MOApplicationData
 					];
 
 					// Dispatch event
-					[[subview controller] mouseDown:moEvent];
+					[[subview controller] mouseDown: moEvent];
 
 					// Cleanup
 					[moEvent release];
@@ -222,7 +222,7 @@ struct MOApplicationData
 					];
 
 					// Dispatch event
-					[[subview controller] mouseUp:moEvent];
+					[[subview controller] mouseUp: moEvent];
 
 					// Clear relevant subview
 					switch(mouseButton)
@@ -259,7 +259,7 @@ struct MOApplicationData
 
 - (id)init
 {
-	if(self = [super init])
+	if (self = [super init])
 	{
 		// Create data
 		applicationData = calloc(1, sizeof (struct MOApplicationData));
@@ -277,7 +277,7 @@ struct MOApplicationData
 	SDL_FreeSurface(applicationData->surface);
 	SDL_Quit();
 
-	[self setMainView:nil];
+	[self setMainView: nil];
 
 	[super dealloc];
 }
@@ -289,7 +289,7 @@ struct MOApplicationData
 	return applicationData->world;
 }
 
-- (void)setWorld:(id)aWorld
+- (void)setWorld: (id)aWorld
 {
 	applicationData->world = aWorld;
 }
@@ -299,7 +299,7 @@ struct MOApplicationData
 	return applicationData->mainView;
 }
 
-- (void)setMainView:(MOView *)aMainView
+- (void)setMainView: (MOView *)aMainView
 {
 	[aMainView retain];
 	[applicationData->mainView release];
@@ -311,7 +311,7 @@ struct MOApplicationData
 	return applicationData->screenSize;
 }
 
-- (void)setScreenSize:(MOSize)aScreenSize
+- (void)setScreenSize: (MOSize)aScreenSize
 {
 	applicationData->screenSize = aScreenSize;
 }
@@ -321,7 +321,7 @@ struct MOApplicationData
 	return applicationData->isFullscreen;
 }
 
-- (void)setFullscreen:(BOOL)aIsFullscreen
+- (void)setFullscreen: (BOOL)aIsFullscreen
 {
 	applicationData->isFullscreen = aIsFullscreen;
 }
@@ -331,7 +331,7 @@ struct MOApplicationData
 	return applicationData->gameTicksPerSecond;
 }
 
-- (void)setGameTicksPerSecond:(UInt8)aGameTicksPerSecond
+- (void)setGameTicksPerSecond: (UInt8)aGameTicksPerSecond
 {
 	applicationData->gameTicksPerSecond = aGameTicksPerSecond;
 }
@@ -341,7 +341,7 @@ struct MOApplicationData
 	return applicationData->maxFrameSkip;
 }
 
-- (void)setMaxFrameSkip:(UInt8)aMaxFrameSkip
+- (void)setMaxFrameSkip: (UInt8)aMaxFrameSkip
 {
 	applicationData->maxFrameSkip = aMaxFrameSkip;
 }
@@ -354,8 +354,8 @@ struct MOApplicationData
 	[self refreshAutoreleasePool];
 
 	// Initialize SDL
-	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
-		[NSException raise:@"SDLException" format:@"SDL_Init failed: %s\n", SDL_GetError()];
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
+		[NSException raise: @"SDLException" format: @"SDL_Init failed: %s\n", SDL_GetError()];
 	atexit(&SDL_Quit);
 
 	// Setup OpenGL attributes
@@ -366,12 +366,12 @@ struct MOApplicationData
 	// Create screen
 	Uint32 flags = SDL_OPENGL | (applicationData->isFullscreen ? SDL_FULLSCREEN : 0);
 	applicationData->surface = SDL_SetVideoMode(applicationData->screenSize.w, applicationData->screenSize.h, 0, flags);
-	if(!applicationData->surface)
-		[NSException raise:@"SDLException" format:@"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
+	if (!applicationData->surface)
+		[NSException raise: @"SDLException" format: @"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
 
 	// Set up texturing
-	if(!gluCheckExtension("GL_EXT_texture_rectangle", glGetString(GL_EXTENSIONS)))
-		[NSException raise:@"OpenGLException" format:@"Unsupported extension: GL_EXT_texture_rectangle"];
+	if (!gluCheckExtension("GL_EXT_texture_rectangle", glGetString(GL_EXTENSIONS)))
+		[NSException raise: @"OpenGLException" format: @"Unsupported extension: GL_EXT_texture_rectangle"];
 	glEnable(GL_TEXTURE_RECTANGLE_EXT);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
@@ -419,13 +419,13 @@ struct MOApplicationData
 	Uint32 gameTickLength = 1000/applicationData->gameTicksPerSecond;
 	Uint32 nextGameTick   = SDL_GetTicks();
 
-	while(applicationData->isOpen)
+	while (applicationData->isOpen)
 	{
-		for(int i = 0; SDL_GetTicks() > nextGameTick && i < applicationData->maxFrameSkip; ++i)
+		for (int i = 0; SDL_GetTicks() > nextGameTick && i < applicationData->maxFrameSkip; ++i)
 		{
 			// Update game
-			if([applicationData->world respondsToSelector:@selector(tick)])
-				[applicationData->world performSelector:@selector(tick)];
+			if ([applicationData->world respondsToSelector: @selector(tick)])
+				[applicationData->world performSelector: @selector(tick)];
 			[[applicationData->mainView controller] tick];
 
 			nextGameTick += gameTickLength;

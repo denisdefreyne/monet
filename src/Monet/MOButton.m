@@ -10,9 +10,9 @@ struct MOButtonData
 
 @implementation MOButton
 
-- (id)initWithFrame:(MORect)aFrame app:(MOApplication *)aApp
+- (id)initWithFrame: (MORect)aFrame app: (MOApplication *)aApp
 {
-	if(self = [super initWithFrame:aFrame app:aApp])
+	if (self = [super initWithFrame: aFrame app: aApp])
 	{
 		// Create data
 		buttonData = calloc(1, sizeof (struct MOButtonData));
@@ -29,7 +29,7 @@ struct MOButtonData
 
 - (BOOL)isPressed
 {
-	return buttonData->isMouseDown && MORectContainsPoint([self bounds], [self convertPointFromScreen:[[self app] mouseLocation]]);
+	return buttonData->isMouseDown && MORectContainsPoint([self bounds], [self convertPointFromScreen: [[self app] mouseLocation]]);
 }
 
 - (void)clicked
@@ -39,14 +39,14 @@ struct MOButtonData
 
 #pragma mark -
 
-- (void)mouseDown:(MOEvent *)aEvent
+- (void)mouseDown: (MOEvent *)aEvent
 {
 	buttonData->isMouseDown = YES;
 }
 
-- (void)mouseUp:(MOEvent *)aEvent
+- (void)mouseUp: (MOEvent *)aEvent
 {
-	if([self isPressed])
+	if ([self isPressed])
 		[self clicked];
 
 	buttonData->isMouseDown = NO;

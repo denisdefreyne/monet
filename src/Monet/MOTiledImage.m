@@ -13,9 +13,9 @@ struct MOTiledImageData
 
 @implementation MOTiledImage
 
-- (id)initWithContentsOfFile:(NSString *)aFilename tileSize:(MOSize)aTileSize
+- (id)initWithContentsOfFile: (NSString *)aFilename tileSize: (MOSize)aTileSize
 {
-	if(self = [super initWithContentsOfFile:aFilename])
+	if (self = [super initWithContentsOfFile: aFilename])
 	{
 		tiledImageData = calloc(1, sizeof (struct MOTiledImageData));
 
@@ -34,7 +34,7 @@ struct MOTiledImageData
 
 #pragma mark -
 
-- (void)drawTile:(MOPoint)aTilePoint atPoint:(MOPoint)aPoint
+- (void)drawTile: (MOPoint)aTilePoint atPoint: (MOPoint)aPoint
 {
 	// Get absolute destination
 	MORect dstRect = [[MOGraphicsContext currentContext] rect];

@@ -10,9 +10,9 @@ struct MOColorData
 
 @implementation MOColor
 
-- (id)initWithRed:(double)aRed green:(double)aGreen blue:(double)aBlue alpha:(double)aAlpha
+- (id)initWithRed: (double)aRed green: (double)aGreen blue: (double)aBlue alpha: (double)aAlpha
 {
-	if(self = [super init])
+	if (self = [super init])
 	{
 		// Create data
 		colorData = calloc(1, sizeof (struct MOColorData));
@@ -27,9 +27,9 @@ struct MOColorData
 	return self;
 }
 
-- (id)initWithRed:(double)aRed green:(double)aGreen blue:(double)aBlue
+- (id)initWithRed: (double)aRed green: (double)aGreen blue: (double)aBlue
 {
-	return [self initWithRed:aRed green:aGreen blue:aBlue alpha:1.0];
+	return [self initWithRed: aRed green: aGreen blue: aBlue alpha: 1.0];
 }
 
 #pragma mark -

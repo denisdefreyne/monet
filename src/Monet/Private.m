@@ -2,9 +2,9 @@
 
 @implementation MOGraphicsContext (Private)
 
-- (id)initWithRect:(MORect)aRect
+- (id)initWithRect: (MORect)aRect
 {
-	if(self = [super init])
+	if (self = [super init])
 	{
 		graphicsContextData = calloc(1, sizeof (struct MOGraphicsContextData));
 
@@ -62,16 +62,16 @@ MOKeyModifierMask MOSDLModToMOKeyModifierMask(SDLMod aMod)
 {
 	MOKeyModifierMask keyModifierMask;
 
-	if(aMod & KMOD_CAPS)
+	if (aMod & KMOD_CAPS)
 		keyModifierMask |= MOCapsLockKeyMask;
 
-	if(aMod & KMOD_SHIFT)
+	if (aMod & KMOD_SHIFT)
 		keyModifierMask |= MOShiftKeyMask;
 
-	if(aMod & KMOD_CTRL)
+	if (aMod & KMOD_CTRL)
 		keyModifierMask |= MOControlKeyMask;
 
-	if(aMod & KMOD_ALT)
+	if (aMod & KMOD_ALT)
 		keyModifierMask |= MOAlternateKeyMask;
 
 	return keyModifierMask;

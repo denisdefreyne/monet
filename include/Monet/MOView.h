@@ -11,19 +11,19 @@
 	struct MOViewData *viewData;
 }
 
-- (id)initWithFrame:(MORect)aFrame app:(MOApplication *)aApp;
+- (id)initWithFrame: (MORect)aFrame app: (MOApplication *)aApp;
 
 - (MOApplication *)app;
 
 - (MOView *)superview;
 - (NSMutableArray *)subviews;
-- (void)addSubview:(MOView *)aSubview;
+- (void)addSubview: (MOView *)aSubview;
 
-- (MOPoint)convertPointFromScreen:(MOPoint)aPoint;
-- (MOPoint)convertPointToScreen:(MOPoint)aPoint;
+- (MOPoint)convertPointFromScreen: (MOPoint)aPoint;
+- (MOPoint)convertPointToScreen: (MOPoint)aPoint;
 
-- (MOView *)subviewAtPoint:(MOPoint)aPoint;
-- (MOView *)deepestSubviewAtPoint:(MOPoint)aPoint;
+- (MOView *)subviewAtPoint: (MOPoint)aPoint;
+- (MOView *)deepestSubviewAtPoint: (MOPoint)aPoint;
 
 - (MORect)frame;
 - (MORect)bounds;
@@ -34,7 +34,7 @@
 
 - (void)display;
 - (void)clear;
-- (void)drawRect:(MORect)aRect;
+- (void)drawRect: (MORect)aRect;
 
 - (Class)controllerClass;
 - (MOController *)controller;

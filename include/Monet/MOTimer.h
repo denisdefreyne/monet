@@ -7,7 +7,7 @@
 	struct MOTimerData *timerData;
 }
 
-- (id)initWithTarget:(id)aTarget selector:(SEL)aSelector interval:(UInt32)aInterval userInfo:(void *)aUserInfo;
+- (id)initWithTarget: (id)aTarget selector: (SEL)aSelector interval: (UInt32)aInterval userInfo: (void *)aUserInfo;
 
 - (id)target;
 - (SEL)selector;

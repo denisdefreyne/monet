@@ -10,17 +10,17 @@
 
 @implementation MOImage
 
-- (id)initWithContentsOfFile:(NSString *)aFilename
+- (id)initWithContentsOfFile: (NSString *)aFilename
 {
-	if(self = [super init])
+	if (self = [super init])
 	{
 		// Create data
 		imageData = calloc(1, sizeof (struct MOImageData));
 
 		// Load file
 		SDL_Surface *surface = IMG_Load([aFilename UTF8String]);
-		if(!surface)
-			[NSException raise:@"SDLException" format:@"IMG_Load failed: %s\n", SDL_GetError()];
+		if (!surface)
+			[NSException raise: @"SDLException" format: @"IMG_Load failed: %s\n", SDL_GetError()];
 
 		// Create texture
 		glGenTextures(1, &imageData->textureName);
@@ -31,14 +31,14 @@
 		// Get number of colors and texture format
 		GLint  numberOfColors = surface->format->BytesPerPixel;
 		GLenum textureFormat;
-		if(numberOfColors == 4)
+		if (numberOfColors == 4)
 		{
 			if (surface->format->Rmask == 0x000000ff)
 				textureFormat = GL_RGBA;
 			else
 				textureFormat = GL_BGRA;
 		}
-		else if(numberOfColors == 3)
+		else if (numberOfColors == 3)
 		{
 			if (surface->format->Rmask == 0x000000ff)
 				textureFormat = GL_RGB;
@@ -47,7 +47,7 @@
 		}
 		else
 			// TODO handle gracefully
-			[NSException raise:@"OpenGLException" format:@"glTexImage2D preparation failed: image is not in truecolor (filename = %@)\n", aFilename];
+			[NSException raise: @"OpenGLException" format: @"glTexImage2D preparation failed: image is not in truecolor (filename = %@)\n", aFilename];
 
 		// Set size
 		imageData->size = MOSizeMake(surface->w, surface->h);
@@ -65,9 +65,9 @@
 	return self;
 }
 
-- (id)initWithWidth:(UInt16)aWidth height:(UInt16)aHeight
+- (id)initWithWidth: (UInt16)aWidth height: (UInt16)aHeight
 {
-	if(self = [super init])
+	if (self = [super init])
 	{
 		// Create data
 		imageData = calloc(1, sizeof (struct MOImageData));
@@ -103,10 +103,10 @@
 - (void)lockFocus
 {
 	// Create graphics context if necessary
-	if(!imageData->graphicsContext)
-		imageData->graphicsContext = [[MOGraphicsContext alloc] initWithRect:[self bounds]];
+	if (!imageData->graphicsContext)
+		imageData->graphicsContext = [[MOGraphicsContext alloc] initWithRect: [self bounds]];
 
-	[[MOGraphicsContext stack] addObject:imageData->graphicsContext];
+	[[MOGraphicsContext stack] addObject: imageData->graphicsContext];
 }
 
 - (void)unlockFocus
@@ -123,7 +123,7 @@
 
 #pragma mark -
 
-- (void)takeImageFromRect:(MORect)aRect
+- (void)takeImageFromRect: (MORect)aRect
 {
 	// Bind
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, imageData->textureName);
@@ -137,7 +137,7 @@
 
 #pragma mark -
 
-- (void)drawAtPoint:(MOPoint)aPoint
+- (void)drawAtPoint: (MOPoint)aPoint
 {
 	// Get absolute destination
 	MORect dstRect = [[MOGraphicsContext currentContext] rect];

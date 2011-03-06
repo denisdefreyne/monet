@@ -26,9 +26,9 @@ struct MOViewData
 
 @implementation MOView
 
-- (id)initWithFrame:(MORect)aFrame app:(MOApplication *)aApp
+- (id)initWithFrame: (MORect)aFrame app: (MOApplication *)aApp
 {
-	if(self = [super init])
+	if (self = [super init])
 	{
 		viewData = calloc(1, sizeof (struct MOViewData));
 
@@ -59,7 +59,7 @@ struct MOViewData
 
 - (MOApplication *)app
 {
-	if(!viewData->app)
+	if (!viewData->app)
 		viewData->app = [viewData->superview app];
 
 	return viewData->app;
@@ -70,7 +70,7 @@ struct MOViewData
 	return viewData->superview;
 }
 
-- (void)setSuperview:(MOView *)aSuperview
+- (void)setSuperview: (MOView *)aSuperview
 {
 	// Don't retain
 	viewData->superview = aSuperview;
@@ -81,22 +81,22 @@ struct MOViewData
 	return viewData->subviews;
 }
 
-- (void)addSubview:(MOView *)aSubview
+- (void)addSubview: (MOView *)aSubview
 {
-	[viewData->subviews addObject:aSubview];
-	[aSubview setSuperview:self];
+	[viewData->subviews addObject: aSubview];
+	[aSubview setSuperview: self];
 }
 
 #pragma mark -
 
 - (MOPoint)absoluteOrigin
 {
-	return [viewData->superview convertPointToScreen:MOPointMake(viewData->frame.x, viewData->frame.y)];
+	return [viewData->superview convertPointToScreen: MOPointMake(viewData->frame.x, viewData->frame.y)];
 }
 
-- (MOPoint)convertPointFromScreen:(MOPoint)aPoint
+- (MOPoint)convertPointFromScreen: (MOPoint)aPoint
 {
-	if(!viewData->superview)
+	if (!viewData->superview)
 		return aPoint;
 	else
 	{
@@ -105,9 +105,9 @@ struct MOViewData
 	}
 }
 
-- (MOPoint)convertPointToScreen:(MOPoint)aPoint
+- (MOPoint)convertPointToScreen: (MOPoint)aPoint
 {
-	if(!viewData->superview)
+	if (!viewData->superview)
 		return aPoint;
 	else
 	{
@@ -119,13 +119,13 @@ struct MOViewData
 #pragma mark -
 
 // aPoint is relative to the screen here, not the view.
-- (MOView *)subviewAtPoint:(MOPoint)aPoint
+- (MOView *)subviewAtPoint: (MOPoint)aPoint
 {
 	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
 	MOView *subview = nil;
-	while(subview = [enumerator nextObject])
+	while (subview = [enumerator nextObject])
 	{
-		if(MORectContainsPoint([subview bounds], [subview convertPointFromScreen:aPoint]))
+		if (MORectContainsPoint([subview bounds], [subview convertPointFromScreen: aPoint]))
 			return subview;
 	}
 
@@ -133,14 +133,14 @@ struct MOViewData
 }
 
 // aPoint is relative to the screen here, not the view.
-- (MOView *)deepestSubviewAtPoint:(MOPoint)aPoint
+- (MOView *)deepestSubviewAtPoint: (MOPoint)aPoint
 {
 	// Find deepest subview
 	MOView *subview = self;
-	while(YES)
+	while (YES)
 	{
-		MOView *newSubview = [subview subviewAtPoint:aPoint];
-		if(newSubview)
+		MOView *newSubview = [subview subviewAtPoint: aPoint];
+		if (newSubview)
 			subview = newSubview;
 		else
 			break;
@@ -171,17 +171,17 @@ struct MOViewData
 
 - (void)lockFocus
 {
-	if(!viewData->graphicsContext)
+	if (!viewData->graphicsContext)
 	{
 		// Get destination rectangle
 		MOPoint absoluteOrigin = [self absoluteOrigin];
 		MORect rect = MORectMake(absoluteOrigin.x, absoluteOrigin.y, viewData->frame.w, viewData->frame.h);
 
 		// Create graphics context
-		viewData->graphicsContext = [[MOGraphicsContext alloc] initWithRect:rect];
+		viewData->graphicsContext = [[MOGraphicsContext alloc] initWithRect: rect];
 	}
 
-	[[MOGraphicsContext stack] addObject:viewData->graphicsContext];
+	[[MOGraphicsContext stack] addObject: viewData->graphicsContext];
 }
 
 - (void)unlockFocus
@@ -198,13 +198,13 @@ struct MOViewData
 
 	// Draw this view
 	[self lockFocus];
-	[self drawRect:[self bounds]];
+	[self drawRect: [self bounds]];
 	[self unlockFocus];
 
 	// Draw subviews
 	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
 	MOView *subview = nil;
-	while(subview = [enumerator nextObject])
+	while (subview = [enumerator nextObject])
 		[subview display];
 }
 
@@ -213,7 +213,7 @@ struct MOViewData
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-- (void)drawRect:(MORect)aRect
+- (void)drawRect: (MORect)aRect
 {
 	// Do nothing by default
 }
