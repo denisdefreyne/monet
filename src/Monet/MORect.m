@@ -8,7 +8,7 @@
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
 
-MORect MORectMake(SInt16 aX, SInt16 aY, UInt16 aW, UInt16 aH)
+MORect MORectMake(int16_t aX, int16_t aY, uint16_t aW, uint16_t aH)
 {
 	MORect rect = { aX, aY, aW, aH };
 	return rect;

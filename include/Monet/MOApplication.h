@@ -18,10 +18,10 @@
 - (void)setScreenSize: (MOSize)aSize;
 - (BOOL)isFullscreen;
 - (void)setFullscreen: (BOOL)aIsFullscreen;
-- (UInt8)gameTicksPerSecond;
-- (void)setGameTicksPerSecond: (UInt8)aGameTicksPerSecond;
-- (UInt8)maxFrameSkip;
-- (void)setMaxFrameSkip: (UInt8)aMaxFrameSkip;
+- (uint8_t)gameTicksPerSecond;
+- (void)setGameTicksPerSecond: (uint8_t)aGameTicksPerSecond;
+- (uint8_t)maxFrameSkip;
+- (void)setMaxFrameSkip: (uint8_t)aMaxFrameSkip;
 
 - (void)openScreen;
 - (void)enterRunloop;

@@ -1,6 +1,6 @@
 #import <Monet/MOPoint.h>
 
-MOPoint MOPointMake(SInt16 aX, SInt16 aY)
+MOPoint MOPointMake(int16_t aX, int16_t aY)
 {
 	MOPoint point;
 

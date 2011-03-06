@@ -29,8 +29,8 @@ struct MOApplicationData
 	MOView            *mainView;
 
 	// Timing
-	UInt8             maxFrameSkip;
-	UInt8             gameTicksPerSecond;
+	uint8_t             maxFrameSkip;
+	uint8_t             gameTicksPerSecond;
 	float             interpolation;
 
 	// Recent views receiving mouse button events
@@ -150,7 +150,7 @@ struct MOApplicationData
 					// Get event information
 					MOPoint mouseLocation		= MOPointMake(event.button.x, applicationData->screenSize.h-event.button.y-1);
 					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
-					UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
+					uint8_t modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
 					// Find deepest subview
 					MOView *subview = [applicationData->mainView deepestSubviewAtPoint: mouseLocation];
@@ -193,7 +193,7 @@ struct MOApplicationData
 					// Get event information
 					MOPoint mouseLocation		= MOPointMake(event.button.x, applicationData->screenSize.h-event.button.y-1);
 					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
-					UInt8 modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
+					uint8_t modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
 					// Find subview
 					MOView *subview = nil;
@@ -326,22 +326,22 @@ struct MOApplicationData
 	applicationData->isFullscreen = aIsFullscreen;
 }
 
-- (UInt8)gameTicksPerSecond
+- (uint8_t)gameTicksPerSecond
 {
 	return applicationData->gameTicksPerSecond;
 }
 
-- (void)setGameTicksPerSecond: (UInt8)aGameTicksPerSecond
+- (void)setGameTicksPerSecond: (uint8_t)aGameTicksPerSecond
 {
 	applicationData->gameTicksPerSecond = aGameTicksPerSecond;
 }
 
-- (UInt8)maxFrameSkip
+- (uint8_t)maxFrameSkip
 {
 	return applicationData->maxFrameSkip;
 }
 
-- (void)setMaxFrameSkip: (UInt8)aMaxFrameSkip
+- (void)setMaxFrameSkip: (uint8_t)aMaxFrameSkip
 {
 	applicationData->maxFrameSkip = aMaxFrameSkip;
 }

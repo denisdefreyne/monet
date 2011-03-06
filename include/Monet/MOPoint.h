@@ -1,10 +1,9 @@
 #import <Foundation/Foundation.h>
-
-#import <Monet/Types.h>
+#import <stdint.h>
 
 typedef struct _MOPoint {
-	SInt16 x;
-	SInt16 y;
+	int16_t x;
+	int16_t y;
 } MOPoint;
 
-MOPoint MOPointMake(SInt16 aX, SInt16 aY);
+MOPoint MOPointMake(int16_t aX, int16_t aY);

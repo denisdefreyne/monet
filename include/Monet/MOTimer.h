@@ -1,17 +1,16 @@
 #import <Foundation/Foundation.h>
-
-#import <Monet/Types.h>
+#import <stdint.h>
 
 @interface MOTimer : NSObject
 {
 	struct MOTimerData *timerData;
 }
 
-- (id)initWithTarget: (id)aTarget selector: (SEL)aSelector interval: (UInt32)aInterval userInfo: (void *)aUserInfo;
+- (id)initWithTarget: (id)aTarget selector: (SEL)aSelector interval: (uint32_t)aInterval userInfo: (void *)aUserInfo;
 
 - (id)target;
 - (SEL)selector;
-- (UInt32)interval;
+- (uint32_t)interval;
 - (void *)userInfo;
 
 - (void)start;

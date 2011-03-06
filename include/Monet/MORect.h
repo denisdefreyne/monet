@@ -1,17 +1,16 @@
 #import <Foundation/Foundation.h>
-
-#import <Monet/Types.h>
+#import <stdint.h>
 
 #import <Monet/MOPoint.h>
 
 @class MOColor;
 
 typedef struct _MORect {
-	SInt16 x, y;
-	UInt16 w, h;
+	int16_t x, y;
+	uint16_t w, h;
 } MORect;
 
-MORect MORectMake(SInt16 aX, SInt16 aY, UInt16 aW, UInt16 aH);
+MORect MORectMake(int16_t aX, int16_t aY, uint16_t aW, uint16_t aH);
 
 void MOFillRect(MORect aRect, MOColor *aColor);
 void MOStrokeRect(MORect aRect, MOColor *aColor);

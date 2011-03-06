@@ -65,7 +65,7 @@
 	return self;
 }
 
-- (id)initWithWidth: (UInt16)aWidth height: (UInt16)aHeight
+- (id)initWithWidth: (uint16_t)aWidth height: (uint16_t)aHeight
 {
 	if (self = [super init])
 	{

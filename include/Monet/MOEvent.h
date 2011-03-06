@@ -29,7 +29,7 @@ enum {
 
 	MOMouseMotionEventType
 };
-typedef UInt8 MOEventType;
+typedef uint8_t MOEventType;
 
 enum {
 	MOUnknownMouseButton = 0,
@@ -38,7 +38,7 @@ enum {
 	MOMiddleMouseButton,
 	MORightMouseButton
 };
-typedef UInt8 MOMouseButton;
+typedef uint8_t MOMouseButton;
 
 enum {
 	MOUnknownKey = 0,
@@ -77,7 +77,7 @@ enum {
 	MOBackspaceKey,
 	MODeleteKey
 };
-typedef UInt8 MOKey;
+typedef uint8_t MOKey;
 
 enum {
 	MOCapsLockKeyMask  = 0x01,
@@ -85,21 +85,21 @@ enum {
 	MOControlKeyMask   = 0x04,
 	MOAlternateKeyMask = 0x08
 };
-typedef UInt8 MOKeyModifierMask;
+typedef uint8_t MOKeyModifierMask;
 
 @interface MOEvent : NSObject
 {
 	struct MOEventData *eventData;
 }
 
-- (id)initKeyEventWithType: (MOEventType)aType modifiers: (UInt8)aModifiers character: (NSString *)aCharacter key: (MOKey)aKey;
-- (id)initMouseButtonEventWithType: (MOEventType)aType modifiers: (UInt8)aModifiers mouseButton: (MOMouseButton)aMouseButton mouseLocation: (MOPoint)aMouseLocation clickCount: (UInt8)aClickCount;
-- (id)initMouseMotionEventWithModifiers: (UInt8)aModifiers mouseLocation: (MOPoint)aMouseLocation relativeMouseMotion: (MOPoint)aRelativeMouseMotion;
+- (id)initKeyEventWithType: (MOEventType)aType modifiers: (uint8_t)aModifiers character: (NSString *)aCharacter key: (MOKey)aKey;
+- (id)initMouseButtonEventWithType: (MOEventType)aType modifiers: (uint8_t)aModifiers mouseButton: (MOMouseButton)aMouseButton mouseLocation: (MOPoint)aMouseLocation clickCount: (uint8_t)aClickCount;
+- (id)initMouseMotionEventWithModifiers: (uint8_t)aModifiers mouseLocation: (MOPoint)aMouseLocation relativeMouseMotion: (MOPoint)aRelativeMouseMotion;
 
 // General
 
 - (MOEventType)type;
-- (UInt8)modifiers;
+- (uint8_t)modifiers;
 
 // Keyboard-specific
 
@@ -111,6 +111,6 @@ typedef UInt8 MOKeyModifierMask;
 - (MOMouseButton)mouseButton;
 - (MOPoint)mouseLocation;
 - (MOPoint)relativeMouseMotion;
-- (UInt8)clickCount;
+- (uint8_t)clickCount;
 
 @end

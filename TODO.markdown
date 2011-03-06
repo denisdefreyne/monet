@@ -10,15 +10,11 @@ Documentation
 High priority
 -------------
 
-...
+* Make MOPoint and MORect use floats/doubles
 
 Low priority
 ------------
 
-* Decide whether the 'rect' argument in drawRect: is useful
-* Make MOPoint and MORect use floats/doubles
-* Define MOFloat
-* Define MOInteger
 * Add support for limiting framerate
 * Cursors
 * Remove dependency on Foundation

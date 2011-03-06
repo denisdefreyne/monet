@@ -3,7 +3,7 @@
 struct MOEventData
 {
 	MOEventType     type;
-	UInt8           modifiers;
+	uint8_t           modifiers;
     
 	NSString        *character;
 	MOKey           key;
@@ -11,12 +11,12 @@ struct MOEventData
 	MOMouseButton   mouseButton;
 	MOPoint         mouseLocation;
 	MOPoint         relativeMouseMotion;
-	UInt8           clickCount;
+	uint8_t           clickCount;
 };
 
 @implementation MOEvent
 
-- (id)initKeyEventWithType: (MOEventType)aType modifiers: (UInt8)aModifiers character: (NSString *)aCharacter key: (MOKey)aKey
+- (id)initKeyEventWithType: (MOEventType)aType modifiers: (uint8_t)aModifiers character: (NSString *)aCharacter key: (MOKey)aKey
 {
 	if (self = [super init])
 	{
@@ -32,7 +32,7 @@ struct MOEventData
 	return self;
 }
 
-- (id)initMouseButtonEventWithType: (MOEventType)aType modifiers: (UInt8)aModifiers mouseButton: (MOMouseButton)aMouseButton mouseLocation: (MOPoint)aMouseLocation clickCount: (UInt8)aClickCount
+- (id)initMouseButtonEventWithType: (MOEventType)aType modifiers: (uint8_t)aModifiers mouseButton: (MOMouseButton)aMouseButton mouseLocation: (MOPoint)aMouseLocation clickCount: (uint8_t)aClickCount
 {
 	if (self = [super init])
 	{
@@ -49,7 +49,7 @@ struct MOEventData
 	return self;
 }
 
-- (id)initMouseMotionEventWithModifiers: (UInt8)aModifiers mouseLocation: (MOPoint)aMouseLocation relativeMouseMotion: (MOPoint)aRelativeMouseMotion
+- (id)initMouseMotionEventWithModifiers: (uint8_t)aModifiers mouseLocation: (MOPoint)aMouseLocation relativeMouseMotion: (MOPoint)aRelativeMouseMotion
 {
 	if (self = [super init])
 	{
@@ -79,7 +79,7 @@ struct MOEventData
 	return eventData->type;
 }
 
-- (UInt8)modifiers
+- (uint8_t)modifiers
 {
 	return eventData->modifiers;
 }
@@ -113,7 +113,7 @@ struct MOEventData
 	return eventData->relativeMouseMotion;
 }
 
-- (UInt8)clickCount
+- (uint8_t)clickCount
 {
 	return eventData->clickCount;
 }

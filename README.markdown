@@ -82,4 +82,4 @@ Monet uses OpenGL for all drawing operations.
 Other Implementations
 ---------------------
 
-Even though Monet is built on top of SDL and OpenGL, it should be relatively easy to replace SDL or OpenGL with a different implementation. For example, replacing SDL with GLUT should be possible without affecting any public Monet interfaces; similarly, replacing OpenGL with SDL's built-in drawing functions should be possible in the same way.
+Even though Monet is built on top of SDL and OpenGL, it should be relatively easy to replace SDL or OpenGL with a different implementation. For example, replacing SDL with GLUT should be possible without affecting any public Monet interfaces. Similarly, replacing OpenGL with SDL's built-in drawing functions should be possible in the same way, provided that the game itself does not directly use OpenGL.

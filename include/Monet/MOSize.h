@@ -1,10 +1,9 @@
 #import <Foundation/Foundation.h>
-
-#import <Monet/Types.h>
+#import <stdint.h>
 
 typedef struct _MOSize {
-	UInt16 w;
-	UInt16 h;
+	uint16_t w;
+	uint16_t h;
 } MOSize;
 
-MOSize MOSizeMake(UInt16 aW, UInt16 aH);
+MOSize MOSizeMake(uint16_t aW, uint16_t aH);

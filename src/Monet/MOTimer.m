@@ -6,7 +6,7 @@ struct MOTimerData
 {
 	SDL_TimerID	timerID;
 
-	UInt32		interval;
+	uint32_t		interval;
 
 	id			target;
 	SEL			selector;
@@ -25,7 +25,7 @@ Uint32 timerCallback(Uint32 interval, void *param)
 
 @implementation MOTimer
 
-- (id)initWithTarget: (id)aTarget selector: (SEL)aSelector interval: (UInt32)aInterval userInfo: (void *)aUserInfo
+- (id)initWithTarget: (id)aTarget selector: (SEL)aSelector interval: (uint32_t)aInterval userInfo: (void *)aUserInfo
 {
 	if (self = [super init])
 	{
@@ -61,7 +61,7 @@ Uint32 timerCallback(Uint32 interval, void *param)
 	return timerData->selector;
 }
 
-- (UInt32)interval
+- (uint32_t)interval
 {
 	return timerData->interval;
 }
