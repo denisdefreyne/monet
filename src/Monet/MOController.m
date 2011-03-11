@@ -13,7 +13,7 @@ struct MOControllerData
 
 - (id)initWithView: (MOView *)aView
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		controllerData = calloc(1, sizeof (struct MOControllerData));
 
@@ -37,7 +37,7 @@ struct MOControllerData
 	NSEnumerator *enumerator = [[controllerData->view subviews] objectEnumerator];
 	MOView *subview = nil;
 	BOOL isHandled = NO;
-	while (subview = [enumerator nextObject])
+	while ((subview = [enumerator nextObject]))
 	{
 		isHandled = [[subview controller] keyDown: aEvent];
 		if (isHandled)
@@ -52,7 +52,7 @@ struct MOControllerData
 	NSEnumerator *enumerator = [[controllerData->view subviews] objectEnumerator];
 	MOView *subview = nil;
 	BOOL isHandled = NO;
-	while (subview = [enumerator nextObject])
+	while ((subview = [enumerator nextObject]))
 	{
 		isHandled = [[subview controller] keyUp: aEvent];
 		if (isHandled)

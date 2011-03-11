@@ -18,7 +18,7 @@ struct MOEventData
 
 - (id)initKeyEventWithType: (MOEventType)aType modifiers: (uint8_t)aModifiers character: (NSString *)aCharacter key: (MOKey)aKey
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		eventData = calloc(1, sizeof (struct MOEventData));
 
@@ -34,7 +34,7 @@ struct MOEventData
 
 - (id)initMouseButtonEventWithType: (MOEventType)aType modifiers: (uint8_t)aModifiers mouseButton: (MOMouseButton)aMouseButton mouseLocation: (MOPoint)aMouseLocation clickCount: (uint8_t)aClickCount
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		eventData = calloc(1, sizeof (struct MOEventData));
 
@@ -51,7 +51,7 @@ struct MOEventData
 
 - (id)initMouseMotionEventWithModifiers: (uint8_t)aModifiers mouseLocation: (MOPoint)aMouseLocation relativeMouseMotion: (MOPoint)aRelativeMouseMotion
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		eventData = calloc(1, sizeof (struct MOEventData));
 

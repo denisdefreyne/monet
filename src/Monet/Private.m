@@ -4,7 +4,7 @@
 
 - (id)initWithRect: (MORect)aRect
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		graphicsContextData = calloc(1, sizeof (struct MOGraphicsContextData));
 

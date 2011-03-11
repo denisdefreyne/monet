@@ -27,7 +27,7 @@ Uint32 timerCallback(Uint32 interval, void *param)
 
 - (id)initWithTarget: (id)aTarget selector: (SEL)aSelector interval: (uint32_t)aInterval userInfo: (void *)aUserInfo
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		timerData = calloc(1, sizeof(struct MOTimerData));
 

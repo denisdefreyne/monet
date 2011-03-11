@@ -12,7 +12,7 @@ struct MOButtonData
 
 - (id)initWithFrame: (MORect)aFrame app: (MOApplication *)aApp
 {
-	if (self = [super initWithFrame: aFrame app: aApp])
+	if ((self = [super initWithFrame: aFrame app: aApp]))
 	{
 		// Create data
 		buttonData = calloc(1, sizeof (struct MOButtonData));

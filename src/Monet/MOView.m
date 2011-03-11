@@ -28,7 +28,7 @@ struct MOViewData
 
 - (id)initWithFrame: (MORect)aFrame app: (MOApplication *)aApp
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		viewData = calloc(1, sizeof (struct MOViewData));
 
@@ -123,7 +123,7 @@ struct MOViewData
 {
 	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
 	MOView *subview = nil;
-	while (subview = [enumerator nextObject])
+	while ((subview = [enumerator nextObject]))
 	{
 		if (MORectContainsPoint([subview bounds], [subview convertPointFromScreen: aPoint]))
 			return subview;
@@ -204,7 +204,7 @@ struct MOViewData
 	// Draw subviews
 	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
 	MOView *subview = nil;
-	while (subview = [enumerator nextObject])
+	while ((subview = [enumerator nextObject]))
 		[subview display];
 }
 

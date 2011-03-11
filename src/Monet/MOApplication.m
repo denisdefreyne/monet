@@ -259,7 +259,7 @@ struct MOApplicationData
 
 - (id)init
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		// Create data
 		applicationData = calloc(1, sizeof (struct MOApplicationData));

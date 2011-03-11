@@ -12,7 +12,7 @@
 
 - (id)initWithContentsOfFile: (NSString *)aFilename
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		// Create data
 		imageData = calloc(1, sizeof (struct MOImageData));
@@ -67,7 +67,7 @@
 
 - (id)initWithWidth: (uint16_t)aWidth height: (uint16_t)aHeight
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		// Create data
 		imageData = calloc(1, sizeof (struct MOImageData));
