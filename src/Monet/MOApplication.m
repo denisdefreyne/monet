@@ -87,10 +87,11 @@ struct MOApplicationData
 						character = [[NSString alloc] initWithCharacters: &event.key.keysym.unicode length: 1];
 
 					// Create event
-					MOEvent *moEvent = [[MOEvent alloc] initKeyEventWithType: MOKeyDownEventType
-														modifiers:MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
-														character:character
-														key:MOSDLKeyToMOKey(event.key.keysym.sym)
+					MOEvent *moEvent = [[MOEvent alloc]
+						initKeyEventWithType: MOKeyDownEventType
+						modifiers: MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
+						character: character
+						key: MOSDLKeyToMOKey(event.key.keysym.sym)
 					];
 
 					// Dispatch event
@@ -145,9 +146,11 @@ struct MOApplicationData
 			case SDL_MOUSEBUTTONDOWN:
 				{
 					// Get event information
-					MOPoint mouseLocation		= MOPointMake(event.button.x, applicationData->screenSize.h-event.button.y-1);
+					MOPoint mouseLocation		= MOPointMake(
+						event.button.x,
+						applicationData->screenSize.h-event.button.y-1);
 					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
-					uint8_t modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
+					uint8_t modifiers			= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
 					// Find deepest subview
 					MOView *subview = [applicationData->mainView deepestSubviewAtPoint: mouseLocation];
@@ -188,9 +191,11 @@ struct MOApplicationData
 			case SDL_MOUSEBUTTONUP:
 				{
 					// Get event information
-					MOPoint mouseLocation		= MOPointMake(event.button.x, applicationData->screenSize.h-event.button.y-1);
+					MOPoint mouseLocation		= MOPointMake(
+						event.button.x,
+						applicationData->screenSize.h-event.button.y-1);
 					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
-					uint8_t modifiers				= MOSDLModToMOKeyModifierMask(SDL_GetModState());
+					uint8_t modifiers			= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
 					// Find subview
 					MOView *subview = nil;
