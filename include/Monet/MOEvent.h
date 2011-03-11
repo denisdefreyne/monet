@@ -58,6 +58,8 @@ enum {
 	MOPageUpKey,
 	MOPageDownKey,
 
+	MOEscapeKey,
+
 	MOF1Key,
 	MOF2Key,
 	MOF3Key,

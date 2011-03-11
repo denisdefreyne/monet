@@ -38,6 +38,8 @@ MOKey MOSDLKeyToMOKey(SDLKey aKey)
 		case SDLK_BACKSPACE:				return MOBackspaceKey;
 		case SDLK_DELETE:					return MODeleteKey;
 
+		case SDLK_ESCAPE:					return MOEscapeKey;
+
 		case SDLK_F1:						return MOF1Key;
 		case SDLK_F2:						return MOF2Key;
 		case SDLK_F3:						return MOF3Key;
