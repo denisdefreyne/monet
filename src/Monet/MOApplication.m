@@ -23,7 +23,7 @@ struct MOApplicationData
 	BOOL              isOpen;
 
 	// World
-	id                world;
+	id <MOTicking>    world;
 
 	// View
 	MOView            *mainView;
@@ -284,12 +284,12 @@ struct MOApplicationData
 
 #pragma mark -
 
-- (id)world
+- (id <MOTicking>)world
 {
 	return applicationData->world;
 }
 
-- (void)setWorld: (id)aWorld
+- (void)setWorld: (id <MOTicking>)aWorld
 {
 	applicationData->world = aWorld;
 }
@@ -423,10 +423,7 @@ struct MOApplicationData
 	{
 		for (int i = 0; SDL_GetTicks() > nextGameTick && i < applicationData->maxFrameSkip; ++i)
 		{
-			// Update game
-			if ([applicationData->world respondsToSelector: @selector(tick)])
-				[applicationData->world performSelector: @selector(tick)];
-
+			[applicationData->world tick: gameTickLength];
 			nextGameTick += gameTickLength;
 		}
 
