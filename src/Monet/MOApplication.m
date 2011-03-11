@@ -78,9 +78,6 @@ struct MOApplicationData
 				break;
 
 			case SDL_KEYDOWN:
-				if (event.key.keysym.sym == SDLK_ESCAPE)
-					[self closeScreen];
-				else
 				{
 					// Get character
 					NSString *character;
