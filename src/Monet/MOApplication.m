@@ -426,7 +426,6 @@ struct MOApplicationData
 			// Update game
 			if ([applicationData->world respondsToSelector: @selector(tick)])
 				[applicationData->world performSelector: @selector(tick)];
-			[[applicationData->mainView controller] tick];
 
 			nextGameTick += gameTickLength;
 		}

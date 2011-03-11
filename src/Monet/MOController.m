@@ -77,11 +77,4 @@ struct MOControllerData
 	;
 }
 
-#pragma mark -
-
-- (void)tick
-{
-	// Do nothing by default
-}
-
 @end

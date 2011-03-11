@@ -19,6 +19,4 @@
 - (void)mouseUp: (MOEvent *)aEvent;
 - (void)mouseDragged: (MOEvent *)aEvent;
 
-- (void)tick;
-
 @end
