@@ -76,7 +76,7 @@ struct MOViewData
 	viewData->superview = aSuperview;
 }
 
-- (NSMutableArray *)subviews
+- (NSArray *)subviews
 {
 	return viewData->subviews;
 }

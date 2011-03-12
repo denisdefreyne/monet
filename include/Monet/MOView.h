@@ -16,7 +16,7 @@
 - (MOApplication *)app;
 
 - (MOView *)superview;
-- (NSMutableArray *)subviews;
+- (NSArray *)subviews;
 - (void)addSubview: (MOView *)aSubview;
 
 - (MOPoint)convertPointFromScreen: (MOPoint)aPoint;
