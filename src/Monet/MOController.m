@@ -32,6 +32,13 @@ struct MOControllerData
 
 #pragma mark -
 
+- (void)tick: (double)aSeconds
+{
+	;
+}
+
+#pragma mark -
+
 - (BOOL)keyDown: (MOEvent *)aEvent
 {
 	NSEnumerator *enumerator = [[controllerData->view subviews] objectEnumerator];

@@ -418,14 +418,17 @@ struct MOApplicationData
 
 - (void)enterRunloop
 {
-	Uint32 gameTickLength = 1000/applicationData->gameTicksPerSecond;
-	Uint32 nextGameTick   = SDL_GetTicks();
+	Uint32 gameTickLength          = 1000/applicationData->gameTicksPerSecond;
+	double gameTickLengthInSeconds = 1.0/(double)applicationData->gameTicksPerSecond;
+	Uint32 nextGameTick            = SDL_GetTicks();
 
 	while (applicationData->isOpen)
 	{
 		for (int i = 0; SDL_GetTicks() > nextGameTick && i < applicationData->maxFrameSkip; ++i)
 		{
-			[applicationData->world tick: ((double)gameTickLength)/1000.0];
+			[[applicationData->mainView controller] tick: gameTickLengthInSeconds];
+			[applicationData->world tick: gameTickLengthInSeconds];
+
 			nextGameTick += gameTickLength;
 		}
 

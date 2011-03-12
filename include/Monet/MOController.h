@@ -1,10 +1,12 @@
 #import <Foundation/Foundation.h>
 
+#import <Monet/MOTicking.h>
+
 @class MOApplication;
 @class MOEvent;
 @class MOView;
 
-@interface MOController : NSObject
+@interface MOController : NSObject <MOTicking>
 {
 	struct MOControllerData *controllerData;
 }
