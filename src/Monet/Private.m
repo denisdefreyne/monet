@@ -62,7 +62,7 @@ MOKey MOSDLKeyToMOKey(SDLKey aKey)
 
 MOKeyModifierMask MOSDLModToMOKeyModifierMask(SDLMod aMod)
 {
-	MOKeyModifierMask keyModifierMask;
+	MOKeyModifierMask keyModifierMask = 0x0;
 
 	if (aMod & KMOD_CAPS)
 		keyModifierMask |= MOCapsLockKeyMask;
@@ -75,6 +75,9 @@ MOKeyModifierMask MOSDLModToMOKeyModifierMask(SDLMod aMod)
 
 	if (aMod & KMOD_ALT)
 		keyModifierMask |= MOAlternateKeyMask;
+
+	if (aMod & KMOD_META)
+		keyModifierMask |= MOMetaKeyMask;
 
 	return keyModifierMask;
 }

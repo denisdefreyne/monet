@@ -85,7 +85,8 @@ enum {
 	MOCapsLockKeyMask  = 0x01,
 	MOShiftKeyMask     = 0x02,
 	MOControlKeyMask   = 0x04,
-	MOAlternateKeyMask = 0x08
+	MOAlternateKeyMask = 0x08,
+	MOMetaKeyMask      = 0x10
 };
 typedef uint8_t MOKeyModifierMask;
 
