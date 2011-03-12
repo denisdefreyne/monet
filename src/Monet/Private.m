@@ -84,8 +84,8 @@ MOMouseButton MOSDLMouseButtonToMOMouseButton(Uint8 aButton)
 	switch(aButton)
 	{
 		case SDL_BUTTON_LEFT:	return MOLeftMouseButton;
-		case SDL_BUTTON_MIDDLE:	return MOLeftMouseButton;
-		case SDL_BUTTON_RIGHT:	return MOLeftMouseButton;
+		case SDL_BUTTON_MIDDLE:	return MOMiddleMouseButton;
+		case SDL_BUTTON_RIGHT:	return MORightMouseButton;
 
 		default:				return MOUnknownMouseButton;
 	}
