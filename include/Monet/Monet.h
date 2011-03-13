@@ -8,6 +8,7 @@
 #import <Monet/MORect.h>
 #import <Monet/MOApplication.h>
 #import <Monet/MOSize.h>
+#import <Monet/MOSound.h>
 #import <Monet/MOTiledImage.h>
 #import <Monet/MOTicking.h>
 #import <Monet/MOTimer.h>

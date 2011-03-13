@@ -9,6 +9,8 @@
 #import <OpenGL/gl.h>
 #import <OpenGL/glu.h>
 
+#import <SDL_mixer.h>
+
 struct MOApplicationData
 {
 	// Pool
@@ -356,7 +358,7 @@ struct MOApplicationData
 	[self refreshAutoreleasePool];
 
 	// Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) < 0)
 		[NSException raise: @"SDLException" format: @"SDL_Init failed: %s\n", SDL_GetError()];
 	atexit(&SDL_Quit);
 
@@ -364,6 +366,15 @@ struct MOApplicationData
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+
+	// Set up audio
+	Mix_Init(0);
+	if (Mix_OpenAudio(22050, AUDIO_S16, 2, 4096) < 0)
+	{
+		[NSException raise: @"SDLException" format: @"Mix_OpenAudio failed\n"];
+		exit(1);
+	}
+	Mix_AllocateChannels(32);
 
 	// Create screen
 	Uint32 flags = SDL_OPENGL | (applicationData->isFullscreen ? SDL_FULLSCREEN : 0);
