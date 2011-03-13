@@ -426,8 +426,8 @@ struct MOApplicationData
 	{
 		for (int i = 0; SDL_GetTicks() > nextGameTick && i < applicationData->maxFrameSkip; ++i)
 		{
-			[[applicationData->mainView controller] tick: gameTickLengthInSeconds];
 			[applicationData->world tick: gameTickLengthInSeconds];
+			[[applicationData->mainView controller] tick: gameTickLengthInSeconds];
 
 			nextGameTick += gameTickLength;
 		}
