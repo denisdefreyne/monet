@@ -37,7 +37,7 @@ Drawing is handled by `MOView`, which is meant to be subclassed for every kind o
 2. Configure the application (`setScreenSize:`, `setFullscreen:`, ...)
 3. Set the world, if any (`setWorld:`)
 4. Open the screen (`openScreen`)
-5. Create the content view (`setMainView:`)
+5. Push the initial game state (`pushState:`)
 6. Enter runloop (`enterRunloop`)
 
 ### Drawing & views

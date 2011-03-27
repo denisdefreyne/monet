@@ -27,12 +27,12 @@ struct MOApplicationData
 	// World
 	id <MOTicking>    world;
 
-	// View
-	MOView            *mainView;
+	// View etc
+	NSMutableArray    *stateStack;
 
 	// Timing
-	uint8_t             maxFrameSkip;
-	uint8_t             gameTicksPerSecond;
+	uint8_t           maxFrameSkip;
+	uint8_t           gameTicksPerSecond;
 	float             interpolation;
 
 	// Recent views receiving mouse button events
@@ -97,7 +97,7 @@ struct MOApplicationData
 					];
 
 					// Dispatch event
-					[[applicationData->mainView controller] keyDown: moEvent];
+					[[[self currentState] controller] keyDown: moEvent];
 
 					// Cleanup
 					[character release];
@@ -116,7 +116,7 @@ struct MOApplicationData
 					];
 
 					// Dispatch event
-					[[applicationData->mainView controller] keyUp: moEvent];
+					[[[self currentState] controller] keyUp: moEvent];
 
 					// Cleanup
 					[moEvent release];
@@ -155,7 +155,7 @@ struct MOApplicationData
 					uint8_t modifiers			= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
 					// Find deepest subview
-					MOView *subview = [applicationData->mainView deepestSubviewAtPoint: mouseLocation];
+					MOView *subview = [[[self currentState] view] deepestSubviewAtPoint: mouseLocation];
 
 					// Set last view receiving event
 					switch(mouseButton)
@@ -268,6 +268,9 @@ struct MOApplicationData
 		// Create data
 		applicationData = calloc(1, sizeof (struct MOApplicationData));
 
+		// Init stack
+		applicationData->stateStack = [[[NSMutableArray alloc] init] autorelease];
+
 		// Set default values
 		applicationData->gameTicksPerSecond = 30;
 		applicationData->maxFrameSkip       = 3;
@@ -278,10 +281,9 @@ struct MOApplicationData
 
 - (void)dealloc
 {
+	[applicationData->stateStack release];
 	SDL_FreeSurface(applicationData->surface);
 	SDL_Quit();
-
-	[self setMainView: nil];
 
 	[super dealloc];
 }
@@ -296,18 +298,6 @@ struct MOApplicationData
 - (void)setWorld: (id <MOTicking>)aWorld
 {
 	applicationData->world = aWorld;
-}
-
-- (MOView *)mainView
-{
-	return applicationData->mainView;
-}
-
-- (void)setMainView: (MOView *)aMainView
-{
-	[aMainView retain];
-	[applicationData->mainView release];
-	applicationData->mainView = aMainView;
 }
 
 - (MOSize)screenSize
@@ -438,7 +428,7 @@ struct MOApplicationData
 		for (int i = 0; SDL_GetTicks() > nextGameTick && i < applicationData->maxFrameSkip; ++i)
 		{
 			[applicationData->world tick: gameTickLengthInSeconds];
-			[[applicationData->mainView controller] tick: gameTickLengthInSeconds];
+			[[[self currentState] controller] tick: gameTickLengthInSeconds];
 
 			nextGameTick += gameTickLength;
 		}
@@ -451,7 +441,7 @@ struct MOApplicationData
 
 		// Redraw
 		glClear(GL_COLOR_BUFFER_BIT);
-		[applicationData->mainView display];
+		[[[self currentState] view] display];
 		SDL_GL_SwapBuffers();
 
 		// Empty autorelease pool
@@ -462,6 +452,32 @@ struct MOApplicationData
 - (void)closeScreen
 {
 	applicationData->isOpen = NO;
+}
+
+#pragma mark -
+
+- (MOState *)currentState
+{
+	return [applicationData->stateStack lastObject];
+}
+
+- (void)pushState: (MOState *)aState
+{
+	[applicationData->stateStack addObject: aState];
+}
+
+- (MOState *)popCurrentState
+{
+	MOState *removedState = [self currentState];
+	[applicationData->stateStack removeLastObject];
+	return removedState;
+}
+
+- (MOState *)replaceCurrentStateWith: (MOState *)aState
+{
+	MOState *removedState = [self popCurrentState];
+	[self pushState: aState];
+	return removedState;
 }
 
 #pragma mark -

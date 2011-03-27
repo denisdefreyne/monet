@@ -3,6 +3,7 @@
 #import <Monet/MOPoint.h>
 #import <Monet/MOSize.h>
 
+@class MOState;
 @class MOView;
 
 @interface MOApplication : NSObject
@@ -12,8 +13,6 @@
 
 - (id)world;
 - (void)setWorld: (id)aWorld;
-- (MOView *)mainView;
-- (void)setMainView: (MOView *)aMainView;
 - (MOSize)screenSize;
 - (void)setScreenSize: (MOSize)aSize;
 - (BOOL)isFullscreen;
@@ -22,6 +21,11 @@
 - (void)setGameTicksPerSecond: (uint8_t)aGameTicksPerSecond;
 - (uint8_t)maxFrameSkip;
 - (void)setMaxFrameSkip: (uint8_t)aMaxFrameSkip;
+
+- (MOState *)currentState;
+- (void)pushState: (MOState *)aState;
+- (MOState *)popCurrentState;
+- (MOState *)replaceCurrentStateWith: (MOState *)aState;
 
 - (void)openScreen;
 - (void)enterRunloop;
