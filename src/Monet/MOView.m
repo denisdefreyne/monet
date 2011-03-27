@@ -39,7 +39,8 @@ struct MOViewData
 		viewData->bounds.h = viewData->frame.h;
 
 		viewData->subviews   = [[NSMutableArray alloc] init];
-		viewData->controller = nil;
+
+		viewData->controller = [[[self controllerClass] alloc] initWithView: self];
 	}
 
 	return self;
@@ -227,13 +228,6 @@ struct MOViewData
 
 - (MOController *)controller
 {
-	Class controllerClass = [self controllerClass];
-	if (Nil == controllerClass)
-		return nil;
-
-	if (!viewData->controller)
-		viewData->controller = [[controllerClass alloc] initWithView: self];
-
 	return viewData->controller;
 }
 
