@@ -3,7 +3,7 @@
 struct MOEventData
 {
 	MOEventType     type;
-	uint8_t           modifiers;
+	uint8_t         modifiers;
     
 	NSString        *character;
 	MOKey           key;
@@ -11,7 +11,9 @@ struct MOEventData
 	MOMouseButton   mouseButton;
 	MOPoint         mouseLocation;
 	MOPoint         relativeMouseMotion;
-	uint8_t           clickCount;
+	uint8_t         clickCount;
+
+	MOTimer         *timer;
 };
 
 @implementation MOEvent
@@ -65,9 +67,22 @@ struct MOEventData
 	return self;
 }
 
+- (id)initTimerEventWithTimer: (MOTimer *)aTimer
+{
+	if ((self = [super init]))
+	{
+		eventData = calloc(1, sizeof (struct MOEventData));
+
+		eventData->type  = MOTimerFiredEventType;
+
+		eventData->timer = aTimer;
+	}
+}
+
 - (void)dealloc
 {
 	[eventData->character release];
+	[eventData->timer release];
 
 	[super dealloc];
 }
@@ -116,6 +131,13 @@ struct MOEventData
 - (uint8_t)clickCount
 {
 	return eventData->clickCount;
+}
+
+#pragma mark -
+
+- (MOTimer *)timer
+{
+	return eventData->timer;
 }
 
 @end

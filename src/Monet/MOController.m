@@ -84,4 +84,9 @@ struct MOControllerData
 	;
 }
 
+- (void)timerFired: (MOEvent *)aEvent
+{
+	;
+}
+
 @end

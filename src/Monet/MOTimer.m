@@ -6,36 +6,33 @@ struct MOTimerData
 {
 	SDL_TimerID	timerID;
 
-	uint32_t		interval;
+	uint32_t    interval;
+	double      duration;
 
-	id			target;
-	SEL			selector;
-
-	void		*userInfo;
+	void        *userInfo;
 };
 
 Uint32 timerCallback(Uint32 interval, void *param)
 {
 	MOTimer *timer = (MOTimer *)param;
 
-	[[timer target] performSelector: [timer selector] withObject: timer];
+	SDL_Event event;
+	event.type = SDL_USEREVENT;
+	event.user.data1 = timer;
+	SDL_PushEvent(&event);
 
-	return [timer interval];
+	return [timer duration];
 }
 
 @implementation MOTimer
 
-- (id)initWithTarget: (id)aTarget selector: (SEL)aSelector interval: (uint32_t)aInterval userInfo: (void *)aUserInfo
+- (id)initWithDuration: (double)aDuration userInfo: (void *)aUserInfo
 {
 	if ((self = [super init]))
 	{
 		timerData = calloc(1, sizeof(struct MOTimerData));
 
-		timerData->target = aTarget;
-		timerData->selector = aSelector;
-
-		timerData->interval = aInterval;
-
+		timerData->duration = aDuration;
 		timerData->userInfo = aUserInfo;
 	}
 
@@ -51,19 +48,9 @@ Uint32 timerCallback(Uint32 interval, void *param)
 
 #pragma mark -
 
-- (id)target
+- (double)duration
 {
-	return timerData->target;
-}
-
-- (SEL)selector
-{
-	return timerData->selector;
-}
-
-- (uint32_t)interval
-{
-	return timerData->interval;
+	return timerData->duration;
 }
 
 - (void *)userInfo
@@ -75,7 +62,10 @@ Uint32 timerCallback(Uint32 interval, void *param)
 
 - (void)start
 {
-	timerData->timerID = SDL_AddTimer(timerData->interval, &timerCallback, self);
+	timerData->timerID = SDL_AddTimer(
+		(uint32_t)(timerData->duration * 1000.0),
+		&timerCallback,
+		self);
 }
 
 - (void)stop

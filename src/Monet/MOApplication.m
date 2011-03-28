@@ -200,6 +200,7 @@ struct MOApplicationData
 					uint8_t modifiers			= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
 					// Find subview
+					// FIXME won’t work well if game state is different
 					MOView *subview = nil;
 					switch(mouseButton)
 					{
@@ -247,6 +248,14 @@ struct MOApplicationData
 
 					// Cleanup
 					[moEvent release];
+				}
+				break;
+
+			case SDL_USEREVENT:
+				{
+					MOTimer *timer = event.user.data1;
+					MOEvent *moEvent = [[MOEvent alloc] initTimerEventWithTimer: timer];
+					[[[self currentState] controller] timerFired: moEvent];
 				}
 				break;
 

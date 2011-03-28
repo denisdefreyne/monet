@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 
 #import <Monet/MOPoint.h>
+#import <Monet/MOTimer.h>
 
 // Keyboard events example:
 //
@@ -26,8 +27,9 @@ enum {
 
 	MOMouseButtonDownEventType,
 	MOMouseButtonUpEventType,
+	MOMouseMotionEventType,
 
-	MOMouseMotionEventType
+	MOTimerFiredEventType
 };
 typedef uint8_t MOEventType;
 
@@ -98,6 +100,7 @@ typedef uint8_t MOKeyModifierMask;
 - (id)initKeyEventWithType: (MOEventType)aType modifiers: (uint8_t)aModifiers character: (NSString *)aCharacter key: (MOKey)aKey;
 - (id)initMouseButtonEventWithType: (MOEventType)aType modifiers: (uint8_t)aModifiers mouseButton: (MOMouseButton)aMouseButton mouseLocation: (MOPoint)aMouseLocation clickCount: (uint8_t)aClickCount;
 - (id)initMouseMotionEventWithModifiers: (uint8_t)aModifiers mouseLocation: (MOPoint)aMouseLocation relativeMouseMotion: (MOPoint)aRelativeMouseMotion;
+- (id)initTimerEventWithTimer: (MOTimer *)aTimer;
 
 // General
 
@@ -115,5 +118,9 @@ typedef uint8_t MOKeyModifierMask;
 - (MOPoint)mouseLocation;
 - (MOPoint)relativeMouseMotion;
 - (uint8_t)clickCount;
+
+// Timer-specific
+
+- (MOTimer *)timer;
 
 @end
