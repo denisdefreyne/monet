@@ -24,9 +24,6 @@ struct MOApplicationData
 	// Running or not?
 	BOOL              isOpen;
 
-	// World
-	id <MOTicking>    world;
-
 	// View etc
 	NSMutableArray    *stateStack;
 
@@ -299,16 +296,6 @@ struct MOApplicationData
 
 #pragma mark -
 
-- (id <MOTicking>)world
-{
-	return applicationData->world;
-}
-
-- (void)setWorld: (id <MOTicking>)aWorld
-{
-	applicationData->world = aWorld;
-}
-
 - (MOSize)screenSize
 {
 	return applicationData->screenSize;
@@ -436,9 +423,7 @@ struct MOApplicationData
 	{
 		for (int i = 0; SDL_GetTicks() > nextGameTick && i < applicationData->maxFrameSkip; ++i)
 		{
-			[applicationData->world tick: gameTickLengthInSeconds];
-			[[[self currentState] controller] tick: gameTickLengthInSeconds];
-
+			[[self currentState] tick: gameTickLengthInSeconds];
 			nextGameTick += gameTickLength;
 		}
 

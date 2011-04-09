@@ -11,8 +11,6 @@
 	struct MOApplicationData *applicationData;
 }
 
-- (id)world;
-- (void)setWorld: (id)aWorld;
 - (MOSize)screenSize;
 - (void)setScreenSize: (MOSize)aSize;
 - (BOOL)isFullscreen;

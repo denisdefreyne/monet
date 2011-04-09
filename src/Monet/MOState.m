@@ -2,6 +2,7 @@
 
 struct MOStateData
 {
+	NSObject <MOTicking> *world;
 	MOView *view;
 };
 
@@ -11,6 +12,8 @@ struct MOStateData
 {
 	return Nil;
 }
+
+#pragma mark -
 
 - (id)initWithApp: (MOApplication *)aApp
 {
@@ -34,6 +37,20 @@ struct MOStateData
 	[super dealloc];
 }
 
+#pragma mark -
+
+- (NSObject <MOTicking> *)world
+{
+	return stateData->world;
+}
+
+- (void)setWorld: (NSObject <MOTicking> *)aWorld
+{
+	[aWorld retain];
+	[stateData->world release];
+	stateData->world = aWorld;
+}
+
 - (MOView *)view
 {
 	return stateData->view;
@@ -42,6 +59,14 @@ struct MOStateData
 - (MOController *)controller
 {
 	return [stateData->view controller];
+}
+
+#pragma mark -
+
+- (void)tick: (double)aSeconds
+{
+	[stateData->world tick: aSeconds];
+	[[self controller] tick: aSeconds];
 }
 
 @end
