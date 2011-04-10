@@ -42,6 +42,7 @@ Uint32 timerCallback(Uint32 interval, void *param)
 - (void)dealloc
 {
 	[self stop];
+	free(timerData);
 
 	[super dealloc];
 }

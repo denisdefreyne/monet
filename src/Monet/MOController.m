@@ -23,6 +23,13 @@ struct MOControllerData
 	return self;
 }
 
+- (void)dealloc
+{
+	free(controllerData);
+
+	[super dealloc];
+}
+
 #pragma mark -
 
 - (MOApplication *)app

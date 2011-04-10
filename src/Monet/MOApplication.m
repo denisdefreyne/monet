@@ -253,6 +253,7 @@ struct MOApplicationData
 					MOTimer *timer = event.user.data1;
 					MOEvent *moEvent = [[MOEvent alloc] initTimerEventWithTimer: timer];
 					[[[self currentState] controller] timerFired: moEvent];
+					[moEvent release];
 				}
 				break;
 
@@ -275,7 +276,7 @@ struct MOApplicationData
 		applicationData = calloc(1, sizeof (struct MOApplicationData));
 
 		// Init stack
-		applicationData->stateStack = [[[NSMutableArray alloc] init] autorelease];
+		applicationData->stateStack = [[NSMutableArray alloc] init];
 
 		// Set default values
 		applicationData->gameTicksPerSecond = 30;
@@ -289,6 +290,7 @@ struct MOApplicationData
 {
 	[applicationData->stateStack release];
 	SDL_FreeSurface(applicationData->surface);
+	free(applicationData);
 	SDL_Quit();
 
 	[super dealloc];
@@ -462,7 +464,7 @@ struct MOApplicationData
 
 - (MOState *)popCurrentState
 {
-	MOState *removedState = [self currentState];
+	MOState *removedState = [[[self currentState] retain] autorelease];
 	[applicationData->stateStack removeLastObject];
 	return removedState;
 }

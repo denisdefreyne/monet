@@ -24,6 +24,7 @@ struct MOSoundData
 - (void)dealloc
 {
 	Mix_FreeChunk(soundData->chunk);
+	free(soundData);
 
 	[super dealloc];
 }

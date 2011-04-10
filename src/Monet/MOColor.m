@@ -32,6 +32,13 @@ struct MOColorData
 	return [self initWithRed: aRed green: aGreen blue: aBlue alpha: 1.0];
 }
 
+- (void)dealloc
+{
+	free(colorData);
+
+	[super dealloc];
+}
+
 #pragma mark -
 
 - (double)red

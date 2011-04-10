@@ -75,7 +75,7 @@ struct MOEventData
 
 		eventData->type  = MOTimerFiredEventType;
 
-		eventData->timer = aTimer;
+		eventData->timer = [aTimer retain];
 	}
 }
 
@@ -83,6 +83,8 @@ struct MOEventData
 {
 	[eventData->character release];
 	[eventData->timer release];
+
+	free(eventData);
 
 	[super dealloc];
 }

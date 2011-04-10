@@ -14,6 +14,13 @@
 	return self;
 }
 
+- (void)dealloc
+{
+	free(graphicsContextData);
+
+	[super dealloc];
+}
+
 @end
 
 MOKey MOSDLKeyToMOKey(SDLKey aKey)

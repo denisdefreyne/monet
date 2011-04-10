@@ -69,20 +69,15 @@
 {
 	if ((self = [super init]))
 	{
-		// Create data
 		imageData = calloc(1, sizeof (struct MOImageData));
-
-		// Set size
 		imageData->size = MOSizeMake(aWidth, aHeight);
+		imageData->graphicsContext = [[MOGraphicsContext alloc] initWithRect: [self bounds]];
 
-		// Create texture
 		glGenTextures(1, &imageData->textureName);
 		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, imageData->textureName);
 		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, imageData->size.w, imageData->size.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-
-		// Cleanup
 		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
 	}
 
@@ -92,8 +87,8 @@
 - (void)dealloc
 {
 	glDeleteTextures(1, &imageData->textureName);
-
 	[imageData->graphicsContext release];
+	free(imageData);
 
 	[super dealloc];
 }
@@ -102,10 +97,6 @@
 
 - (void)lockFocus
 {
-	// Create graphics context if necessary
-	if (!imageData->graphicsContext)
-		imageData->graphicsContext = [[MOGraphicsContext alloc] initWithRect: [self bounds]];
-
 	[[MOGraphicsContext stack] addObject: imageData->graphicsContext];
 }
 

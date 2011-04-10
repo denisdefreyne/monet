@@ -49,9 +49,9 @@ struct MOViewData
 - (void)dealloc
 {
 	[viewData->subviews release];
-
 	[viewData->graphicsContext release];
 	[viewData->controller release];
+	free(viewData);
 
 	[super dealloc];
 }
@@ -60,9 +60,6 @@ struct MOViewData
 
 - (MOApplication *)app
 {
-	if (!viewData->app)
-		viewData->app = [viewData->superview app];
-
 	return viewData->app;
 }
 

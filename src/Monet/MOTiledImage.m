@@ -25,6 +25,13 @@ struct MOTiledImageData
 	return self;
 }
 
+- (void)dealloc
+{
+	free(tiledImageData);
+
+	[super dealloc];
+}
+
 #pragma mark -
 
 - (MOSize)tileSize
