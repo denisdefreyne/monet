@@ -40,7 +40,7 @@ struct MOViewData
 
 		viewData->subviews   = [[NSMutableArray alloc] init];
 
-		viewData->controller = [[[self controllerClass] alloc] initWithView: self];
+		viewData->controller = [[[[self class] controllerClass] alloc] initWithView: self];
 	}
 
 	return self;
@@ -221,7 +221,7 @@ struct MOViewData
 
 #pragma mark -
 
-- (Class)controllerClass
++ (Class)controllerClass
 {
 	return Nil;
 }

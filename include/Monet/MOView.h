@@ -36,7 +36,7 @@
 - (void)clear;
 - (void)drawRect: (MORect)aRect;
 
-- (Class)controllerClass;
++ (Class)controllerClass;
 - (MOController *)controller;
 
 @end
