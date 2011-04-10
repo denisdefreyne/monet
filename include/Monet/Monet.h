@@ -1,4 +1,4 @@
-#import <Monet/MOButton.h>
+#import <Monet/MOButtonController.h>
 #import <Monet/MOController.h>
 #import <Monet/MOColor.h>
 #import <Monet/MOEvent.h>
