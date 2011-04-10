@@ -30,6 +30,11 @@ struct MOControllerData
 	return [controllerData->view app];
 }
 
+- (MOView *)view
+{
+	return controllerData->view;
+}
+
 #pragma mark -
 
 - (void)tick: (double)aSeconds

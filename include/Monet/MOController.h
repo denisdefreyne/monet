@@ -15,6 +15,7 @@
 - (id)initWithView: (MOView *)aView;
 
 - (MOApplication *)app;
+- (MOView *)view;
 
 - (BOOL)keyDown: (MOEvent *)aEvent;
 - (BOOL)keyUp: (MOEvent *)aEvent;
