@@ -1,5 +1,8 @@
 #import <Monet/MOState.h>
 
+#import <Monet/MORect.h>
+#import <Monet/MOView.h>
+
 struct MOStateData
 {
 	NSObject <MOTicking> *world;
@@ -56,17 +59,12 @@ struct MOStateData
 	return stateData->view;
 }
 
-- (MOController *)controller
-{
-	return [stateData->view controller];
-}
-
 #pragma mark -
 
 - (void)tick: (double)aSeconds
 {
 	[stateData->world tick: aSeconds];
-	[[self controller] tick: aSeconds];
+	[stateData->view tick: aSeconds];
 }
 
 @end

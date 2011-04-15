@@ -4,7 +4,6 @@
 #import <OpenGL/glu.h>
 
 #import <Monet/MOEvent.h>
-#import <Monet/MOController.h>
 #import <Monet/MOApplication.h>
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
@@ -20,8 +19,6 @@ struct MOViewData
 	MORect				bounds;
 
 	MOGraphicsContext	*graphicsContext;
-
-	MOController		*controller;
 };
 
 @implementation MOView
@@ -39,8 +36,6 @@ struct MOViewData
 		viewData->bounds.h = viewData->frame.h;
 
 		viewData->subviews   = [[NSMutableArray alloc] init];
-
-		viewData->controller = [[[[self class] controllerClass] alloc] initWithView: self];
 	}
 
 	return self;
@@ -50,7 +45,6 @@ struct MOViewData
 {
 	[viewData->subviews release];
 	[viewData->graphicsContext release];
-	[viewData->controller release];
 	free(viewData);
 
 	[super dealloc];
@@ -218,14 +212,61 @@ struct MOViewData
 
 #pragma mark -
 
-+ (Class)controllerClass
+- (void)tick: (double)aSeconds
 {
-	return Nil;
+	;
 }
 
-- (MOController *)controller
+#pragma mark -
+
+- (BOOL)keyDown: (MOEvent *)aEvent
 {
-	return viewData->controller;
+	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
+	MOView *subview = nil;
+	BOOL isHandled = NO;
+	while ((subview = [enumerator nextObject]))
+	{
+		isHandled = [subview keyDown: aEvent];
+		if (isHandled)
+			break;
+	}
+
+	return isHandled;
+}
+
+- (BOOL)keyUp: (MOEvent *)aEvent
+{
+	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
+	MOView *subview = nil;
+	BOOL isHandled = NO;
+	while ((subview = [enumerator nextObject]))
+	{
+		isHandled = [subview keyUp: aEvent];
+		if (isHandled)
+			break;
+	}
+
+	return isHandled;
+}
+
+- (void)mouseDown: (MOEvent *)aEvent
+{
+	[viewData->superview mouseDown: aEvent];
+}
+
+- (void)mouseUp: (MOEvent *)aEvent
+{
+	[viewData->superview mouseUp: aEvent];
+}
+
+- (void)mouseDragged: (MOEvent *)aEvent
+{
+	;
+}
+
+- (void)timerFired: (MOEvent *)aEvent
+{
+	;
 }
 
 @end

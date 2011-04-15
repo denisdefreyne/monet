@@ -2,7 +2,6 @@
 
 #import <Monet/MORect.h>
 
-@class MOController;
 @class MOEvent;
 @class MOApplication;
 
@@ -36,7 +35,13 @@
 - (void)clear;
 - (void)drawRect: (MORect)aRect;
 
-+ (Class)controllerClass;
-- (MOController *)controller;
+- (void)tick: (double)aSeconds;
+
+- (BOOL)keyDown: (MOEvent *)aEvent;
+- (BOOL)keyUp: (MOEvent *)aEvent;
+- (void)mouseDown: (MOEvent *)aEvent;
+- (void)mouseUp: (MOEvent *)aEvent;
+- (void)mouseDragged: (MOEvent *)aEvent;
+- (void)timerFired: (MOEvent *)aEvent;
 
 @end

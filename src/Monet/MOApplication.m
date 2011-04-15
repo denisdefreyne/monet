@@ -94,7 +94,7 @@ struct MOApplicationData
 					];
 
 					// Dispatch event
-					[[[self currentState] controller] keyDown: moEvent];
+					[[[self currentState] view] keyDown: moEvent];
 
 					// Cleanup
 					[character release];
@@ -113,7 +113,7 @@ struct MOApplicationData
 					];
 
 					// Dispatch event
-					[[[self currentState] controller] keyUp: moEvent];
+					[[[self currentState] view] keyUp: moEvent];
 
 					// Cleanup
 					[moEvent release];
@@ -131,11 +131,11 @@ struct MOApplicationData
 
 					// Dispatch event to subviews that want it
 					if (applicationData->lastLeftMouseButtonDownView)
-						[[applicationData->lastLeftMouseButtonDownView controller] mouseDragged: moEvent];
+						[applicationData->lastLeftMouseButtonDownView mouseDragged: moEvent];
 					if (applicationData->lastMiddleMouseButtonDownView)
-						[[applicationData->lastMiddleMouseButtonDownView controller] mouseDragged: moEvent];
+						[applicationData->lastMiddleMouseButtonDownView mouseDragged: moEvent];
 					if (applicationData->lastRightMouseButtonDownView)
-						[[applicationData->lastRightMouseButtonDownView controller] mouseDragged: moEvent];
+						[applicationData->lastRightMouseButtonDownView mouseDragged: moEvent];
 
 					// Cleanup
 					[moEvent release];
@@ -180,7 +180,7 @@ struct MOApplicationData
 					];
 
 					// Dispatch event
-					[[subview controller] mouseDown: moEvent];
+					[subview mouseDown: moEvent];
 
 					// Cleanup
 					[moEvent release];
@@ -224,7 +224,7 @@ struct MOApplicationData
 					];
 
 					// Dispatch event
-					[[subview controller] mouseUp: moEvent];
+					[subview mouseUp: moEvent];
 
 					// Clear relevant subview
 					switch(mouseButton)
@@ -252,7 +252,7 @@ struct MOApplicationData
 				{
 					MOTimer *timer = event.user.data1;
 					MOEvent *moEvent = [[MOEvent alloc] initTimerEventWithTimer: timer];
-					[[[self currentState] controller] timerFired: moEvent];
+					[[[self currentState] view] timerFired: moEvent];
 					[moEvent release];
 				}
 				break;
