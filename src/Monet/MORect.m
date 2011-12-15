@@ -14,7 +14,7 @@ MORect MORectMake(int16_t aX, int16_t aY, uint16_t aW, uint16_t aH)
 	return rect;
 }
 
-void MOFillRect(MORect aRect, MOColor aColor)
+void MORectFill(MORect aRect, MOColor aColor)
 {
 	// Save
 	glPushAttrib(GL_CURRENT_BIT);
@@ -27,7 +27,7 @@ void MOFillRect(MORect aRect, MOColor aColor)
 	glPopAttrib();
 }
 
-void MOStrokeRect(MORect aRect, MOColor aColor)
+void MORectStroke(MORect aRect, MOColor aColor)
 {
 	// Save
 	glPushAttrib(GL_CURRENT_BIT);
