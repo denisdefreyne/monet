@@ -9,7 +9,7 @@
 #import <OpenGL/gl.h>
 #import <OpenGL/glu.h>
 
-#import <SDL_mixer.h>
+#import <SDL/SDL_mixer.h>
 
 struct MOApplicationData
 {
