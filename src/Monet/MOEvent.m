@@ -77,6 +77,8 @@ struct MOEventData
 
 		eventData->timer = [aTimer retain];
 	}
+
+	return self;
 }
 
 - (void)dealloc
