@@ -1,64 +1,25 @@
 #import <Monet/MOColor.h>
 
-struct MOColorData
+MOColor MOColorMakeRGB(double aRed, double aGreen, double aBlue)
 {
-	double red;
-	double green;
-	double blue;
-	double alpha;
-};
+	MOColor color;
 
-@implementation MOColor
+	color.r = aRed;
+	color.g = aGreen;
+	color.b = aBlue;
+	color.a = 1.0l;
 
-- (id)initWithRed: (double)aRed green: (double)aGreen blue: (double)aBlue alpha: (double)aAlpha
-{
-	if ((self = [super init]))
-	{
-		// Create data
-		colorData = calloc(1, sizeof (struct MOColorData));
-
-		// Set values
-		colorData->red   = aRed;
-		colorData->green = aGreen;
-		colorData->blue  = aBlue;
-		colorData->alpha = aAlpha;
-	}
-
-	return self;
+	return color;
 }
 
-- (id)initWithRed: (double)aRed green: (double)aGreen blue: (double)aBlue
+MOColor MOColorMakeRGBA(double aRed, double aGreen, double aBlue, double aAlpha)
 {
-	return [self initWithRed: aRed green: aGreen blue: aBlue alpha: 1.0];
+	MOColor color;
+
+	color.r = aRed;
+	color.g = aGreen;
+	color.b = aBlue;
+	color.a = aAlpha;
+
+	return color;
 }
-
-- (void)dealloc
-{
-	free(colorData);
-
-	[super dealloc];
-}
-
-#pragma mark -
-
-- (double)red
-{
-	return colorData->red;
-}
-
-- (double)green
-{
-	return colorData->green;
-}
-
-- (double)blue
-{
-	return colorData->blue;
-}
-
-- (double)alpha
-{
-	return colorData->alpha;
-}
-
-@end

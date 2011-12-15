@@ -14,20 +14,20 @@ MORect MORectMake(int16_t aX, int16_t aY, uint16_t aW, uint16_t aH)
 	return rect;
 }
 
-void MOFillRect(MORect aRect, MOColor *aColor)
+void MOFillRect(MORect aRect, MOColor aColor)
 {
 	// Save
 	glPushAttrib(GL_CURRENT_BIT);
 
 	// Draw
-	glColor4f([aColor red], [aColor green], [aColor blue], [aColor alpha]);
+	glColor4f(aColor.r, aColor.g, aColor.b, aColor.a);
 	glRecti(aRect.x, aRect.y, aRect.x + aRect.w, aRect.y + aRect.h);
 
 	// Restore
 	glPopAttrib();
 }
 
-void MOStrokeRect(MORect aRect, MOColor *aColor)
+void MOStrokeRect(MORect aRect, MOColor aColor)
 {
 	// Save
 	glPushAttrib(GL_CURRENT_BIT);
@@ -38,7 +38,7 @@ void MOStrokeRect(MORect aRect, MOColor *aColor)
 	aRect.y += dstRect.y;
 
 	// Draw
-	glColor4f([aColor red], [aColor green], [aColor blue], [aColor alpha]);
+	glColor4f(aColor.r, aColor.g, aColor.b, aColor.a);
 	glBegin(GL_LINE_LOOP);
 	{
 		glVertex2i(aRect.x,				aRect.y);

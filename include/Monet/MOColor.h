@@ -1,16 +1,8 @@
-#import <Foundation/Foundation.h>
-
-@interface MOColor : NSObject
+struct _MOColor
 {
-	struct MOColorData *colorData;
-}
+	double r, g, b, a;
+};
+typedef struct _MOColor MOColor;
 
-- (id)initWithRed: (double)aRed green: (double)aGreen blue: (double)aBlue alpha: (double)alpha;
-- (id)initWithRed: (double)aRed green: (double)aGreen blue: (double)aBlue;
-
-- (double)red;
-- (double)green;
-- (double)blue;
-- (double)alpha;
-
-@end
+MOColor MOColorMakeRGB(double aRed, double aGreen, double aBlue);
+MOColor MOColorMakeRGBA(double aRed, double aGreen, double aBlue, double aAlpha);
