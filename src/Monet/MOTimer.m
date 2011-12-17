@@ -1,9 +1,12 @@
 #import <Monet/MOTimer.h>
 
+#import <cobject/cobject.h>
 #import <SDL/SDL.h>
 
-struct MOTimerData
+struct _MOTimer
 {
+	COGuts      *guts;
+
 	SDL_TimerID	timerID;
 
 	uint32_t    interval;
@@ -12,66 +15,58 @@ struct MOTimerData
 	void        *userInfo;
 };
 
-Uint32 timerCallback(Uint32 interval, void *param)
+void _MOTimerDestroy(void *aTimer);
+
+Uint32 _MOTimerFired(uint32_t aInterval, void *aParam)
 {
-	MOTimer *timer = (MOTimer *)param;
+	MOTimer *timer = (MOTimer *)aParam;
 
 	SDL_Event event;
 	event.type = SDL_USEREVENT;
 	event.user.data1 = timer;
 	SDL_PushEvent(&event);
 
-	return [timer duration];
+	return MOTimerGetDuration(timer);
 }
 
-@implementation MOTimer
-
-- (id)initWithDuration: (double)aDuration userInfo: (void *)aUserInfo
+MOTimer *MOTimerCreate(double aDuration, void *aUserInfo)
 {
-	if ((self = [super init]))
-	{
-		timerData = calloc(1, sizeof(struct MOTimerData));
+	MOTimer *timer = malloc(sizeof (MOTimer));
+	COInitialize(timer);
+	COSetDestructor(timer, &_MOTimerDestroy);
 
-		timerData->duration = aDuration;
-		timerData->userInfo = aUserInfo;
-	}
+	timer->duration = aDuration;
+	timer->userInfo = aUserInfo;
 
-	return self;
+	return timer;
 }
 
-- (void)dealloc
+void _MOTimerDestroy(void *aTimer)
 {
-	[self stop];
-	free(timerData);
+	MOTimer *timer = (MOTimer *)timer;
 
-	[super dealloc];
+	MOTimerStop(timer);
 }
 
-#pragma mark -
-
-- (double)duration
+double MOTimerGetDuration(MOTimer *aTimer)
 {
-	return timerData->duration;
+	return aTimer->duration;
 }
 
-- (void *)userInfo
+void *MOTimerGetUserInfo(MOTimer *aTimer)
 {
-	return timerData->userInfo;
+	return aTimer->userInfo;
 }
 
-#pragma mark -
-
-- (void)start
+void MOTimerStart(MOTimer *aTimer)
 {
-	timerData->timerID = SDL_AddTimer(
-		(uint32_t)(timerData->duration * 1000.0),
-		&timerCallback,
-		self);
+	aTimer->timerID = SDL_AddTimer(
+		(uint32_t)(aTimer->duration * 1000.0l),
+		&_MOTimerFired,
+		aTimer);
 }
 
-- (void)stop
+void MOTimerStop(MOTimer *aTimer)
 {
-	SDL_RemoveTimer(timerData->timerID);
+	SDL_RemoveTimer(aTimer->timerID);
 }
-
-@end

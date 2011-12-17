@@ -31,7 +31,7 @@ struct MOButtonData
 {
 	return buttonData->isMouseDown && MORectContainsPoint(
 		[self bounds],
-		[self convertPointFromScreen: [[self app] mouseLocation]]);
+		[self convertPointFromScreen: MOApplicationGetMouseLocation([self app])]);
 }
 
 #pragma mark -

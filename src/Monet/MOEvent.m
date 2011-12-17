@@ -1,5 +1,7 @@
 #import <Monet/MOEvent.h>
 
+#import <cobject/cobject.h>
+
 struct MOEventData
 {
 	MOEventType     type;
@@ -75,7 +77,7 @@ struct MOEventData
 
 		eventData->type  = MOTimerFiredEventType;
 
-		eventData->timer = [aTimer retain];
+		eventData->timer = CORetain(aTimer);
 	}
 
 	return self;
@@ -84,7 +86,7 @@ struct MOEventData
 - (void)dealloc
 {
 	[eventData->character release];
-	[eventData->timer release];
+	CORelease(eventData->timer);
 
 	free(eventData);
 

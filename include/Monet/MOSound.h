@@ -1,12 +1,4 @@
-#import <Foundation/Foundation.h>
+typedef struct _MOSound MOSound;
 
-@interface MOSound : NSObject
-{
-	struct MOSoundData *soundData;
-}
-
-+ (MOSound *)named: (NSString *)aName;
-
-- (void)play;
-
-@end
+MOSound *MOSoundCreateFromFilename(char *aFilename);
+void MOSoundPlay(MOSound *aSound);

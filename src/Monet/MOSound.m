@@ -1,46 +1,36 @@
 #import <Monet/MOSound.h>
 
+#import <cobject/cobject.h>
 #import <SDL_mixer.h>
 
-struct MOSoundData
+struct _MOSound
 {
+	COGuts    *guts;
+
 	Mix_Chunk *chunk;
 };
 
-@implementation MOSound
+void _MOSoundDestroy(void *aSound);
 
-- (id)initWithFilename: (NSString *)aName
+MOSound *MOSoundCreateFromFilename(char *aFilename)
 {
-	if ((self = [super init]))
-	{
-		soundData = calloc(1, sizeof (struct MOSoundData));
+	MOSound *sound = malloc(sizeof (MOSound));
+	COInitialize(sound);
+	COSetDestructor(sound, &_MOSoundDestroy);
 
-		soundData->chunk = Mix_LoadWAV([aName UTF8String]);
-	}
+	sound->chunk = Mix_LoadWAV(aFilename);
 
-	return self;
+	return sound;
 }
 
-- (void)dealloc
+void _MOSoundDestroy(void *aSound)
 {
-	Mix_FreeChunk(soundData->chunk);
-	free(soundData);
+	MOSound *sound = (MOSound *)aSound;
 
-	[super dealloc];
+	Mix_FreeChunk(sound->chunk);
 }
 
-#pragma mark -
-
-+ (MOSound *)named: (NSString *)aName
+void MOSoundPlay(MOSound *aSound)
 {
-	return [[[self alloc] initWithFilename: aName] autorelease];
+	Mix_PlayChannel(-1, aSound->chunk, 0);
 }
-
-#pragma mark -
-
-- (void)play
-{
-	int channel = Mix_PlayChannel(-1, soundData->chunk, 0);
-}
-
-@end

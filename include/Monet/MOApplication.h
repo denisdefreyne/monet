@@ -1,35 +1,33 @@
-#import <Foundation/Foundation.h>
+typedef struct _MOApplication MOApplication;
 
 #import <Monet/MOPoint.h>
 #import <Monet/MOSize.h>
+#import <Monet/MOState.h>
 
 @class MOState;
-@class MOView;
 
-@interface MOApplication : NSObject
-{
-	struct MOApplicationData *applicationData;
-}
+MOApplication *MOApplicationCreate(void);
 
-- (MOSize)screenSize;
-- (void)setScreenSize: (MOSize)aSize;
-- (BOOL)isFullscreen;
-- (void)setFullscreen: (BOOL)aIsFullscreen;
-- (uint8_t)gameTicksPerSecond;
-- (void)setGameTicksPerSecond: (uint8_t)aGameTicksPerSecond;
-- (uint8_t)maxFrameSkip;
-- (void)setMaxFrameSkip: (uint8_t)aMaxFrameSkip;
+MOSize MOApplicationGetScreenSize(MOApplication *self);
+void MOApplicationSetScreenSize(MOApplication *self, MOSize aSize);
 
-- (MOState *)currentState;
-- (void)pushState: (MOState *)aState;
-- (MOState *)popCurrentState;
-- (MOState *)replaceCurrentStateWith: (MOState *)aState;
+bool MOApplicationIsFullscreen(MOApplication *self);
+void MOApplicationSetIsFullscreen(MOApplication *self, bool aIsFullscreen);
 
-- (void)openScreen;
-- (void)enterRunloop;
-- (void)closeScreen;
+uint8_t MOApplicationGetGameTicksPerSecond(MOApplication *self);
+void MOApplicationSetGameTicksPerSecond(MOApplication *self, uint8_t aGameTicksPerSecond);
 
-- (float)interpolation;
-- (MOPoint)mouseLocation;
+uint8_t MOApplicationGetMaxFrameskip(MOApplication *self);
+void MOApplicationSetMaxFrameskip(MOApplication *self, uint8_t aMaxFrameskip);
 
-@end
+MOState *MOApplicationGetCurrentState(MOApplication *self);
+void MOApplicationPushState(MOApplication *self, MOState *aState);
+MOState *MOApplicationPopCurrentState(MOApplication *self);
+MOState *MOApplicationReplaceCurrentState(MOApplication *self, MOState *aState);
+
+void MOApplicationOpenScreen(MOApplication *self);
+void MOApplicationEnterRunloop(MOApplication *self);
+void MOApplicationCloseScreen(MOApplication *self);
+
+float MOApplicationGetInterpolation(MOApplication *self);
+MOPoint MOApplicationGetMouseLocation(MOApplication *self);

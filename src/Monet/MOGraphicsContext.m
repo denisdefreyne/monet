@@ -2,19 +2,19 @@
 
 #import <Monet/Private.h>
 
-NSMutableArray *MOGraphicsContext_getStack(void)
+SBArray *MOGraphicsContext_getStack(void)
 {
-	static NSMutableArray *stack = nil;
+	static SBArray *stack = nil;
 
 	if (!stack)
-		stack = [[NSMutableArray alloc] init];
+		stack = SBArrayCreateWithCapacity(5);
 
 	return stack;
 }
 
 MOGraphicsContext *MOGraphicsContext_getCurrent(void)
 {
-	return [[MOGraphicsContext_getStack() lastObject] pointerValue];
+	return SBArrayPeek(MOGraphicsContext_getStack());
 }
 
 MORect MOGraphicsContext_getCurrentRect(void)
@@ -25,12 +25,12 @@ MORect MOGraphicsContext_getCurrentRect(void)
 
 void MOGraphicsContext_push(MOGraphicsContext *aGraphicsContext)
 {
-	[MOGraphicsContext_getStack() addObject: [NSValue valueWithPointer: aGraphicsContext]];
+	return SBArrayPush(MOGraphicsContext_getStack(), aGraphicsContext);
 }
 
 void MOGraphicsContext_pop(void)
 {
-	[MOGraphicsContext_getStack() removeLastObject];
+	SBArrayPop(MOGraphicsContext_getStack());
 }
 
 MORect MOGraphicsContextGetRect(MOGraphicsContext *aGraphicsContext)

@@ -1,5 +1,6 @@
 #import <Monet/MOState.h>
 
+#import <Monet/MOApplication.h>
 #import <Monet/MORect.h>
 #import <Monet/MOView.h>
 
@@ -25,7 +26,7 @@ struct MOStateData
 		stateData = calloc(1, sizeof (struct MOStateData));
 
 		Class viewClass = [[self class] viewClass];
-		MORect frame = MORectMake(0, 0, [aApp screenSize].w, [aApp screenSize].h);
+		MORect frame = MORectMake(0, 0, MOApplicationGetScreenSize(aApp).w, MOApplicationGetScreenSize(aApp).h);
 		stateData->view = [[viewClass alloc] initWithFrame: frame app: aApp];
 	}
 

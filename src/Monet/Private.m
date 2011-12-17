@@ -2,7 +2,7 @@
 
 MOGraphicsContext *MOGraphicsContextCreate(MORect aRect)
 {
-	MOGraphicsContext *graphicsContext = calloc(1, sizeof (MOGraphicsContext));
+	MOGraphicsContext *graphicsContext = malloc(sizeof (MOGraphicsContext));
 	COInitialize(graphicsContext);
 
 	graphicsContext->rect = aRect;

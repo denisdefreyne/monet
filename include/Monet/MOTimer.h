@@ -1,17 +1,9 @@
-#import <Foundation/Foundation.h>
-#import <stdint.h>
+typedef struct _MOTimer MOTimer;
 
-@interface MOTimer : NSObject
-{
-	struct MOTimerData *timerData;
-}
+MOTimer *MOTimerCreate(double aDuration, void *aUserInfo);
 
-- (id)initWithDuration: (double)aDuration userInfo: (void *)aUserInfo;
+double MOTimerGetDuration(MOTimer *aTimer);
+void *MOTimerGetUserInfo(MOTimer *aTimer);
 
-- (double)duration;
-- (void *)userInfo;
-
-- (void)start;
-- (void)stop;
-
-@end
+void MOTimerStart(MOTimer *aTimer);
+void MOTimerStop(MOTimer *aTimer);
