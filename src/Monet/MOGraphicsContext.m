@@ -2,9 +2,7 @@
 
 #import <Monet/Private.h>
 
-@implementation MOGraphicsContext
-
-+ (NSMutableArray *)stack
+NSMutableArray *MOGraphicsContext_getStack(void)
 {
 	static NSMutableArray *stack = nil;
 
@@ -14,16 +12,28 @@
 	return stack;
 }
 
-+ (MOGraphicsContext *)currentContext
+MOGraphicsContext *MOGraphicsContext_getCurrent(void)
 {
-	return [[self stack] lastObject];
+	return [[MOGraphicsContext_getStack() lastObject] pointerValue];
 }
 
-#pragma mark -
-
-- (MORect)rect
+MORect MOGraphicsContext_getCurrentRect(void)
 {
-	return graphicsContextData->rect;
+	return MOGraphicsContextGetRect(
+		MOGraphicsContext_getCurrent());
 }
 
-@end
+void MOGraphicsContext_push(MOGraphicsContext *aGraphicsContext)
+{
+	[MOGraphicsContext_getStack() addObject: [NSValue valueWithPointer: aGraphicsContext]];
+}
+
+void MOGraphicsContext_pop(void)
+{
+	[MOGraphicsContext_getStack() removeLastObject];
+}
+
+MORect MOGraphicsContextGetRect(MOGraphicsContext *aGraphicsContext)
+{
+	return aGraphicsContext->rect;
+}

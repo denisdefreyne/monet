@@ -1,80 +1,78 @@
 #import <Monet/MOTiledImage.h>
 
+#import <cobject/cobject.h>
 #import <OpenGL/gl.h>
 #import <OpenGL/glu.h>
 
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
 
-struct MOTiledImageData
+void _MOTiledImageDestroy(void *aTiledImage);
+
+MOTiledImage *MOTiledImageCreateFromFile(char *aFilename, MOSize aTileSize)
 {
-	MOSize tileSize;
-};
+	// Create tiled image
+	MOTiledImage *tiledImage = calloc(1, sizeof (MOTiledImage));
+	COInitialize(tiledImage);
+	COSetDestructor(tiledImage, &_MOTiledImageDestroy);
 
-@implementation MOTiledImage
+	// Initialize
+	tiledImage->tileSize = aTileSize;
+	tiledImage->image = MOImageCreateFromFile(aFilename);
 
-- (id)initWithContentsOfFile: (NSString *)aFilename tileSize: (MOSize)aTileSize
-{
-	if ((self = [super initWithContentsOfFile: aFilename]))
-	{
-		tiledImageData = calloc(1, sizeof (struct MOTiledImageData));
-
-		tiledImageData->tileSize = aTileSize;
-	}
-
-	return self;
+	return tiledImage;
 }
 
-- (void)dealloc
+void _MOTiledImageDestroy(void *aTiledImage)
 {
-	free(tiledImageData);
+	MOTiledImage *tiledImage = (MOTiledImage *)aTiledImage;
 
-	[super dealloc];
+	CORelease(tiledImage->image);
+	CORelease(tiledImage);
 }
 
-#pragma mark -
-
-- (MOSize)tileSize
+MOSize MOTiledImageGetTileSize(MOTiledImage *aTiledImage)
 {
-	return tiledImageData->tileSize;
+	return aTiledImage->tileSize;
 }
 
-#pragma mark -
+MOImage *MOTiledImageAsImage(MOTiledImage *aTiledImage)
+{
+	return aTiledImage->image;
+}
 
-- (void)drawTile: (MOPoint)aTilePoint atPoint: (MOPoint)aPoint
+void MOTiledImageDrawTileAtPoint(MOTiledImage *aTiledImage, MOPoint aTilePoint, MOPoint aPoint)
 {
 	// Get absolute destination
-	MORect dstRect = [[MOGraphicsContext currentContext] rect];
+	MORect dstRect = MOGraphicsContext_getCurrentRect();
 	MOPoint dstPoint = MOPointMake(dstRect.x + aPoint.x, dstRect.y + aPoint.y);
 
 	// Get tile origin
 	MOPoint tileOrigin;
-	tileOrigin.x = aTilePoint.x * tiledImageData->tileSize.w;
-	tileOrigin.y = aTilePoint.y * tiledImageData->tileSize.h;
+	tileOrigin.x = aTilePoint.x * aTiledImage->tileSize.w;
+	tileOrigin.y = aTilePoint.y * aTiledImage->tileSize.h;
 
 	// TODO [OpenGL] translate using matrixes
 
-	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, imageData->textureName);
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, aTiledImage->image->textureName);
 	glBegin(GL_QUADS);
 	{
 		// bottom left
-		glTexCoord2i(	tileOrigin.x,								tileOrigin.y);
-		glVertex2i(		dstPoint.x,									dstPoint.y + tiledImageData->tileSize.h);
+		glTexCoord2i(tileOrigin.x,                              tileOrigin.y);
+		glVertex2i(  dstPoint.x,                                dstPoint.y + aTiledImage->tileSize.h);
 
 		// bottom right
-		glTexCoord2i(	tileOrigin.x + tiledImageData->tileSize.w,	tileOrigin.y);
-		glVertex2i(		dstPoint.x + tiledImageData->tileSize.w,	dstPoint.y + tiledImageData->tileSize.h);
+		glTexCoord2i(tileOrigin.x + aTiledImage->tileSize.w,    tileOrigin.y);
+		glVertex2i(  dstPoint.x + aTiledImage->tileSize.w,      dstPoint.y + aTiledImage->tileSize.h);
 
 		// top right
-		glTexCoord2i(	tileOrigin.x + tiledImageData->tileSize.w,	tileOrigin.y + tiledImageData->tileSize.h);
-		glVertex2i(		dstPoint.x + tiledImageData->tileSize.w,	dstPoint.y);
+		glTexCoord2i(tileOrigin.x + aTiledImage->tileSize.w,    tileOrigin.y + aTiledImage->tileSize.h);
+		glVertex2i(  dstPoint.x + aTiledImage->tileSize.w,      dstPoint.y);
 
 		// top left
-		glTexCoord2i(	tileOrigin.x,								tileOrigin.y + tiledImageData->tileSize.h);
-		glVertex2i(		dstPoint.x,									dstPoint.y);
+		glTexCoord2i(tileOrigin.x,                              tileOrigin.y + aTiledImage->tileSize.h);
+		glVertex2i(  dstPoint.x,                                dstPoint.y);
 	}
 	glEnd();
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
 }
-
-@end

@@ -1,24 +1,18 @@
-#import <Foundation/Foundation.h>
-
 #import <Monet/MOPoint.h>
 #import <Monet/MORect.h>
+#import <Monet/MOSize.h>
 
-@interface MOImage : NSObject
-{
-	struct MOImageData *imageData;
-}
+typedef struct _MOImage MOImage;
 
-- (id)initWithContentsOfFile: (NSString *)aFilename;
-- (id)initWithWidth: (uint16_t)aWidth height: (uint16_t)aHeight;
+MOImage *MOImageCreateFromFile(char *aFilename);
+MOImage *MOImageCreateWithSize(MOSize aSize);
 
-- (void)lockFocus;
-- (void)unlockFocus;
+void MOImageLockFocus(MOImage *aImage);
+void MOImageUnlockFocus(MOImage *aImage);
 
-- (MORect)bounds;
+MORect MOImageGetBounds(MOImage *aImage);
 
 // FIXME allow drawing into a MOImage instead
-- (void)takeImageFromRect: (MORect)aRect;
+void MOImageTakeFromOnScreenRect(MOImage *aImage, MORect aRect);
 
-- (void)drawAtPoint: (MOPoint)aPoint;
-
-@end
+void MOImageDrawAtPoint(MOImage *aImage, MOPoint aPoint);

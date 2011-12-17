@@ -1,5 +1,6 @@
 #import <Monet/MOImage.h>
 
+#import <cobject/cobject.h>
 #import <SDL/SDL.h>
 #import <SDL_image/SDL_image.h>
 #import <OpenGL/gl.h>
@@ -8,155 +9,142 @@
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
 
-@implementation MOImage
+void _MOImageDestroy(void *aImage);
 
-- (id)initWithContentsOfFile: (NSString *)aFilename
+MOImage *MOImageCreateFromFile(char *aFilename)
 {
-	if ((self = [super init]))
+	// Create image
+	MOImage *image = calloc(1, sizeof (MOImage));
+	COInitialize(image);
+	COSetDestructor(image, &_MOImageDestroy);
+
+	// Load file
+	SDL_Surface *surface = IMG_Load(aFilename);
+	if (!surface)
+		[NSException raise: @"SDLException" format: @"IMG_Load failed: %s\n", SDL_GetError()];
+
+	// Create texture
+	glGenTextures(1, &image->textureName);
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, image->textureName);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	// Get number of colors and texture format
+	GLint  numberOfColors = surface->format->BytesPerPixel;
+	GLenum textureFormat;
+	if (numberOfColors == 4)
 	{
-		// Create data
-		imageData = calloc(1, sizeof (struct MOImageData));
-
-		// Load file
-		SDL_Surface *surface = IMG_Load([aFilename UTF8String]);
-		if (!surface)
-			[NSException raise: @"SDLException" format: @"IMG_Load failed: %s\n", SDL_GetError()];
-
-		// Create texture
-		glGenTextures(1, &imageData->textureName);
-		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, imageData->textureName);
-		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-		// Get number of colors and texture format
-		GLint  numberOfColors = surface->format->BytesPerPixel;
-		GLenum textureFormat;
-		if (numberOfColors == 4)
-		{
-			if (surface->format->Rmask == 0x000000ff)
-				textureFormat = GL_RGBA;
-			else
-				textureFormat = GL_BGRA;
-		}
-		else if (numberOfColors == 3)
-		{
-			if (surface->format->Rmask == 0x000000ff)
-				textureFormat = GL_RGB;
-			else
-				textureFormat = GL_BGR;
-		}
+		if (surface->format->Rmask == 0x000000ff)
+			textureFormat = GL_RGBA;
 		else
-			// TODO handle gracefully
-			[NSException raise: @"OpenGLException" format: @"glTexImage2D preparation failed: image is not in truecolor (filename = %@)\n", aFilename];
-
-		// Set size
-		imageData->size = MOSizeMake(surface->w, surface->h);
-
-		// Fill texture
-		SDL_LockSurface(surface);
-		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, imageData->size.w, imageData->size.h, 0, textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
-		SDL_UnlockSurface(surface);
-
-		// Cleanup
-		SDL_FreeSurface(surface);
-		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
+			textureFormat = GL_BGRA;
 	}
-
-	return self;
-}
-
-- (id)initWithWidth: (uint16_t)aWidth height: (uint16_t)aHeight
-{
-	if ((self = [super init]))
+	else if (numberOfColors == 3)
 	{
-		imageData = calloc(1, sizeof (struct MOImageData));
-		imageData->size = MOSizeMake(aWidth, aHeight);
-		imageData->graphicsContext = [[MOGraphicsContext alloc] initWithRect: [self bounds]];
-
-		glGenTextures(1, &imageData->textureName);
-		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, imageData->textureName);
-		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, imageData->size.w, imageData->size.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-		glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
+		if (surface->format->Rmask == 0x000000ff)
+			textureFormat = GL_RGB;
+		else
+			textureFormat = GL_BGR;
 	}
+	else
+		// TODO handle gracefully
+		[NSException raise: @"OpenGLException" format: @"glTexImage2D preparation failed: image is not in truecolor (filename = %@)\n", aFilename];
 
-	return self;
+	// Set size
+	image->size = MOSizeMake(surface->w, surface->h);
+
+	// Fill texture
+	SDL_LockSurface(surface);
+	glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, image->size.w, image->size.h, 0, textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
+	SDL_UnlockSurface(surface);
+
+	// Cleanup
+	SDL_FreeSurface(surface);
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
+
+	return image;
 }
 
-- (void)dealloc
+MOImage *MOImageCreateWithSize(MOSize aSize)
 {
-	glDeleteTextures(1, &imageData->textureName);
-	[imageData->graphicsContext release];
-	free(imageData);
+	// Create image
+	MOImage *image = calloc(1, sizeof (MOImage));
+	COInitialize(image);
+	COSetDestructor(image, &_MOImageDestroy);
 
-	[super dealloc];
+	// Initalize
+	image->size = aSize;
+	image->graphicsContext = MOGraphicsContextCreate(MOImageGetBounds(image));
+
+	// Create texture
+	glGenTextures(1, &image->textureName);
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, image->textureName);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, image->size.w, image->size.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
+
+	return image;
 }
 
-#pragma mark -
-
-- (void)lockFocus
+void _MOImageDestroy(void *aImage)
 {
-	[[MOGraphicsContext stack] addObject: imageData->graphicsContext];
+	MOImage *image = (MOImage *)aImage;
+	glDeleteTextures(1, &image->textureName);
+	CORelease(image->graphicsContext);
 }
 
-- (void)unlockFocus
+void MOImageLockFocus(MOImage *aImage)
 {
-	[[MOGraphicsContext stack] removeLastObject];
+	MOGraphicsContext_push(aImage->graphicsContext);
 }
 
-#pragma mark -
-
-- (MORect)bounds
+void MOImageUnlockFocus(MOImage *aImage)
 {
-	return MORectMake(0, 0, imageData->size.w, imageData->size.h);
+	MOGraphicsContext_pop();
 }
 
-#pragma mark -
-
-- (void)takeImageFromRect: (MORect)aRect
+MORect MOImageGetBounds(MOImage *aImage)
 {
-	// Bind
-	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, imageData->textureName);
+	return MORectMake(0, 0, aImage->size.w, aImage->size.h);
+}
 
-	// Copy
+// FIXME allow drawing into a MOImage instead
+// FIXME what if sizes don’t match?
+void MOImageTakeFromOnScreenRect(MOImage *aImage, MORect aRect)
+{
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, aImage->textureName);
 	glCopyTexSubImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, 0, 0, aRect.x, aRect.y, aRect.w, aRect.h);
-
-	// Unbind
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
 }
 
-#pragma mark -
-
-- (void)drawAtPoint: (MOPoint)aPoint
+void MOImageDrawAtPoint(MOImage *aImage, MOPoint aPoint)
 {
 	// Get absolute destination
-	MORect dstRect = [[MOGraphicsContext currentContext] rect];
+	MORect dstRect = MOGraphicsContext_getCurrentRect();
 	MOPoint dstPoint = MOPointMake(dstRect.x + aPoint.x, dstRect.y + aPoint.y);
 
 	// TODO [OpenGL] translate using matrixes
 
-	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, imageData->textureName);
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, aImage->textureName);
 	glBegin(GL_QUADS);
 	{
 		// bottom left
-		glTexCoord2i(	0,							0);
-		glVertex2i(		dstPoint.x,					dstPoint.y + imageData->size.h);
+		glTexCoord2i(0,                           0);
+		glVertex2i(  dstPoint.x,                  dstPoint.y + aImage->size.h);
 
 		// bottom right
-		glTexCoord2i(	imageData->size.w,				0);
-		glVertex2i(		dstPoint.x + imageData->size.w,	dstPoint.y + imageData->size.h);
+		glTexCoord2i(aImage->size.w,              0);
+		glVertex2i(  dstPoint.x + aImage->size.w, dstPoint.y + aImage->size.h);
 
 		// top right
-		glTexCoord2i(	imageData->size.w,				imageData->size.h);
-		glVertex2i(		dstPoint.x + imageData->size.w,	dstPoint.y);
+		glTexCoord2i(aImage->size.w,              aImage->size.h);
+		glVertex2i(  dstPoint.x + aImage->size.w, dstPoint.y);
 
 		// top left
-		glTexCoord2i(	0,							imageData->size.h);
-		glVertex2i(		dstPoint.x,					dstPoint.y);
+		glTexCoord2i(0,                           aImage->size.h);
+		glVertex2i(  dstPoint.x,                  dstPoint.y);
 	}
 	glEnd();
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0);
 }
-
-@end

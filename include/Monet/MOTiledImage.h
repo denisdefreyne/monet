@@ -1,18 +1,12 @@
-#import <Foundation/Foundation.h>
-
 #import <Monet/MOImage.h>
 #import <Monet/MOSize.h>
 #import <Monet/MOPoint.h>
 
-@interface MOTiledImage : MOImage
-{
-	struct MOTiledImageData *tiledImageData;
-}
+typedef struct _MOTiledImage MOTiledImage;
 
-- (id)initWithContentsOfFile: (NSString *)aFilename tileSize: (MOSize)aTileSize;
+MOTiledImage *MOTiledImageCreateFromFile(char *aFilename, MOSize aTileSize);
 
-- (MOSize)tileSize;
+MOSize MOTiledImageGetTileSize(MOTiledImage *aTiledImage);
+MOImage *MOTiledImageAsImage(MOTiledImage *aTiledImage);
 
-- (void)drawTile: (MOPoint)aTilePoint atPoint: (MOPoint)aPoint;
-
-@end
+void MOTiledImageDrawTileAtPoint(MOTiledImage *aTiledImage, MOPoint aTilePoint, MOPoint aPoint);

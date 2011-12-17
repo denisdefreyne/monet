@@ -2,16 +2,13 @@
 
 #import <Monet/MORect.h>
 
-@class MOImage;
+typedef struct _MOGraphicsContext MOGraphicsContext;
 
-@interface MOGraphicsContext : NSObject
-{
-	struct MOGraphicsContextData *graphicsContextData;
-}
+NSMutableArray *MOGraphicsContext_getStack(void);
+MOGraphicsContext *MOGraphicsContext_getCurrent(void);
+MORect MOGraphicsContext_getCurrentRect(void);
 
-+ (NSMutableArray *)stack;
-+ (MOGraphicsContext *)currentContext;
+void MOGraphicsContext_push(MOGraphicsContext *aGraphicsContext);
+void MOGraphicsContext_pop(void);
 
-- (MORect)rect;
-
-@end
+MORect MOGraphicsContextGetRect(MOGraphicsContext *aGraphicsContext);

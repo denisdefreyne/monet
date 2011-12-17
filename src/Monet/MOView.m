@@ -44,7 +44,7 @@ struct MOViewData
 - (void)dealloc
 {
 	[viewData->subviews release];
-	[viewData->graphicsContext release];
+	CORelease(viewData->graphicsContext);
 	free(viewData);
 
 	[super dealloc];
@@ -170,15 +170,15 @@ struct MOViewData
 		MORect rect = MORectMake(absoluteOrigin.x, absoluteOrigin.y, viewData->frame.w, viewData->frame.h);
 
 		// Create graphics context
-		viewData->graphicsContext = [[MOGraphicsContext alloc] initWithRect: rect];
+		viewData->graphicsContext = MOGraphicsContextCreate(rect);
 	}
 
-	[[MOGraphicsContext stack] addObject: viewData->graphicsContext];
+	MOGraphicsContext_push(viewData->graphicsContext);
 }
 
 - (void)unlockFocus
 {
-	[[MOGraphicsContext stack] removeLastObject];
+	MOGraphicsContext_pop();
 }
 
 #pragma mark -

@@ -1,27 +1,14 @@
 #import <Monet/Private.h>
 
-@implementation MOGraphicsContext (Private)
-
-- (id)initWithRect: (MORect)aRect
+MOGraphicsContext *MOGraphicsContextCreate(MORect aRect)
 {
-	if ((self = [super init]))
-	{
-		graphicsContextData = calloc(1, sizeof (struct MOGraphicsContextData));
+	MOGraphicsContext *graphicsContext = calloc(1, sizeof (MOGraphicsContext));
+	COInitialize(graphicsContext);
 
-		graphicsContextData->rect = aRect;
-	}
+	graphicsContext->rect = aRect;
 
-	return self;
+	return graphicsContext;
 }
-
-- (void)dealloc
-{
-	free(graphicsContextData);
-
-	[super dealloc];
-}
-
-@end
 
 MOKey MOSDLKeyToMOKey(SDLKey aKey)
 {

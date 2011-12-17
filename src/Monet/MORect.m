@@ -14,6 +14,7 @@ MORect MORectMake(int16_t aX, int16_t aY, uint16_t aW, uint16_t aH)
 	return rect;
 }
 
+// FIXME this does not take the graphics context into account
 void MORectFill(MORect aRect, MOColor aColor)
 {
 	// Save
@@ -33,7 +34,7 @@ void MORectStroke(MORect aRect, MOColor aColor)
 	glPushAttrib(GL_CURRENT_BIT);
 
 	// Get absolute destination
-	MORect dstRect = [[MOGraphicsContext currentContext] rect];
+	MORect dstRect = MOGraphicsContext_getCurrentRect();
 	aRect.x += dstRect.x;
 	aRect.y += dstRect.y;
 
