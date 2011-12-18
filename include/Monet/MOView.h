@@ -1,46 +1,65 @@
-#import <Foundation/Foundation.h>
+#import <SeaBase/SeaBase.h>
+
+typedef struct _MOView MOView;
 
 #import <Monet/MOApplication.h>
 #import <Monet/MOEvent.h>
 #import <Monet/MORect.h>
 
-@interface MOView : NSObject
-{
-	struct MOViewData *viewData;
-}
+typedef void (*MOViewDrawRectCallback)(MOView *self, MORect aRect);
+typedef void (*MOViewTickCallback)(MOView *self, double aSeconds);
 
-- (id)initWithFrame: (MORect)aFrame app: (MOApplication *)aApp;
+typedef bool (*MOViewKeyPressedCallback)(MOView *self, MOEvent *aEvent);
+typedef bool (*MOViewKeyReleasedCallback)(MOView *self, MOEvent *aEvent);
+typedef bool (*MOViewMouseButtonPressedCallback)(MOView *self, MOEvent *aEvent);
+typedef bool (*MOViewMouseButtonReleasedCallback)(MOView *self, MOEvent *aEvent);
+typedef bool (*MOViewMouseDraggedCallback)(MOView *self, MOEvent *aEvent);
+typedef bool (*MOViewTimerFiredCallback)(MOView *self, MOEvent *aEvent);
 
-- (MOApplication *)app;
+MOView *MOViewCreate(MORect aFrame, MOApplication *aApplication);
 
-- (MOView *)superview;
-- (NSArray *)subviews;
-- (void)addSubview: (MOView *)aSubview;
+void MOViewSetDrawRectCallback(MOView *self, MOViewDrawRectCallback aCallback);
+void MOViewSetTickCallback(MOView *self, MOViewTickCallback aCallback);
 
-- (MOPoint)convertPointFromScreen: (MOPoint)aPoint;
-- (MOPoint)convertPointToScreen: (MOPoint)aPoint;
+void MOViewSetKeyPressedCallback(MOView *self, MOViewKeyPressedCallback aCallback);
+void MOViewSetKeyReleasedCallback(MOView *self, MOViewKeyReleasedCallback aCallback);
+void MOViewSetMouseButtonPressedCallback(MOView *self, MOViewMouseButtonPressedCallback aCallback);
+void MOViewSetMouseButtonReleasedCallback(MOView *self, MOViewMouseButtonReleasedCallback aCallback);
+void MOViewSetMouseDraggedCallback(MOView *self, MOViewMouseDraggedCallback aCallback);
+void MOViewSetTimerFiredCallback(MOView *self, MOViewTimerFiredCallback aCallback);
 
-- (MOView *)subviewAtPoint: (MOPoint)aPoint;
-- (MOView *)deepestSubviewAtPoint: (MOPoint)aPoint;
+MOApplication *MOViewGetApplication(MOView *self);
+void *MOViewGetExtra(MOView *self);
+void MOViewSetExtra(MOView *self, void *aExtra);
 
-- (MORect)frame;
-- (MORect)bounds;
-- (MORect)boundsRelativeToWindow;
+MOView *MOViewGetSuperview(MOView *self);
+void MOViewSetSuperview(MOView *self, MOView *aSuperview);
+SBArray *MOViewGetSubviews(MOView *self);
+void MOViewAddSubview(MOView *self, MOView *aSubview);
 
-- (void)lockFocus;
-- (void)unlockFocus;
+MOPoint MOViewGetAbsoluteOrigin(MOView *self);
+MOPoint MOViewConvertPointFromScreen(MOView *self, MOPoint aPoint);
+MOPoint MOViewConvertPointToScreen(MOView *self, MOPoint aPoint);
 
-- (void)display;
-- (void)clear;
-- (void)drawRect: (MORect)aRect;
+MOView *MOViewGetSubviewAtPoint(MOView *self, MOPoint aPoint);
+MOView *MOViewGetDeepestSubviewAtPoint(MOView *self, MOPoint aPoint);
 
-- (void)tick: (double)aSeconds;
+MORect MOViewGetFrame(MOView *self);
+MORect MOViewGetBounds(MOView *self);
+MORect MOViewGetBoundsRelativeToWindow(MOView *self);
 
-- (BOOL)keyDown: (MOEvent *)aEvent;
-- (BOOL)keyUp: (MOEvent *)aEvent;
-- (void)mouseDown: (MOEvent *)aEvent;
-- (void)mouseUp: (MOEvent *)aEvent;
-- (void)mouseDragged: (MOEvent *)aEvent;
-- (void)timerFired: (MOEvent *)aEvent;
+void MOViewLockFocus(MOView *self);
+void MOViewUnlockFocus(MOView *self);
 
-@end
+void MOViewDisplay(MOView *self);
+void MOViewClear(MOView *self);
+
+void MOViewDrawRect(MOView *self, MORect aRect);
+void MOViewTick(MOView *self, double aSeconds);
+
+bool MOViewKeyPressed(MOView *self, MOEvent *aEvent);
+bool MOViewKeyReleased(MOView *self, MOEvent *aEvent);
+void MOViewMouseButtonPressed(MOView *self, MOEvent *aEvent);
+void MOViewMouseButtonReleased(MOView *self, MOEvent *aEvent);
+void MOViewMouseDragged(MOView *self, MOEvent *aEvent);
+void MOViewTimerFired(MOView *self, MOEvent *aEvent);

@@ -2,8 +2,7 @@
 
 #import <Monet/MOApplication.h>
 #import <Monet/MOTicking.h>
-
-@class MOView;
+#import <Monet/MOView.h>
 
 @interface MOState : NSObject <MOTicking>
 {
@@ -12,7 +11,7 @@
 
 + (Class)viewClass;
 
-- (id)initWithApp: (MOApplication *)aApp;
+- (id)initWithApp: (MOApplication *)aApp view: (MOView *)aView;
 
 - (NSObject <MOTicking> *)world;
 - (void)setWorld: (NSObject <MOTicking> *)aWorld;

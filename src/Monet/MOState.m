@@ -10,6 +10,23 @@ struct MOStateData
 	MOView *view;
 };
 
+// FIXME view struct definition here is UGLY
+#include <cobject/cobject.h>
+struct _MOView
+{
+	COGuts                 *guts;
+
+	MOApplication          *application;
+
+	MOView                *superview;
+	SBArray                *subviews;
+
+	MORect                 frame;
+	MORect                 bounds;
+
+	// more irrelevant stuff here
+};
+
 @implementation MOState
 
 + (Class)viewClass
@@ -19,15 +36,21 @@ struct MOStateData
 
 #pragma mark -
 
-- (id)initWithApp: (MOApplication *)aApp
+- (id)initWithApp: (MOApplication *)aApp view: (MOView *)aView
 {
 	if ((self = [super init]))
 	{
 		stateData = calloc(1, sizeof (struct MOStateData));
 
-		Class viewClass = [[self class] viewClass];
-		MORect frame = MORectMake(0, 0, MOApplicationGetScreenSize(aApp).w, MOApplicationGetScreenSize(aApp).h);
-		stateData->view = [[viewClass alloc] initWithFrame: frame app: aApp];
+		MOSize screenSize =  MOApplicationGetScreenSize(aApp);
+		MORect frame = MORectMake(0, 0, screenSize.w, screenSize.h);
+		// FIXME modifying view is ugly
+		aView->application   = aApp;
+		aView->frame = frame;
+		aView->bounds = frame;
+		aView->bounds.x = 0;
+		aView->bounds.y = 0;
+		stateData->view = CORetain(aView);
 	}
 
 	return self;
@@ -35,7 +58,7 @@ struct MOStateData
 
 - (void)dealloc
 {
-	[stateData->view release];
+	CORelease(stateData->view);
 	free(stateData);
 
 	[super dealloc];
@@ -65,7 +88,7 @@ struct MOStateData
 - (void)tick: (double)aSeconds
 {
 	[stateData->world tick: aSeconds];
-	[stateData->view tick: aSeconds];
+	MOViewTick(stateData->view, aSeconds);
 }
 
 @end

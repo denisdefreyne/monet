@@ -5,6 +5,8 @@
 #import <Monet/MORect.h>
 #import <Monet/MOView.h>
 
+/*
+
 struct MOButtonData
 {
 	BOOL isMouseDown;
@@ -57,3 +59,5 @@ struct MOButtonData
 }
 
 @end
+
+*/

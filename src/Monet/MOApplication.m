@@ -33,9 +33,9 @@ struct _MOApplication
 	float             interpolation;
 
 	// Recent views receiving mouse button events
-	MOView            *lastLeftMouseButtonDownView;
-	MOView            *lastMiddleMouseButtonDownView;
-	MOView            *lastRightMouseButtonDownView;
+	MOView           *lastLeftMouseButtonDownView;
+	MOView           *lastMiddleMouseButtonDownView;
+	MOView           *lastRightMouseButtonDownView;
 };
 
 void _MOApplicationDestroy(void *self);
@@ -46,6 +46,15 @@ void _MOApplicationRefreshAutoreleasePool(MOApplication *self)
 	self->autoreleasePool = [[NSAutoreleasePool alloc] init];
 }
 
+/*
+bool MOViewKeyPressed(MOView *self, MOEvent *aEvent);
+bool MOViewKeyReleased(MOView *self, MOEvent *aEvent);
+bool MOViewMouseButtonPressed(MOView *self, MOEvent *aEvent);
+bool MOViewMouseButtonReleased(MOView *self, MOEvent *aEvent);
+bool MOViewMouseDragged(MOView *self, MOEvent *aEvent);
+bool MOViewTimerFired(MOView *self, MOEvent *aEvent);
+*/
+
 void _MOApplicationHandleEvents(MOApplication *self)
 {
 	SDL_Event event;
@@ -55,9 +64,9 @@ void _MOApplicationHandleEvents(MOApplication *self)
 		{
 			case SDL_ACTIVEEVENT:
 				if (event.active.gain)
-					; // Resume
+					; // TODO Resume
 				else
-					; // Pause
+					; // TODO Pause
 				break;
 
 			case SDL_KEYDOWN:
@@ -77,7 +86,8 @@ void _MOApplicationHandleEvents(MOApplication *self)
 						MOSDLKeyToMOKey(event.key.keysym.sym));
 
 					// Dispatch event
-					[[MOApplicationGetCurrentState(self) view] keyDown: moEvent];
+					MOState *state = MOApplicationGetCurrentState(self);
+					MOViewKeyPressed([state view], moEvent);
 
 					// Cleanup
 					[character release];
@@ -95,7 +105,8 @@ void _MOApplicationHandleEvents(MOApplication *self)
 						MOSDLKeyToMOKey(event.key.keysym.sym));
 
 					// Dispatch event
-					[[MOApplicationGetCurrentState(self) view] keyUp: moEvent];
+					MOState *state = MOApplicationGetCurrentState(self);
+					MOViewKeyReleased([state view], moEvent);
 
 					// Cleanup
 					CORelease(moEvent);
@@ -108,16 +119,15 @@ void _MOApplicationHandleEvents(MOApplication *self)
 					MOEvent *moEvent = MOEventCreateMouseMotion(
 						MOSDLModToMOKeyModifierMask(SDL_GetModState()),
 						MOPointMake(event.motion.x, self->screenSize.h-event.motion.y-1),
-						MOPointMake(event.motion.xrel, event.motion.yrel)
-					);
+						MOPointMake(event.motion.xrel, event.motion.yrel));
 
 					// Dispatch event to subviews that want it
 					if (self->lastLeftMouseButtonDownView)
-						[self->lastLeftMouseButtonDownView mouseDragged: moEvent];
+						MOViewMouseDragged(self->lastLeftMouseButtonDownView, moEvent);
 					if (self->lastMiddleMouseButtonDownView)
-						[self->lastMiddleMouseButtonDownView mouseDragged: moEvent];
+						MOViewMouseDragged(self->lastMiddleMouseButtonDownView, moEvent);
 					if (self->lastRightMouseButtonDownView)
-						[self->lastRightMouseButtonDownView mouseDragged: moEvent];
+						MOViewMouseDragged(self->lastRightMouseButtonDownView, moEvent);
 
 					// Cleanup
 					CORelease(moEvent);
@@ -134,7 +144,8 @@ void _MOApplicationHandleEvents(MOApplication *self)
 					uint8_t modifiers			= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
 					// Find deepest subview
-					MOView *subview = [[MOApplicationGetCurrentState(self) view] deepestSubviewAtPoint: mouseLocation];
+					MOState *state = MOApplicationGetCurrentState(self);
+					MOView *subview = MOViewGetDeepestSubviewAtPoint([state view], mouseLocation);
 
 					// Set last view receiving event
 					switch(mouseButton)
@@ -161,7 +172,7 @@ void _MOApplicationHandleEvents(MOApplication *self)
 						1); // FIXME set correct click count
 
 					// Dispatch event
-					[subview mouseDown: moEvent];
+					MOViewMouseButtonPressed(subview, moEvent);
 
 					// Cleanup
 					CORelease(moEvent);
@@ -204,7 +215,7 @@ void _MOApplicationHandleEvents(MOApplication *self)
 						1); // FIXME set correct click count
 
 					// Dispatch event
-					[subview mouseUp: moEvent];
+					MOViewMouseButtonReleased(subview, moEvent);
 
 					// Clear relevant subview
 					switch(mouseButton)
@@ -232,7 +243,8 @@ void _MOApplicationHandleEvents(MOApplication *self)
 				{
 					MOTimer *timer = event.user.data1;
 					MOEvent *moEvent = MOEventCreateTimer(timer);
-					[[MOApplicationGetCurrentState(self) view] timerFired: moEvent];
+					MOState *state = MOApplicationGetCurrentState(self);
+					MOViewTimerFired([state view], moEvent);
 					CORelease(moEvent);
 				}
 				break;
@@ -424,7 +436,8 @@ void MOApplicationEnterRunloop(MOApplication *self)
 
 		// Redraw
 		glClear(GL_COLOR_BUFFER_BIT);
-		[[MOApplicationGetCurrentState(self) view] display];
+		MOState *state = MOApplicationGetCurrentState(self);
+		MOViewDisplay([state view]);
 		SDL_GL_SwapBuffers();
 
 		// Empty autorelease pool

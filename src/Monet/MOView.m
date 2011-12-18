@@ -8,130 +8,181 @@
 #import <Monet/MOGraphicsContext.h>
 #import <Monet/Private.h>
 
-struct MOViewData
+struct _MOView
 {
-	MOApplication		*app;
+	COGuts                            *guts;
 
-	MOView				*superview;
-	NSMutableArray		*subviews;
+	MOApplication                     *application;
 
-	MORect				frame;
-	MORect				bounds;
+	MOView                            *superview;
+	SBArray                           *subviews;
 
-	MOGraphicsContext	*graphicsContext;
+	MORect                            frame;
+	MORect                            bounds;
+
+	MOGraphicsContext                 *graphicsContext;
+
+	MOViewDrawRectCallback            drawRectCallback;
+	MOViewTickCallback                tickCallback;
+
+	MOViewKeyPressedCallback          keyPressedCallback;
+	MOViewKeyReleasedCallback         keyReleasedCallback;
+	MOViewMouseButtonPressedCallback  mouseButtonPressedCallback;
+	MOViewMouseButtonReleasedCallback mouseButtonReleasedCallback;
+	MOViewMouseDraggedCallback        mouseDraggedCallback;
+	MOViewTimerFiredCallback          timerFiredCallback;
+
+	void                              *extra;
 };
 
-@implementation MOView
+void _MOViewDestroy(void *self);
 
-- (id)initWithFrame: (MORect)aFrame app: (MOApplication *)aApp
+MOView *MOViewCreate(MORect aFrame, MOApplication *aApplication)
 {
-	if ((self = [super init]))
-	{
-		viewData = calloc(1, sizeof (struct MOViewData));
+	MOView *view = calloc(1, sizeof (MOView));
+	COInitialize(view);
+	COSetDestructor(view, &_MOViewDestroy);
 
-		viewData->frame = aFrame;
-		viewData->app   = aApp;
+	view->frame       = aFrame;
+	view->application = aApplication;
 
-		viewData->bounds.w = viewData->frame.w;
-		viewData->bounds.h = viewData->frame.h;
+	view->bounds.w    = view->frame.w;
+	view->bounds.h    = view->frame.h;
 
-		viewData->subviews   = [[NSMutableArray alloc] init];
-	}
+	view->subviews    = SBArrayCreateWithCapacity(3);
 
-	return self;
+	return view;
 }
 
-- (void)dealloc
+void _MOViewDestroy(void *self)
 {
-	[viewData->subviews release];
-	CORelease(viewData->graphicsContext);
-	free(viewData);
+	MOView *view = self;
 
-	[super dealloc];
+	CORelease(view->subviews);
+	CORelease(view->graphicsContext);
 }
 
-#pragma mark -
-
-- (MOApplication *)app
+void MOViewSetDrawRectCallback(MOView *self, MOViewDrawRectCallback aCallback)
 {
-	return viewData->app;
+	self->drawRectCallback = aCallback;
 }
 
-- (MOView *)superview
+void MOViewSetTickCallback(MOView *self, MOViewTickCallback aCallback)
 {
-	return viewData->superview;
+	self->tickCallback = aCallback;
 }
 
-- (void)setSuperview: (MOView *)aSuperview
+void MOViewSetKeyPressedCallback(MOView *self, MOViewKeyPressedCallback aCallback)
 {
-	// Don't retain
-	viewData->superview = aSuperview;
+	self->keyPressedCallback = aCallback;
 }
 
-- (NSArray *)subviews
+void MOViewSetKeyReleasedCallback(MOView *self, MOViewKeyReleasedCallback aCallback)
 {
-	return viewData->subviews;
+	self->keyReleasedCallback = aCallback;
 }
 
-- (void)addSubview: (MOView *)aSubview
+void MOViewSetMouseButtonPressedCallback(MOView *self, MOViewMouseButtonPressedCallback aCallback)
 {
-	[viewData->subviews addObject: aSubview];
-	[aSubview setSuperview: self];
+	self->mouseButtonPressedCallback = aCallback;
 }
 
-#pragma mark -
-
-- (MOPoint)absoluteOrigin
+void MOViewSetMouseButtonReleasedCallback(MOView *self, MOViewMouseButtonReleasedCallback aCallback)
 {
-	return [viewData->superview convertPointToScreen: MOPointMake(viewData->frame.x, viewData->frame.y)];
+	self->mouseButtonReleasedCallback = aCallback;
 }
 
-- (MOPoint)convertPointFromScreen: (MOPoint)aPoint
+void MOViewSetMouseDraggedCallback(MOView *self, MOViewMouseDraggedCallback aCallback)
 {
-	if (!viewData->superview)
-		return aPoint;
+	self->mouseDraggedCallback = aCallback;
+}
+
+void MOViewSetTimerFiredCallback(MOView *self, MOViewTimerFiredCallback aCallback)
+{
+	self->timerFiredCallback = aCallback;
+}
+
+MOApplication *MOViewGetApplication(MOView *self)
+{
+	return self->application;
+}
+
+void *MOViewGetExtra(MOView *self)
+{
+	return self->extra;
+}
+
+void MOViewSetExtra(MOView *self, void *aExtra)
+{
+	// FIXME retain or not?
+	self->extra = aExtra;
+}
+
+MOView *MOViewGetSuperview(MOView *self)
+{
+	return self->superview;
+}
+
+void MOViewSetSuperview(MOView *self, MOView *aSuperview)
+{
+	self->superview = aSuperview;
+}
+
+SBArray *MOViewGetSubviews(MOView *self)
+{
+	return self->subviews;
+}
+
+void MOViewAddSubview(MOView *self, MOView *aSubview)
+{
+	SBArrayPush(self->subviews, aSubview);
+	MOViewSetSuperview(aSubview, self);
+}
+
+MOPoint MOViewGetAbsoluteOrigin(MOView *self)
+{
+	MOPoint basicOrigin = MOPointMake(self->frame.x, self->frame.y);
+
+	if (!self->superview)
+		return basicOrigin;
 	else
-	{
-		MOPoint absoluteOrigin = [self absoluteOrigin];
-		return MOPointMake(aPoint.x - absoluteOrigin.x, aPoint.y - absoluteOrigin.y);
-	}
+		return MOViewConvertPointToScreen(self->superview, basicOrigin);
 }
 
-- (MOPoint)convertPointToScreen: (MOPoint)aPoint
+MOPoint MOViewConvertPointFromScreen(MOView *self, MOPoint aPoint)
 {
-	if (!viewData->superview)
-		return aPoint;
-	else
-	{
-		MOPoint absoluteOrigin = [self absoluteOrigin];
-		return MOPointMake(aPoint.x + absoluteOrigin.x, aPoint.y + absoluteOrigin.y);
-	}
+	MOPoint absoluteOrigin = MOViewGetAbsoluteOrigin(self);
+	return MOPointMake(aPoint.x - absoluteOrigin.x, aPoint.y - absoluteOrigin.y);
 }
 
-#pragma mark -
+MOPoint MOViewConvertPointToScreen(MOView *self, MOPoint aPoint)
+{
+	MOPoint absoluteOrigin = MOViewGetAbsoluteOrigin(self);
+	return MOPointMake(aPoint.x + absoluteOrigin.x, aPoint.y + absoluteOrigin.y);
+}
 
 // aPoint is relative to the screen here, not the view.
-- (MOView *)subviewAtPoint: (MOPoint)aPoint
+MOView *MOViewGetSubviewAtPoint(MOView *self, MOPoint aPoint)
 {
-	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
-	MOView *subview = nil;
-	while ((subview = [enumerator nextObject]))
+	SBArrayIndex size = SBArrayGetSize(self->subviews);
+	for (SBArrayIndex i = 0; i < size; ++i)
 	{
-		if (MORectContainsPoint([subview bounds], [subview convertPointFromScreen: aPoint]))
+		MOView *subview = SBArrayAt(self->subviews, i);
+		MOPoint convertedPoint = MOViewConvertPointFromScreen(subview, aPoint);
+		if (MORectContainsPoint(MOViewGetBounds(subview), convertedPoint))
 			return subview;
 	}
 
-	return nil;
+	return NULL;
 }
 
 // aPoint is relative to the screen here, not the view.
-- (MOView *)deepestSubviewAtPoint: (MOPoint)aPoint
+MOView *MOViewGetDeepestSubviewAtPoint(MOView *self, MOPoint aPoint)
 {
-	// Find deepest subview
 	MOView *subview = self;
-	while (YES)
+	while (1)
 	{
-		MOView *newSubview = [subview subviewAtPoint: aPoint];
+		MOView *newSubview = MOViewGetSubviewAtPoint(subview, aPoint);
 		if (newSubview)
 			subview = newSubview;
 		else
@@ -141,132 +192,172 @@ struct MOViewData
 	return subview;
 }
 
-#pragma mark -
-
-- (MORect)frame
+MORect MOViewGetFrame(MOView *self)
 {
-	return viewData->frame;
+	return self->frame;
 }
 
-- (MORect)bounds
+MORect MOViewGetBounds(MOView *self)
 {
-	return viewData->bounds;
+	return self->bounds;
 }
 
-- (MORect)boundsRelativeToWindow
+MORect MOViewGetBoundsRelativeToWindow(MOView *self)
 {
-	MOPoint absoluteOrigin = [self absoluteOrigin];
-	return MORectMake(absoluteOrigin.x, absoluteOrigin.y, viewData->bounds.w, viewData->bounds.h);
+	MOPoint absoluteOrigin = MOViewGetAbsoluteOrigin(self);
+	return MORectMake(absoluteOrigin.x, absoluteOrigin.y, self->bounds.w, self->bounds.h);
 }
 
-#pragma mark -
-
-- (void)lockFocus
+void MOViewLockFocus(MOView *self)
 {
-	if (!viewData->graphicsContext)
+	if (!self->graphicsContext)
 	{
 		// Get destination rectangle
-		MOPoint absoluteOrigin = [self absoluteOrigin];
-		MORect rect = MORectMake(absoluteOrigin.x, absoluteOrigin.y, viewData->frame.w, viewData->frame.h);
+		MOPoint absoluteOrigin = MOViewGetAbsoluteOrigin(self);
+		MORect rect = MORectMake(absoluteOrigin.x, absoluteOrigin.y, self->frame.w, self->frame.h);
 
 		// Create graphics context
-		viewData->graphicsContext = MOGraphicsContextCreate(rect);
+		self->graphicsContext = MOGraphicsContextCreate(rect);
 	}
 
-	MOGraphicsContext_push(viewData->graphicsContext);
+	MOGraphicsContext_push(self->graphicsContext);
 }
 
-- (void)unlockFocus
+void MOViewUnlockFocus(MOView *self)
 {
 	MOGraphicsContext_pop();
 }
 
-#pragma mark -
-
-- (void)display
+void MOViewDisplay(MOView *self)
 {
 	// Set up clipping
-	glScissor([self absoluteOrigin].x, [self absoluteOrigin].y, viewData->bounds.w, viewData->bounds.h);
+	MOPoint absoluteOrigin = MOViewGetAbsoluteOrigin(self);
+	glScissor(absoluteOrigin.x, absoluteOrigin.y, self->bounds.w, self->bounds.h);
 
 	// Draw this view
-	[self lockFocus];
-	[self drawRect: [self bounds]];
-	[self unlockFocus];
+	MOViewLockFocus(self);
+	MOViewDrawRect(self, MOViewGetBounds(self));
+	MOViewUnlockFocus(self);
 
 	// Draw subviews
-	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
-	MOView *subview = nil;
-	while ((subview = [enumerator nextObject]))
-		[subview display];
+	SBArrayIndex size = SBArrayGetSize(self->subviews);
+	for (SBArrayIndex i = 0; i < size; ++i)
+	{
+		MOView *subview = SBArrayAt(self->subviews, i);
+		MOViewDisplay(subview);
+	}
 }
 
-- (void)clear
+void MOViewClear(MOView *self)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-- (void)drawRect: (MORect)aRect
+void MOViewDrawRect(MOView *self, MORect aRect)
 {
-	// Do nothing by default
+	if (self->drawRectCallback)
+		self->drawRectCallback(self, aRect);
 }
 
-#pragma mark -
-
-- (void)tick: (double)aSeconds
+void MOViewTick(MOView *self, double aSeconds)
 {
-	;
+	if (self->tickCallback)
+		self->tickCallback(self, aSeconds);
 }
 
-#pragma mark -
-
-- (BOOL)keyDown: (MOEvent *)aEvent
+bool MOViewKeyPressed(MOView *self, MOEvent *aEvent)
 {
-	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
-	MOView *subview = nil;
-	BOOL isHandled = NO;
-	while ((subview = [enumerator nextObject]))
+	bool wasHandled;
+
+	// Try handling here
+	if (self->keyPressedCallback)
 	{
-		isHandled = [subview keyDown: aEvent];
-		if (isHandled)
-			break;
+		wasHandled = self->keyPressedCallback(self, aEvent);
+		if (wasHandled)
+			return true;
 	}
 
-	return isHandled;
-}
-
-- (BOOL)keyUp: (MOEvent *)aEvent
-{
-	NSEnumerator *enumerator = [viewData->subviews objectEnumerator];
-	MOView *subview = nil;
-	BOOL isHandled = NO;
-	while ((subview = [enumerator nextObject]))
+	// Pass on to subviews
+	SBArrayIndex size = SBArrayGetSize(self->subviews);
+	for (SBArrayIndex i = 0; i < size; ++i)
 	{
-		isHandled = [subview keyUp: aEvent];
-		if (isHandled)
-			break;
+		MOView *subview = SBArrayAt(self->subviews, i);
+		wasHandled = MOViewKeyPressed(subview, aEvent);
+		if (wasHandled)
+			return true;
 	}
 
-	return isHandled;
+	return false;
 }
 
-- (void)mouseDown: (MOEvent *)aEvent
+bool MOViewKeyReleased(MOView *self, MOEvent *aEvent)
 {
-	[viewData->superview mouseDown: aEvent];
+	bool wasHandled;
+
+	// Try handling here
+	if (self->keyReleasedCallback)
+	{
+		wasHandled = self->keyReleasedCallback(self, aEvent);
+		if (wasHandled)
+			return true;
+	}
+
+	// Pass on to subviews
+	SBArrayIndex size = SBArrayGetSize(self->subviews);
+	for (SBArrayIndex i = 0; i < size; ++i)
+	{
+		MOView *subview = SBArrayAt(self->subviews, i);
+		wasHandled = MOViewKeyReleased(subview, aEvent);
+		if (wasHandled)
+			return true;
+	}
+
+	return false;
 }
 
-- (void)mouseUp: (MOEvent *)aEvent
+void MOViewMouseButtonPressed(MOView *self, MOEvent *aEvent)
 {
-	[viewData->superview mouseUp: aEvent];
+	// arrives in the lowest view
+
+	// Try to handle here
+	MOViewMouseButtonPressedCallback callback = self->mouseButtonPressedCallback;
+	bool wasHandled = callback ? callback(self, aEvent) : false;
+
+	// Pass on to superview
+	if (!wasHandled && self->superview)
+		MOViewMouseButtonPressed(self->superview, aEvent);
 }
 
-- (void)mouseDragged: (MOEvent *)aEvent
+void MOViewMouseButtonReleased(MOView *self, MOEvent *aEvent)
 {
-	;
+	// arrives in the lowest view
+
+	// Try to handle here
+	MOViewMouseButtonReleasedCallback callback = self->mouseButtonReleasedCallback;
+	bool wasHandled = callback ? callback(self, aEvent) : false;
+
+	// Pass on to superview
+	if (!wasHandled && self->superview)
+		MOViewMouseButtonReleased(self->superview, aEvent);
 }
 
-- (void)timerFired: (MOEvent *)aEvent
+void MOViewMouseDragged(MOView *self, MOEvent *aEvent)
 {
-	;
+	// arrives in the lowest view
+
+	// Try to handle here
+	MOViewMouseDraggedCallback callback = self->mouseDraggedCallback;
+	bool wasHandled = callback ? callback(self, aEvent) : false;
+
+	// Pass on to superview
+	if (!wasHandled && self->superview)
+		MOViewMouseDragged(self->superview, aEvent);
 }
 
-@end
+void MOViewTimerFired(MOView *self, MOEvent *aEvent)
+{
+	// arrives in the highest (topmost) view
+
+	if (self->timerFiredCallback)
+		self->timerFiredCallback(self, aEvent);
+}
