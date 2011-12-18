@@ -70,48 +70,46 @@ void _MOApplicationHandleEvents(MOApplication *self)
 						character = [[NSString alloc] initWithCharacters: &event.key.keysym.unicode length: 1];
 
 					// Create event
-					MOEvent *moEvent = [[MOEvent alloc]
-						initKeyEventWithType: MOKeyDownEventType
-						modifiers: MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
-						character: character
-						key: MOSDLKeyToMOKey(event.key.keysym.sym)
-					];
+					MOEvent *moEvent = MOEventCreateKey(
+						MOKeyDownEventType,
+						MOSDLModToMOKeyModifierMask(event.key.keysym.mod),
+						[character UTF8String],
+						MOSDLKeyToMOKey(event.key.keysym.sym));
 
 					// Dispatch event
 					[[MOApplicationGetCurrentState(self) view] keyDown: moEvent];
 
 					// Cleanup
 					[character release];
-					[moEvent release];
+					CORelease(moEvent);
 				}
 				break;
 
 			case SDL_KEYUP:
 				{
 					// Create event
-					MOEvent *moEvent = [[MOEvent alloc]
-						initKeyEventWithType: MOKeyUpEventType
-						modifiers: MOSDLModToMOKeyModifierMask(event.key.keysym.mod)
-						character: 0
-						key: MOSDLKeyToMOKey(event.key.keysym.sym)
-					];
+					MOEvent *moEvent = MOEventCreateKey(
+						MOKeyUpEventType,
+						MOSDLModToMOKeyModifierMask(event.key.keysym.mod),
+						NULL,
+						MOSDLKeyToMOKey(event.key.keysym.sym));
 
 					// Dispatch event
 					[[MOApplicationGetCurrentState(self) view] keyUp: moEvent];
 
 					// Cleanup
-					[moEvent release];
+					CORelease(moEvent);
 				}
 				break;
 
 			case SDL_MOUSEMOTION:
 				{
 					// Create event
-					MOEvent *moEvent = [[MOEvent alloc]
-						initMouseMotionEventWithModifiers: MOSDLModToMOKeyModifierMask(SDL_GetModState())
-						mouseLocation: MOPointMake(event.motion.x, self->screenSize.h-event.motion.y-1)
-						relativeMouseMotion: MOPointMake(event.motion.xrel, event.motion.yrel)
-					];
+					MOEvent *moEvent = MOEventCreateMouseMotion(
+						MOSDLModToMOKeyModifierMask(SDL_GetModState()),
+						MOPointMake(event.motion.x, self->screenSize.h-event.motion.y-1),
+						MOPointMake(event.motion.xrel, event.motion.yrel)
+					);
 
 					// Dispatch event to subviews that want it
 					if (self->lastLeftMouseButtonDownView)
@@ -122,7 +120,7 @@ void _MOApplicationHandleEvents(MOApplication *self)
 						[self->lastRightMouseButtonDownView mouseDragged: moEvent];
 
 					// Cleanup
-					[moEvent release];
+					CORelease(moEvent);
 				}
 				break;
 
@@ -155,19 +153,18 @@ void _MOApplicationHandleEvents(MOApplication *self)
 					}
 
 					// Create event
-					MOEvent *moEvent = [[MOEvent alloc]
-						initMouseButtonEventWithType:MOMouseButtonDownEventType
-						modifiers:modifiers
-						mouseButton:mouseButton
-						mouseLocation:mouseLocation
-						clickCount:1 // FIXME set correct click count
-					];
+					MOEvent *moEvent = MOEventCreateMouseButton(
+						MOMouseButtonDownEventType,
+						modifiers,
+						mouseButton,
+						mouseLocation,
+						1); // FIXME set correct click count
 
 					// Dispatch event
 					[subview mouseDown: moEvent];
 
 					// Cleanup
-					[moEvent release];
+					CORelease(moEvent);
 				}
 				break;
 
@@ -199,13 +196,12 @@ void _MOApplicationHandleEvents(MOApplication *self)
 					}
 
 					// Create event
-					MOEvent *moEvent = [[MOEvent alloc]
-						initMouseButtonEventWithType:MOMouseButtonUpEventType
-						modifiers:modifiers
-						mouseButton:mouseButton
-						mouseLocation:mouseLocation
-						clickCount:1 // FIXME set correct click count
-					];
+					MOEvent *moEvent = MOEventCreateMouseButton(
+						MOMouseButtonUpEventType,
+						modifiers,
+						mouseButton,
+						mouseLocation,
+						1); // FIXME set correct click count
 
 					// Dispatch event
 					[subview mouseUp: moEvent];
@@ -228,16 +224,16 @@ void _MOApplicationHandleEvents(MOApplication *self)
 
 
 					// Cleanup
-					[moEvent release];
+					CORelease(moEvent);
 				}
 				break;
 
 			case SDL_USEREVENT:
 				{
 					MOTimer *timer = event.user.data1;
-					MOEvent *moEvent = [[MOEvent alloc] initTimerEventWithTimer: timer];
+					MOEvent *moEvent = MOEventCreateTimer(timer);
 					[[MOApplicationGetCurrentState(self) view] timerFired: moEvent];
-					[moEvent release];
+					CORelease(moEvent);
 				}
 				break;
 

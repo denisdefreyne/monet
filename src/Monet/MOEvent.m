@@ -2,14 +2,16 @@
 
 #import <cobject/cobject.h>
 
-struct MOEventData
+struct _MOEvent
 {
+	COGuts          *guts;
+
 	MOEventType     type;
 	uint8_t         modifiers;
-    
-	NSString        *character;
+
+	char            *character;
 	MOKey           key;
-    
+
 	MOMouseButton   mouseButton;
 	MOPoint         mouseLocation;
 	MOPoint         relativeMouseMotion;
@@ -18,132 +20,117 @@ struct MOEventData
 	MOTimer         *timer;
 };
 
-@implementation MOEvent
+void _MOEventDestroy(void *aEvent);
 
-- (id)initKeyEventWithType: (MOEventType)aType modifiers: (uint8_t)aModifiers character: (NSString *)aCharacter key: (MOKey)aKey
+MOEvent *MOEventCreateKey(MOEventType aType, MOKeyModifierMask aModifiers, char *aCharacter, MOKey aKey)
 {
-	if ((self = [super init]))
-	{
-		eventData = calloc(1, sizeof (struct MOEventData));
+	MOEvent *event = calloc(1, sizeof (MOEvent));
+	COInitialize(event);
+	COSetDestructor(event, &_MOEventDestroy);
 
-		eventData->type      = aType;
-		eventData->modifiers = aModifiers;
+	event->type      = aType;
+	event->modifiers = aModifiers;
 
-		eventData->character = [aCharacter retain];
-		eventData->key       = aKey;
-	}
+	event->character = aCharacter ? strdup(aCharacter) : NULL;
+	event->key       = aKey;
 
-	return self;
+	return event;
 }
 
-- (id)initMouseButtonEventWithType: (MOEventType)aType modifiers: (uint8_t)aModifiers mouseButton: (MOMouseButton)aMouseButton mouseLocation: (MOPoint)aMouseLocation clickCount: (uint8_t)aClickCount
+MOEvent *MOEventCreateMouseButton(MOEventType aType, MOKeyModifierMask aModifiers, MOMouseButton aMouseButton, MOPoint aMouseLocation, uint8_t aClickCount)
 {
-	if ((self = [super init]))
-	{
-		eventData = calloc(1, sizeof (struct MOEventData));
+	MOEvent *event = calloc(1, sizeof (MOEvent));
+	COInitialize(event);
+	COSetDestructor(event, &_MOEventDestroy);
 
-		eventData->type          = aType;
-		eventData->modifiers     = aModifiers;
+	event->type          = aType;
+	event->modifiers     = aModifiers;
+
+	event->mouseButton   = aMouseButton;
+	event->mouseLocation = aMouseLocation;
+	event->clickCount    = aClickCount;
+
+	return event;
+}
+
+MOEvent *MOEventCreateMouseMotion(MOKeyModifierMask aModifiers, MOPoint aMouseLocation, MOPoint aRelativeMouseMotion)
+{
+	MOEvent *event = calloc(1, sizeof (MOEvent));
+	COInitialize(event);
+	COSetDestructor(event, &_MOEventDestroy);
+
+	event->type                = MOMouseMotionEventType;
+	event->modifiers           = aModifiers;
         
-		eventData->mouseButton   = aMouseButton;
-		eventData->mouseLocation = aMouseLocation;
-		eventData->clickCount    = aClickCount;
-	}
+	event->mouseLocation       = aMouseLocation;
+	event->relativeMouseMotion = aRelativeMouseMotion;
 
-	return self;
+	return event;
 }
 
-- (id)initMouseMotionEventWithModifiers: (uint8_t)aModifiers mouseLocation: (MOPoint)aMouseLocation relativeMouseMotion: (MOPoint)aRelativeMouseMotion
+MOEvent *MOEventCreateTimer(MOTimer *aTimer)
 {
-	if ((self = [super init]))
-	{
-		eventData = calloc(1, sizeof (struct MOEventData));
+	MOEvent *event = calloc(1, sizeof (MOEvent));
+	COInitialize(event);
+	COSetDestructor(event, &_MOEventDestroy);
 
-		eventData->type                = MOMouseMotionEventType;
-		eventData->modifiers           = aModifiers;
-        
-		eventData->mouseLocation       = aMouseLocation;
-		eventData->relativeMouseMotion = aRelativeMouseMotion;
-	}
+	event->type  = MOTimerFiredEventType;
 
-	return self;
+	event->timer = CORetain(aTimer);
+
+	return event;
 }
 
-- (id)initTimerEventWithTimer: (MOTimer *)aTimer
+void _MOEventDestroy(void *aEvent)
 {
-	if ((self = [super init]))
-	{
-		eventData = calloc(1, sizeof (struct MOEventData));
+	MOEvent *event = (MOEvent *)aEvent;
 
-		eventData->type  = MOTimerFiredEventType;
-
-		eventData->timer = CORetain(aTimer);
-	}
-
-	return self;
+	if (event->character)
+		free(event->character);
+	CORelease(event->timer);
 }
 
-- (void)dealloc
+MOEventType MOEventGetType(MOEvent *aEvent)
 {
-	[eventData->character release];
-	CORelease(eventData->timer);
-
-	free(eventData);
-
-	[super dealloc];
+	return aEvent->type;
 }
 
-#pragma mark -
-
-- (MOEventType)type
+MOKeyModifierMask MOEventGetModifiers(MOEvent *aEvent)
 {
-	return eventData->type;
+	return aEvent->modifiers;
 }
 
-- (uint8_t)modifiers
+char *MOEventGetCharacter(MOEvent *aEvent)
 {
-	return eventData->modifiers;
+	return aEvent->character;
 }
 
-#pragma mark -
-
-- (NSString *)character
+MOKey MOEventGetKey(MOEvent *aEvent)
 {
-	return eventData->character;
+	return aEvent->key;
 }
 
-- (MOKey)key
+MOMouseButton MOEventGetMouseButton(MOEvent *aEvent)
 {
-	return eventData->key;
+	return aEvent->mouseButton;
 }
 
-#pragma mark -
-
-- (MOMouseButton)mouseButton
+MOPoint MOEventGetMouseLocation(MOEvent *aEvent)
 {
-	return eventData->mouseButton;
+	return aEvent->mouseLocation;
 }
 
-- (MOPoint)mouseLocation
+MOPoint MOEventGetRelativeMouseMotion(MOEvent *aEvent)
 {
-	return eventData->mouseLocation;
+	return aEvent->relativeMouseMotion;
 }
 
-- (MOPoint)relativeMouseMotion
+uint8_t MOEventGetClickCount(MOEvent *aEvent)
 {
-	return eventData->relativeMouseMotion;
+	return aEvent->clickCount;
 }
 
-- (uint8_t)clickCount
+MOTimer *MOEventGetTimer(MOEvent *aEvent)
 {
-	return eventData->clickCount;
+	return aEvent->timer;
 }
-
-#pragma mark -
-
-- (MOTimer *)timer
-{
-	return eventData->timer;
-}
-
-@end

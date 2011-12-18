@@ -1,9 +1,8 @@
 #import <Foundation/Foundation.h>
 
 #import <Monet/MOApplication.h>
+#import <Monet/MOEvent.h>
 #import <Monet/MORect.h>
-
-@class MOEvent;
 
 @interface MOView : NSObject
 {

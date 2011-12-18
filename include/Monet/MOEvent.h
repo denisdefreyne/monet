@@ -1,5 +1,3 @@
-#import <Foundation/Foundation.h>
-
 #import <Monet/MOPoint.h>
 #import <Monet/MOTimer.h>
 
@@ -92,35 +90,22 @@ enum {
 };
 typedef uint8_t MOKeyModifierMask;
 
-@interface MOEvent : NSObject
-{
-	struct MOEventData *eventData;
-}
+typedef struct _MOEvent MOEvent;
 
-- (id)initKeyEventWithType: (MOEventType)aType modifiers: (uint8_t)aModifiers character: (NSString *)aCharacter key: (MOKey)aKey;
-- (id)initMouseButtonEventWithType: (MOEventType)aType modifiers: (uint8_t)aModifiers mouseButton: (MOMouseButton)aMouseButton mouseLocation: (MOPoint)aMouseLocation clickCount: (uint8_t)aClickCount;
-- (id)initMouseMotionEventWithModifiers: (uint8_t)aModifiers mouseLocation: (MOPoint)aMouseLocation relativeMouseMotion: (MOPoint)aRelativeMouseMotion;
-- (id)initTimerEventWithTimer: (MOTimer *)aTimer;
+MOEvent *MOEventCreateKey(MOEventType aType, MOKeyModifierMask aModifiers, char *aCharacter, MOKey aKey);
+MOEvent *MOEventCreateMouseButton(MOEventType aType, MOKeyModifierMask aModifiers, MOMouseButton aMouseButton, MOPoint aMouseLocation, uint8_t aClickCount);
+MOEvent *MOEventCreateMouseMotion(MOKeyModifierMask aModifiers, MOPoint aMouseLocation, MOPoint aRelativeMouseMotion);
+MOEvent *MOEventCreateTimer(MOTimer *aTimer);
 
-// General
+MOEventType MOEventGetType(MOEvent *aEvent);
+MOKeyModifierMask MOEventGetModifiers(MOEvent *aEvent);
 
-- (MOEventType)type;
-- (uint8_t)modifiers;
+char *MOEventGetCharacter(MOEvent *aEvent);
+MOKey MOEventGetKey(MOEvent *aEvent);
 
-// Keyboard-specific
+MOMouseButton MOEventGetMouseButton(MOEvent *aEvent);
+MOPoint MOEventGetMouseLocation(MOEvent *aEvent);
+MOPoint MOEventGetRelativeMouseMotion(MOEvent *aEvent);
+uint8_t MOEventGetClickCount(MOEvent *aEvent);
 
-- (NSString *)character;
-- (MOKey)key;
-
-// Mouse button-specific
-
-- (MOMouseButton)mouseButton;
-- (MOPoint)mouseLocation;
-- (MOPoint)relativeMouseMotion;
-- (uint8_t)clickCount;
-
-// Timer-specific
-
-- (MOTimer *)timer;
-
-@end
+MOTimer *MOEventGetTimer(MOEvent *aEvent);
