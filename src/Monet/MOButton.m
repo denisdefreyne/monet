@@ -1,63 +1,70 @@
 #import <Monet/MOButton.h>
 
+#import <cobject/cobject.h>
+
 #import <Monet/MOApplication.h>
 #import <Monet/MOPoint.h>
 #import <Monet/MORect.h>
 #import <Monet/MOView.h>
 
-/*
-
-struct MOButtonData
+struct _MOButtonExtra
 {
-	BOOL isMouseDown;
-	BOOL isMouseInside;
+	COGuts *guts;
+
+	bool   isMouseDown;
+	bool   isMouseInside;
+
+	MOButtonClickedCallback clickedCallback;
 };
+typedef struct _MOButtonExtra MOButtonExtra;
 
-@implementation MOButton : MOView
-
-- (id)initWithFrame: (MORect)aFrame app: (MOApplication *)aApp;
+bool _MOButtonIsMousePressed(MOView *self)
 {
-	if ((self = [super initWithFrame: aFrame app: aApp]))
-	{
-		buttonData = calloc(1, sizeof (struct MOButtonData));
-		buttonData->isMouseDown   = NO;
-		buttonData->isMouseInside = NO;
-	}
+	MOButtonExtra *extra = MOViewGetExtra(self);
 
-	return self;
+	MORect bounds = MOViewGetBounds(self);
+	MOPoint untranslatedPoint = MOApplicationGetMouseLocation(MOViewGetApplication(self));
+	MOPoint point = MOViewConvertPointFromScreen(self, untranslatedPoint);
+	return extra->isMouseDown && MORectContainsPoint(bounds, point);
 }
 
-#pragma mark -
-
-- (BOOL)isPressed
+bool _MOButtonMouseButtonPressed(MOView *self, MOEvent *aEvent)
 {
-	return buttonData->isMouseDown && MORectContainsPoint(
-		[self bounds],
-		[self convertPointFromScreen: MOApplicationGetMouseLocation([self app])]);
+	MOButtonExtra *extra = MOViewGetExtra(self);
+
+	extra->isMouseDown = YES;
+
+	return true;
 }
 
-#pragma mark -
-
-- (void)mouseDown: (MOEvent *)aEvent
+bool _MOButtonMouseButtonReleased(MOView *self, MOEvent *aEvent)
 {
-	buttonData->isMouseDown = YES;
+	MOButtonExtra *extra = MOViewGetExtra(self);
+
+	if (_MOButtonIsMousePressed(self))
+		extra->clickedCallback(self);
+
+	extra->isMouseDown = NO;
+
+	return true;
 }
 
-- (void)mouseUp: (MOEvent *)aEvent
+MOView *MOButtonCreate(MORect aFrame, MOApplication *aApplication)
 {
-	if ([self isPressed])
-		[self clicked];
+	MOView *view = MOViewCreate(aFrame, aApplication);
 
-	buttonData->isMouseDown = NO;
+	MOButtonExtra *extra = calloc(1, sizeof (MOButtonExtra));
+	COInitialize(extra);
+	MOViewSetExtra(view, extra);
+
+	MOViewSetMouseButtonPressedCallback(view, &_MOButtonMouseButtonPressed);
+	MOViewSetMouseButtonReleasedCallback(view, &_MOButtonMouseButtonReleased);
+
+	return view;
 }
 
-#pragma mark -
-
-- (void)clicked
+void MOButtonSetClickedCallback(MOView *self, MOButtonClickedCallback aCallback)
 {
-	;
+	MOButtonExtra *extra = MOViewGetExtra(self);
+	extra->clickedCallback = aCallback;
 }
-
-@end
-
-*/

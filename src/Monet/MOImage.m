@@ -21,7 +21,10 @@ MOImage *MOImageCreateFromFile(char *aFilename)
 	// Load file
 	SDL_Surface *surface = IMG_Load(aFilename);
 	if (!surface)
-		[NSException raise: @"SDLException" format: @"IMG_Load failed: %s\n", SDL_GetError()];
+	{
+		fprintf(stderr, "IMG_Load failed (%s)\n", SDL_GetError());
+		exit(1);
+	}
 
 	// Create texture
 	glGenTextures(1, &image->textureName);
@@ -47,8 +50,11 @@ MOImage *MOImageCreateFromFile(char *aFilename)
 			textureFormat = GL_BGR;
 	}
 	else
+	{
 		// TODO handle gracefully
-		[NSException raise: @"OpenGLException" format: @"glTexImage2D preparation failed: image is not in truecolor (filename = %@)\n", aFilename];
+		fprintf(stderr, "glTexImage2D preparation failed: image is not in truecolor (filename = %s)\n", aFilename);
+		exit(1);
+	}
 
 	// Set size
 	image->size = MOSizeMake(surface->w, surface->h);

@@ -1,5 +1,6 @@
 #import <Monet/MOView.h>
 
+#import <cobject/cobject.h>
 #import <OpenGL/gl.h>
 #import <OpenGL/glu.h>
 
