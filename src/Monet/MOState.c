@@ -59,6 +59,7 @@ void MOStateSetWorldTickerFunction(MOState *aState, MOStateWorldTicker aCallback
 
 void MOStateTick(MOState *aState, double aGameTickLengthInSeconds)
 {
+	MOViewTick(aState->view, aGameTickLengthInSeconds);
 	if (aState->worldTicker)
 		aState->worldTicker(aState, aGameTickLengthInSeconds);
 }
