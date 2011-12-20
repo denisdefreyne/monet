@@ -10,6 +10,5 @@
 #import <Monet/MOSound.h>
 #import <Monet/MOState.h>
 #import <Monet/MOTiledImage.h>
-#import <Monet/MOTicking.h>
 #import <Monet/MOTimer.h>
 #import <Monet/MOView.h>
