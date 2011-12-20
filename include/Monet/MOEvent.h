@@ -1,3 +1,5 @@
+#import <stdint.h>
+
 #import <Monet/MOPoint.h>
 #import <Monet/MOTimer.h>
 

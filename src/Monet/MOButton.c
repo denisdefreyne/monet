@@ -1,6 +1,7 @@
 #import <Monet/MOButton.h>
 
 #import <cobject/cobject.h>
+#import <stdlib.h>
 
 #import <Monet/MOApplication.h>
 #import <Monet/MOPoint.h>
@@ -32,7 +33,7 @@ bool _MOButtonMouseButtonPressed(MOView *self, MOEvent *aEvent)
 {
 	MOButtonExtra *extra = MOViewGetExtra(self);
 
-	extra->isMouseDown = YES;
+	extra->isMouseDown = true;
 
 	return true;
 }
@@ -44,7 +45,7 @@ bool _MOButtonMouseButtonReleased(MOView *self, MOEvent *aEvent)
 	if (_MOButtonIsMousePressed(self))
 		extra->clickedCallback(self);
 
-	extra->isMouseDown = NO;
+	extra->isMouseDown = false;
 
 	return true;
 }

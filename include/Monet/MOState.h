@@ -1,20 +1,18 @@
-#import <Foundation/Foundation.h>
+#import <SeaBase/SeaBase.h>
+
+typedef struct _MOState MOState;
 
 #import <Monet/MOApplication.h>
-#import <Monet/MOTicking.h>
 #import <Monet/MOView.h>
 
-@interface MOState : NSObject <MOTicking>
-{
-	struct MOStateData *stateData;
-}
+typedef MOView * (*MOStateViewConstructor)(MOApplication *aApplication);
+typedef void (*MOStateWorldTicker)(MOState *aState, double aGameTickLengthInSeconds);
 
-+ (Class)viewClass;
+MOState *MOStateCreate(MOApplication *aApplication, MOStateViewConstructor aCallback);
 
-- (id)initWithApp: (MOApplication *)aApp view: (MOView *)aView;
+MOView *MOStateGetView(MOState *aState);
+void *MOStateGetWorld(MOState *aState);
+void MOStateSetWorld(MOState *aState, void *aWorld);
+void MOStateSetWorldTickerFunction(MOState *aState, MOStateWorldTicker);
 
-- (NSObject <MOTicking> *)world;
-- (void)setWorld: (NSObject <MOTicking> *)aWorld;
-- (MOView *)view;
-
-@end
+void MOStateTick(MOState *aState, double aGameTickLengthInSeconds);

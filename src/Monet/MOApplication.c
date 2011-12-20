@@ -1,6 +1,7 @@
 #import <Monet/MOApplication.h>
 
-#import <Foundation/Foundation.h>
+#import <stdbool.h>
+#import <stdint.h>
 #import <OpenGL/gl.h>
 #import <OpenGL/glu.h>
 #import <SDL/SDL_mixer.h>
@@ -14,18 +15,18 @@ struct _MOApplication
 	COGuts            *guts;
 
 	// Pool
-	NSAutoreleasePool *autoreleasePool;
+	SBAutoreleasePool *autoreleasePool;
 
 	// Surface
 	SDL_Surface       *surface;
 	MOSize            screenSize;
-	BOOL              isFullscreen;
+	bool              isFullscreen;
 
 	// Running or not?
-	BOOL              isOpen;
+	bool              isOpen;
 
 	// View etc
-	NSMutableArray    *stateStack;
+	SBArray           *stateStack;
 
 	// Timing
 	uint8_t           maxFrameSkip;
@@ -33,27 +34,12 @@ struct _MOApplication
 	float             interpolation;
 
 	// Recent views receiving mouse button events
-	MOView           *lastLeftMouseButtonDownView;
-	MOView           *lastMiddleMouseButtonDownView;
-	MOView           *lastRightMouseButtonDownView;
+	MOView            *lastLeftMouseButtonDownView;
+	MOView            *lastMiddleMouseButtonDownView;
+	MOView            *lastRightMouseButtonDownView;
 };
 
 void _MOApplicationDestroy(void *self);
-
-void _MOApplicationRefreshAutoreleasePool(MOApplication *self)
-{
-	[self->autoreleasePool release];
-	self->autoreleasePool = [[NSAutoreleasePool alloc] init];
-}
-
-/*
-bool MOViewKeyPressed(MOView *self, MOEvent *aEvent);
-bool MOViewKeyReleased(MOView *self, MOEvent *aEvent);
-bool MOViewMouseButtonPressed(MOView *self, MOEvent *aEvent);
-bool MOViewMouseButtonReleased(MOView *self, MOEvent *aEvent);
-bool MOViewMouseDragged(MOView *self, MOEvent *aEvent);
-bool MOViewTimerFired(MOView *self, MOEvent *aEvent);
-*/
 
 void _MOApplicationHandleEvents(MOApplication *self)
 {
@@ -72,25 +58,20 @@ void _MOApplicationHandleEvents(MOApplication *self)
 			case SDL_KEYDOWN:
 				{
 					// Get character
-					NSString *character;
-					if (event.key.keysym.unicode == 0)
-						character = @"";
-					else
-						character = [[NSString alloc] initWithCharacters: &event.key.keysym.unicode length: 1];
+					// TODO fill in with event.key.keysym.unicode
 
 					// Create event
 					MOEvent *moEvent = MOEventCreateKey(
 						MOKeyDownEventType,
 						MOSDLModToMOKeyModifierMask(event.key.keysym.mod),
-						[character UTF8String],
+						"", // FIXME set actual character
 						MOSDLKeyToMOKey(event.key.keysym.sym));
 
 					// Dispatch event
 					MOState *state = MOApplicationGetCurrentState(self);
-					MOViewKeyPressed([state view], moEvent);
+					MOViewKeyPressed(MOStateGetView(state), moEvent);
 
 					// Cleanup
-					[character release];
 					CORelease(moEvent);
 				}
 				break;
@@ -106,7 +87,7 @@ void _MOApplicationHandleEvents(MOApplication *self)
 
 					// Dispatch event
 					MOState *state = MOApplicationGetCurrentState(self);
-					MOViewKeyReleased([state view], moEvent);
+					MOViewKeyReleased(MOStateGetView(state), moEvent);
 
 					// Cleanup
 					CORelease(moEvent);
@@ -145,7 +126,7 @@ void _MOApplicationHandleEvents(MOApplication *self)
 
 					// Find deepest subview
 					MOState *state = MOApplicationGetCurrentState(self);
-					MOView *subview = MOViewGetDeepestSubviewAtPoint([state view], mouseLocation);
+					MOView *subview = MOViewGetDeepestSubviewAtPoint(MOStateGetView(state), mouseLocation);
 
 					// Set last view receiving event
 					switch(mouseButton)
@@ -190,7 +171,7 @@ void _MOApplicationHandleEvents(MOApplication *self)
 
 					// Find subview
 					// FIXME won’t work well if game state is different
-					MOView *subview = nil;
+					MOView *subview = NULL;
 					switch(mouseButton)
 					{
 						case MOLeftMouseButton:
@@ -221,15 +202,15 @@ void _MOApplicationHandleEvents(MOApplication *self)
 					switch(mouseButton)
 					{
 						case MOLeftMouseButton:
-							self->lastLeftMouseButtonDownView = nil;
+							self->lastLeftMouseButtonDownView = NULL;
 							break;
 
 						case MOMiddleMouseButton:
-							self->lastMiddleMouseButtonDownView = nil;
+							self->lastMiddleMouseButtonDownView = NULL;
 							break;
 
 						case MORightMouseButton:
-							self->lastRightMouseButtonDownView = nil;
+							self->lastRightMouseButtonDownView = NULL;
 							break;
 					}
 
@@ -244,7 +225,7 @@ void _MOApplicationHandleEvents(MOApplication *self)
 					MOTimer *timer = event.user.data1;
 					MOEvent *moEvent = MOEventCreateTimer(timer);
 					MOState *state = MOApplicationGetCurrentState(self);
-					MOViewTimerFired([state view], moEvent);
+					MOViewTimerFired(MOStateGetView(state), moEvent);
 					CORelease(moEvent);
 				}
 				break;
@@ -262,7 +243,7 @@ MOApplication *MOApplicationCreate(void)
 	COInitialize(application);
 	COSetDestructor(application, &_MOApplicationDestroy);
 
-	application->stateStack         = [[NSMutableArray alloc] init];
+	application->stateStack         = SBArrayCreateWithCapacity(3);
 	application->gameTicksPerSecond = 30;
 	application->maxFrameSkip       = 3;
 
@@ -273,7 +254,7 @@ void _MOApplicationDestroy(void *self)
 {
 	MOApplication *application = (MOApplication *)self;
 
-	[application->stateStack release];
+	CORelease(application->stateStack);
 	SDL_FreeSurface(application->surface);
 	SDL_Quit();
 }
@@ -320,18 +301,18 @@ void MOApplicationSetMaxFrameSkip(MOApplication *self, uint8_t aMaxFrameSkip)
 
 MOState *MOApplicationGetCurrentState(MOApplication *self)
 {
-	return [self->stateStack lastObject];
+	return SBArrayPeek(self->stateStack);
 }
 
 void MOApplicationPushState(MOApplication *self, MOState *aState)
 {
-	[self->stateStack addObject: aState];
+	SBArrayPush(self->stateStack, aState);
 }
 
 MOState *MOApplicationPopCurrentState(MOApplication *self)
 {
-	MOState *removedState = [[MOApplicationGetCurrentState(self) retain] autorelease];
-	[self->stateStack removeLastObject];
+	MOState *removedState = MOApplicationGetCurrentState(self);
+	SBArrayPop(self->stateStack);
 	return removedState;
 }
 
@@ -344,12 +325,12 @@ MOState *MOApplicationReplaceCurrentState(MOApplication *self, MOState *aState)
 
 void MOApplicationOpenScreen(MOApplication *self)
 {
-	// Setup autorelease pool
-	_MOApplicationRefreshAutoreleasePool(self);
-
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) < 0)
-		[NSException raise: @"SDLException" format: @"SDL_Init failed: %s\n", SDL_GetError()];
+	{
+		fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
+		exit(1);
+	}
 	atexit(&SDL_Quit);
 
 	// Setup OpenGL attributes
@@ -360,18 +341,27 @@ void MOApplicationOpenScreen(MOApplication *self)
 	// Set up audio
 	Mix_Init(0);
 	if (Mix_OpenAudio(22050, AUDIO_S16, 2, 4096) < 0)
-		[NSException raise: @"SDLException" format: @"Mix_OpenAudio failed\n"];
+	{
+		fprintf(stderr, "Mix_OpenAudio failed: %s\n", SDL_GetError());
+		exit(1);
+	}
 	Mix_AllocateChannels(32);
 
 	// Create screen
 	Uint32 flags = SDL_OPENGL | (self->isFullscreen ? SDL_FULLSCREEN : 0);
 	self->surface = SDL_SetVideoMode(self->screenSize.w, self->screenSize.h, 0, flags);
 	if (!self->surface)
-		[NSException raise: @"SDLException" format: @"SDL_SetVideoMode failed: %s\n", SDL_GetError()];
+	{
+		fprintf(stderr, "SDL_SetVideoMode failed: %s\n", SDL_GetError());
+		exit(1);
+	}
 
 	// Set up texturing
 	if (!gluCheckExtension("GL_EXT_texture_rectangle", glGetString(GL_EXTENSIONS)))
-		[NSException raise: @"OpenGLException" format: @"Unsupported extension: GL_EXT_texture_rectangle"];
+	{
+		fprintf(stderr, "Unsupported OpenGL extension: GL_EXT_texture_rectangle\n");
+		exit(1);
+	}
 	glEnable(GL_TEXTURE_RECTANGLE_EXT);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
@@ -411,7 +401,7 @@ void MOApplicationOpenScreen(MOApplication *self)
 	SDL_EnableUNICODE(1);
 
 	// We're open!
-	self->isOpen = YES;
+	self->isOpen = true;
 }
 
 void MOApplicationEnterRunloop(MOApplication *self)
@@ -422,9 +412,12 @@ void MOApplicationEnterRunloop(MOApplication *self)
 
 	while (self->isOpen)
 	{
+		SBAutoreleasePool_push();
+
 		for (int i = 0; SDL_GetTicks() > nextGameTick && i < self->maxFrameSkip; ++i)
 		{
-			[MOApplicationGetCurrentState(self) tick: gameTickLengthInSeconds];
+			MOState *state = MOApplicationGetCurrentState(self);
+			MOStateTick(state, gameTickLengthInSeconds);
 			nextGameTick += gameTickLength;
 		}
 
@@ -437,17 +430,16 @@ void MOApplicationEnterRunloop(MOApplication *self)
 		// Redraw
 		glClear(GL_COLOR_BUFFER_BIT);
 		MOState *state = MOApplicationGetCurrentState(self);
-		MOViewDisplay([state view]);
+		MOViewDisplay(MOStateGetView(state));
 		SDL_GL_SwapBuffers();
 
-		// Empty autorelease pool
-		_MOApplicationRefreshAutoreleasePool(self);
+		SBAutoreleasePool_pop();
 	}
 }
 
 void MOApplicationCloseScreen(MOApplication *self)
 {
-	self->isOpen = NO;
+	self->isOpen = false;
 }
 
 float MOApplicationGetInterpolation(MOApplication *self)

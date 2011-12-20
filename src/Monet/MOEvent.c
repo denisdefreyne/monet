@@ -1,5 +1,7 @@
 #import <Monet/MOEvent.h>
 
+#import <string.h>
+#import <stdlib.h>
 #import <cobject/cobject.h>
 
 struct _MOEvent

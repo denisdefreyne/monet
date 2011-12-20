@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+#import <stdbool.h>
 #import <stdint.h>
 
 #import <Monet/MOColor.h>
@@ -14,5 +14,5 @@ MORect MORectMake(int16_t aX, int16_t aY, uint16_t aW, uint16_t aH);
 void MORectFill(MORect aRect, MOColor aColor);
 void MORectStroke(MORect aRect, MOColor aColor);
 
-BOOL MORectContainsPoint(MORect aRect, MOPoint aPoint);
-BOOL MORectIntersectsRect(MORect aRect1, MORect aRect2);
+bool MORectContainsPoint(MORect aRect, MOPoint aPoint);
+bool MORectIntersectsRect(MORect aRect1, MORect aRect2);

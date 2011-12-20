@@ -4,7 +4,7 @@
 
 SBArray *MOGraphicsContext_getStack(void)
 {
-	static SBArray *stack = nil;
+	static SBArray *stack = NULL;
 
 	if (!stack)
 		stack = SBArrayCreateWithCapacity(5);

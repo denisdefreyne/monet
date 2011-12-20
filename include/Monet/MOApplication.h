@@ -4,8 +4,6 @@ typedef struct _MOApplication MOApplication;
 #import <Monet/MOSize.h>
 #import <Monet/MOState.h>
 
-@class MOState;
-
 MOApplication *MOApplicationCreate(void);
 
 MOSize MOApplicationGetScreenSize(MOApplication *self);
