@@ -2,11 +2,7 @@
 #define __MONET_PRIVATE_H__
 
 #include <Monet/Monet.h>
-
-#include <cobject/cobject.h>
-#include <SDL/SDL.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include <Monet/Common.h>
 
 struct _MOImage
 {

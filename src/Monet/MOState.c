@@ -1,7 +1,6 @@
 #include <Monet/MOState.h>
 
-#include <cobject/cobject.h>
-#include <stdlib.h>
+#include <Monet/Common.h>
 
 #include <Monet/MORect.h>
 

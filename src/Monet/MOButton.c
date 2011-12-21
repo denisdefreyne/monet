@@ -1,7 +1,6 @@
 #include <Monet/MOButton.h>
 
-#include <cobject/cobject.h>
-#include <stdlib.h>
+#include <Monet/Common.h>
 
 #include <Monet/MOApplication.h>
 #include <Monet/MOPoint.h>

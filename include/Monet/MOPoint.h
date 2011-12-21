@@ -1,7 +1,7 @@
 #ifndef __MONET_MOPOINT_H__
 #define __MONET_MOPOINT_H__
 
-#include <SeaBase/Types.h>
+#include <Monet/Common.h>
 
 typedef struct _MOPoint {
 	int16_t x;

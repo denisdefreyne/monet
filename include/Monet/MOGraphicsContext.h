@@ -1,7 +1,7 @@
 #ifndef __MONET_MOGRAPHICSCONTEXT_H__
 #define __MONET_MOGRAPHICSCONTEXT_H__
 
-#include <SeaBase/SeaBase.h>
+#include <Monet/Common.h>
 
 typedef struct _MOGraphicsContext MOGraphicsContext;
 

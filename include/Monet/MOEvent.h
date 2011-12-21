@@ -1,7 +1,13 @@
 #ifndef __MONET_MOEVENT_H__
 #define __MONET_MOEVENT_H__
 
-#include <SeaBase/Types.h>
+#include <Monet/Common.h>
+
+typedef uint8_t MOEventType;
+typedef uint8_t MOMouseButton;
+typedef uint8_t MOKey;
+typedef uint8_t MOKeyModifierMask;
+typedef struct _MOEvent MOEvent;
 
 #include <Monet/MOPoint.h>
 #include <Monet/MOTimer.h>
@@ -34,7 +40,6 @@ enum {
 
 	MOTimerFiredEventType
 };
-typedef uint8_t MOEventType;
 
 enum {
 	MOUnknownMouseButton = 0,
@@ -43,7 +48,6 @@ enum {
 	MOMiddleMouseButton,
 	MORightMouseButton
 };
-typedef uint8_t MOMouseButton;
 
 enum {
 	MOUnknownKey = 0,
@@ -84,7 +88,6 @@ enum {
 	MOBackspaceKey,
 	MODeleteKey
 };
-typedef uint8_t MOKey;
 
 enum {
 	MOCapsLockKeyMask  = 0x01,
@@ -93,9 +96,6 @@ enum {
 	MOAlternateKeyMask = 0x08,
 	MOMetaKeyMask      = 0x10
 };
-typedef uint8_t MOKeyModifierMask;
-
-typedef struct _MOEvent MOEvent;
 
 MOEvent *MOEventCreateKey(MOEventType aType, MOKeyModifierMask aModifiers, char *aCharacter, MOKey aKey);
 MOEvent *MOEventCreateMouseButton(MOEventType aType, MOKeyModifierMask aModifiers, MOMouseButton aMouseButton, MOPoint aMouseLocation, uint8_t aClickCount);

@@ -1,7 +1,7 @@
 #ifndef __MONET_MORECT_H__
 #define __MONET_MORECT_H__
 
-#include <SeaBase/Types.h>
+#include <Monet/Common.h>
 
 struct _MORect {
 	int16_t x, y;

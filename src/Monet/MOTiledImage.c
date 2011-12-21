@@ -1,8 +1,6 @@
 #include <Monet/MOTiledImage.h>
 
-#include <cobject/cobject.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include <Monet/Common.h>
 
 #include <Monet/MOGraphicsContext.h>
 #include <Monet/Private.h>

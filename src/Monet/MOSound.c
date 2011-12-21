@@ -1,7 +1,6 @@
 #include <Monet/MOSound.h>
 
-#include <cobject/cobject.h>
-#include <SDL_mixer.h>
+#include <Monet/Common.h>
 
 struct _MOSound
 {

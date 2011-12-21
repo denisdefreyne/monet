@@ -1,10 +1,6 @@
 #include <Monet/MOApplication.h>
 
-#include <SeaBase/Types.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <SDL/SDL_mixer.h>
-
+#include <Monet/Common.h>
 #include <Monet/MOEvent.h>
 #include <Monet/MOView.h>
 #include <Monet/Private.h>

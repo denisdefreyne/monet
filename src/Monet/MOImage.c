@@ -1,10 +1,6 @@
 #include <Monet/MOImage.h>
 
-#include <cobject/cobject.h>
-#include <SDL/SDL.h>
-#include <SDL_image/SDL_image.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include <Monet/Common.h>
 
 #include <Monet/MOGraphicsContext.h>
 #include <Monet/Private.h>

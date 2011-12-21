@@ -1,8 +1,6 @@
 #include <Monet/MOView.h>
 
-#include <cobject/cobject.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include <Monet/Common.h>
 
 #include <Monet/MOEvent.h>
 #include <Monet/MOApplication.h>
