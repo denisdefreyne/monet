@@ -1,7 +1,7 @@
-#import <Monet/MOTimer.h>
+#include <Monet/MOTimer.h>
 
-#import <cobject/cobject.h>
-#import <SDL/SDL.h>
+#include <cobject/cobject.h>
+#include <SDL/SDL.h>
 
 struct _MOTimer
 {

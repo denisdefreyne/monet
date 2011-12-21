@@ -1,11 +1,11 @@
-#import <Monet/MOTiledImage.h>
+#include <Monet/MOTiledImage.h>
 
-#import <cobject/cobject.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glu.h>
+#include <cobject/cobject.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 
-#import <Monet/MOGraphicsContext.h>
-#import <Monet/Private.h>
+#include <Monet/MOGraphicsContext.h>
+#include <Monet/Private.h>
 
 void _MOTiledImageDestroy(void *aTiledImage);
 

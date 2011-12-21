@@ -1,4 +1,4 @@
-#import <Monet/MOPoint.h>
+#include <Monet/MOPoint.h>
 
 MOPoint MOPointMake(int16_t aX, int16_t aY)
 {

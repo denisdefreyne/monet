@@ -1,14 +1,14 @@
-#import <Monet/MOApplication.h>
+#include <Monet/MOApplication.h>
 
-#import <stdbool.h>
-#import <stdint.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glu.h>
-#import <SDL/SDL_mixer.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <SDL/SDL_mixer.h>
 
-#import <Monet/MOEvent.h>
-#import <Monet/MOView.h>
-#import <Monet/Private.h>
+#include <Monet/MOEvent.h>
+#include <Monet/MOView.h>
+#include <Monet/Private.h>
 
 struct _MOApplication
 {

@@ -1,4 +1,4 @@
-#import <Monet/Private.h>
+#include <Monet/Private.h>
 
 MOGraphicsContext *MOGraphicsContextCreate(MORect aRect)
 {

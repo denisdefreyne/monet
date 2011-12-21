@@ -1,9 +1,9 @@
-#import <Monet/MOState.h>
+#include <Monet/MOState.h>
 
-#import <cobject/cobject.h>
-#import <stdlib.h>
+#include <cobject/cobject.h>
+#include <stdlib.h>
 
-#import <Monet/MORect.h>
+#include <Monet/MORect.h>
 
 struct _MOState
 {

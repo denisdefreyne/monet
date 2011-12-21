@@ -1,13 +1,13 @@
-#import <Monet/MOView.h>
+#include <Monet/MOView.h>
 
-#import <cobject/cobject.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glu.h>
+#include <cobject/cobject.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 
-#import <Monet/MOEvent.h>
-#import <Monet/MOApplication.h>
-#import <Monet/MOGraphicsContext.h>
-#import <Monet/Private.h>
+#include <Monet/MOEvent.h>
+#include <Monet/MOApplication.h>
+#include <Monet/MOGraphicsContext.h>
+#include <Monet/Private.h>
 
 struct _MOView
 {

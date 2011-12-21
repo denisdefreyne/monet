@@ -1,7 +1,10 @@
-#import <stdint.h>
+#ifndef __MONET_MOEVENT_H__
+#define __MONET_MOEVENT_H__
 
-#import <Monet/MOPoint.h>
-#import <Monet/MOTimer.h>
+#include <stdint.h>
+
+#include <Monet/MOPoint.h>
+#include <Monet/MOTimer.h>
 
 // Keyboard events example:
 //
@@ -111,3 +114,5 @@ MOPoint MOEventGetRelativeMouseMotion(MOEvent *aEvent);
 uint8_t MOEventGetClickCount(MOEvent *aEvent);
 
 MOTimer *MOEventGetTimer(MOEvent *aEvent);
+
+#endif

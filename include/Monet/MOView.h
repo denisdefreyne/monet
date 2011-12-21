@@ -1,10 +1,13 @@
-#import <SeaBase/SeaBase.h>
+#ifndef __MONET_MOVIEW_H__
+#define __MONET_MOVIEW_H__
+
+#include <SeaBase/SeaBase.h>
 
 typedef struct _MOView MOView;
 
-#import <Monet/MOApplication.h>
-#import <Monet/MOEvent.h>
-#import <Monet/MORect.h>
+#include <Monet/MOApplication.h>
+#include <Monet/MOEvent.h>
+#include <Monet/MORect.h>
 
 typedef void (*MOViewDrawRectCallback)(MOView *self, MORect aRect);
 typedef void (*MOViewTickCallback)(MOView *self, double aSeconds);
@@ -63,3 +66,5 @@ void MOViewMouseButtonPressed(MOView *self, MOEvent *aEvent);
 void MOViewMouseButtonReleased(MOView *self, MOEvent *aEvent);
 void MOViewMouseDragged(MOView *self, MOEvent *aEvent);
 void MOViewTimerFired(MOView *self, MOEvent *aEvent);
+
+#endif

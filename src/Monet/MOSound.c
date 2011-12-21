@@ -1,7 +1,7 @@
-#import <Monet/MOSound.h>
+#include <Monet/MOSound.h>
 
-#import <cobject/cobject.h>
-#import <SDL_mixer.h>
+#include <cobject/cobject.h>
+#include <SDL_mixer.h>
 
 struct _MOSound
 {

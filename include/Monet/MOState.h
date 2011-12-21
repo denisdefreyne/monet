@@ -1,9 +1,12 @@
-#import <SeaBase/SeaBase.h>
+#ifndef __MONET_MOSTATE_H__
+#define __MONET_MOSTATE_H__
+
+#include <SeaBase/SeaBase.h>
 
 typedef struct _MOState MOState;
 
-#import <Monet/MOApplication.h>
-#import <Monet/MOView.h>
+#include <Monet/MOApplication.h>
+#include <Monet/MOView.h>
 
 typedef MOView * (*MOStateViewConstructor)(MOApplication *aApplication);
 typedef void (*MOStateWorldTicker)(MOState *aState, double aGameTickLengthInSeconds);
@@ -16,3 +19,5 @@ void MOStateSetWorld(MOState *aState, void *aWorld);
 void MOStateSetWorldTickerFunction(MOState *aState, MOStateWorldTicker);
 
 void MOStateTick(MOState *aState, double aGameTickLengthInSeconds);
+
+#endif

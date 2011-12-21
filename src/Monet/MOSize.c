@@ -1,4 +1,4 @@
-#import <Monet/MOSize.h>
+#include <Monet/MOSize.h>
 
 MOSize MOSizeMake(uint16_t aW, uint16_t aH)
 {

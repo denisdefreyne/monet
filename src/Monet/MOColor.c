@@ -1,4 +1,4 @@
-#import <Monet/MOColor.h>
+#include <Monet/MOColor.h>
 
 MOColor MOColorMakeRGB(double aRed, double aGreen, double aBlue)
 {

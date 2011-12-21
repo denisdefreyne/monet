@@ -1,6 +1,6 @@
-#import <Monet/MOGraphicsContext.h>
+#include <Monet/MOGraphicsContext.h>
 
-#import <Monet/Private.h>
+#include <Monet/Private.h>
 
 SBArray *MOGraphicsContext_getStack(void)
 {

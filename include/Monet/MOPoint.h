@@ -1,4 +1,7 @@
-#import <stdint.h>
+#ifndef __MONET_MOPOINT_H__
+#define __MONET_MOPOINT_H__
+
+#include <stdint.h>
 
 typedef struct _MOPoint {
 	int16_t x;
@@ -6,3 +9,5 @@ typedef struct _MOPoint {
 } MOPoint;
 
 MOPoint MOPointMake(int16_t aX, int16_t aY);
+
+#endif

@@ -1,9 +1,12 @@
-#import <Monet/Monet.h>
+#ifndef __MONET_PRIVATE_H__
+#define __MONET_PRIVATE_H__
 
-#import <cobject/cobject.h>
-#import <SDL/SDL.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glu.h>
+#include <Monet/Monet.h>
+
+#include <cobject/cobject.h>
+#include <SDL/SDL.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 
 struct _MOImage
 {
@@ -34,3 +37,5 @@ MOGraphicsContext *MOGraphicsContextCreate(MORect aRect);
 MOKey MOSDLKeyToMOKey(SDLKey aKey);
 MOKeyModifierMask MOSDLModToMOKeyModifierMask(SDLMod aMod);
 MOMouseButton MOSDLMouseButtonToMOMouseButton(Uint8 aButton);
+
+#endif

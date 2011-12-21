@@ -1,13 +1,13 @@
-#import <Monet/MOImage.h>
+#include <Monet/MOImage.h>
 
-#import <cobject/cobject.h>
-#import <SDL/SDL.h>
-#import <SDL_image/SDL_image.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glu.h>
+#include <cobject/cobject.h>
+#include <SDL/SDL.h>
+#include <SDL_image/SDL_image.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 
-#import <Monet/MOGraphicsContext.h>
-#import <Monet/Private.h>
+#include <Monet/MOGraphicsContext.h>
+#include <Monet/Private.h>
 
 void _MOImageDestroy(void *aImage);
 

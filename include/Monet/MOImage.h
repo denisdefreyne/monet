@@ -1,6 +1,9 @@
-#import <Monet/MOPoint.h>
-#import <Monet/MORect.h>
-#import <Monet/MOSize.h>
+#ifndef __MONET_MOIMAGE_H__
+#define __MONET_MOIMAGE_H__
+
+#include <Monet/MOPoint.h>
+#include <Monet/MORect.h>
+#include <Monet/MOSize.h>
 
 typedef struct _MOImage MOImage;
 
@@ -16,3 +19,5 @@ MORect MOImageGetBounds(MOImage *aImage);
 void MOImageTakeFromOnScreenRect(MOImage *aImage, MORect aRect);
 
 void MOImageDrawAtPoint(MOImage *aImage, MOPoint aPoint);
+
+#endif

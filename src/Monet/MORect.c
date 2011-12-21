@@ -1,12 +1,12 @@
-#import <Monet/MORect.h>
+#include <Monet/MORect.h>
 
-#import <SDL/SDL.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glu.h>
+#include <SDL/SDL.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 
-#import <Monet/MOColor.h>
-#import <Monet/MOGraphicsContext.h>
-#import <Monet/Private.h>
+#include <Monet/MOColor.h>
+#include <Monet/MOGraphicsContext.h>
+#include <Monet/Private.h>
 
 MORect MORectMake(int16_t aX, int16_t aY, uint16_t aW, uint16_t aH)
 {

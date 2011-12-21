@@ -1,8 +1,11 @@
+#ifndef __MONET_MOAPPLICATION_H__
+#define __MONET_MOAPPLICATION_H__
+
 typedef struct _MOApplication MOApplication;
 
-#import <Monet/MOPoint.h>
-#import <Monet/MOSize.h>
-#import <Monet/MOState.h>
+#include <Monet/MOPoint.h>
+#include <Monet/MOSize.h>
+#include <Monet/MOState.h>
 
 MOApplication *MOApplicationCreate(void);
 
@@ -29,3 +32,5 @@ void MOApplicationCloseScreen(MOApplication *self);
 
 float MOApplicationGetInterpolation(MOApplication *self);
 MOPoint MOApplicationGetMouseLocation(MOApplication *self);
+
+#endif
