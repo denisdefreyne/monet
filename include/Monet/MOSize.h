@@ -1,7 +1,7 @@
 #ifndef __MONET_MOSIZE_H__
 #define __MONET_MOSIZE_H__
 
-#include <stdint.h>
+#include <SeaBase/Types.h>
 
 struct _MOSize {
 	uint16_t w;

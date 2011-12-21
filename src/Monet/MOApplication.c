@@ -1,7 +1,6 @@
 #include <Monet/MOApplication.h>
 
-#include <stdbool.h>
-#include <stdint.h>
+#include <SeaBase/Types.h>
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <SDL/SDL_mixer.h>

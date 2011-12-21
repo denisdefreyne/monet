@@ -1,7 +1,7 @@
 #ifndef __MONET_MOEVENT_H__
 #define __MONET_MOEVENT_H__
 
-#include <stdint.h>
+#include <SeaBase/Types.h>
 
 #include <Monet/MOPoint.h>
 #include <Monet/MOTimer.h>
