@@ -7,12 +7,16 @@
 
 void _MOTiledImageDestroy(void *aTiledImage);
 
+COClass MOTiledImageClass = {
+	.superclass = NULL,
+	.destructor = NULL
+};
+
 MOTiledImage *MOTiledImageCreateFromFile(char *aFilename, MOSize aTileSize)
 {
 	// Create tiled image
 	MOTiledImage *tiledImage = calloc(1, sizeof (MOTiledImage));
-	COInitialize(tiledImage);
-	COSetDestructor(tiledImage, &_MOTiledImageDestroy);
+	COInitialize(tiledImage, &MOTiledImageClass);
 
 	// Initialize
 	tiledImage->tileSize = aTileSize;

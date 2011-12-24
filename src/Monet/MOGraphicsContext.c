@@ -2,6 +2,21 @@
 
 #include <Monet/Private.h>
 
+COClass MOGraphicsContextClass = {
+	.superclass = NULL,
+	.destructor = NULL
+};
+
+MOGraphicsContext *MOGraphicsContextCreate(MORect aRect)
+{
+	MOGraphicsContext *graphicsContext = malloc(sizeof (MOGraphicsContext));
+	COInitialize(graphicsContext, &MOGraphicsContextClass);
+
+	graphicsContext->rect = aRect;
+
+	return graphicsContext;
+}
+
 SBArray *MOGraphicsContext_getStack(void)
 {
 	static SBArray *stack = NULL;

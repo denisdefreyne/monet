@@ -5,6 +5,8 @@
 
 typedef struct _MOState MOState;
 
+extern COClass MOStateClass;
+
 #include <Monet/MOApplication.h>
 #include <Monet/MOView.h>
 

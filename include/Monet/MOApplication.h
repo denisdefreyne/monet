@@ -1,7 +1,11 @@
 #ifndef __MONET_MOAPPLICATION_H__
 #define __MONET_MOAPPLICATION_H__
 
+#include <Monet/Common.h>
+
 typedef struct _MOApplication MOApplication;
+
+extern COClass MOApplicationClass;
 
 #include <Monet/MOPoint.h>
 #include <Monet/MOSize.h>

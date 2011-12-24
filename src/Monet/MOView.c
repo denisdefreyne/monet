@@ -9,7 +9,7 @@
 
 struct _MOView
 {
-	COGuts                            *guts;
+	COGuts                            guts;
 
 	MOApplication                     *application;
 
@@ -36,11 +36,15 @@ struct _MOView
 
 void _MOViewDestroy(void *self);
 
+COClass MOViewClass = {
+	.superclass = NULL,
+	.destructor = &_MOViewDestroy
+};
+
 MOView *MOViewCreate(MORect aFrame, MOApplication *aApplication)
 {
 	MOView *view = calloc(1, sizeof (MOView));
-	COInitialize(view);
-	COSetDestructor(view, &_MOViewDestroy);
+	COInitialize(view, &MOViewClass);
 
 	view->frame       = aFrame;
 	view->application = aApplication;

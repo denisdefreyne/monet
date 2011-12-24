@@ -7,12 +7,16 @@
 
 void _MOImageDestroy(void *aImage);
 
+COClass MOImageClass = {
+	.superclass = NULL,
+	.destructor = &_MOImageDestroy
+};
+
 MOImage *MOImageCreateFromFile(char *aFilename)
 {
 	// Create image
 	MOImage *image = calloc(1, sizeof (MOImage));
-	COInitialize(image);
-	COSetDestructor(image, &_MOImageDestroy);
+	COInitialize(image, &MOImageClass);
 
 	// Load file
 	SDL_Surface *surface = IMG_Load(aFilename);
@@ -71,8 +75,7 @@ MOImage *MOImageCreateWithSize(MOSize aSize)
 {
 	// Create image
 	MOImage *image = calloc(1, sizeof (MOImage));
-	COInitialize(image);
-	COSetDestructor(image, &_MOImageDestroy);
+	COInitialize(image, &MOImageClass);
 
 	// Initalize
 	image->size = aSize;

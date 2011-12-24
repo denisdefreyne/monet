@@ -6,7 +6,7 @@
 
 struct _MOImage
 {
-	COGuts            *guts;
+	COGuts            guts;
 
 	GLuint            textureName;
 	MOSize            size;
@@ -15,7 +15,7 @@ struct _MOImage
 
 struct _MOTiledImage
 {
-	COGuts  *guts;
+	COGuts  guts;
 
 	MOImage *image;
 	MOSize  tileSize;
@@ -23,7 +23,7 @@ struct _MOTiledImage
 
 struct _MOGraphicsContext
 {
-	COGuts *guts;
+	COGuts guts;
 
 	MORect rect;
 };

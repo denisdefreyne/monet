@@ -6,7 +6,7 @@
 
 struct _MOState
 {
-	COGuts *guts;
+	COGuts guts;
 
 	MOApplication      *application;
 	MOView             *view;
@@ -16,11 +16,15 @@ struct _MOState
 
 void _MOStateDestroy(void *aState);
 
+COClass MOStateClass = {
+	.superclass = NULL,
+	.destructor = &_MOStateDestroy
+};
+
 MOState *MOStateCreate(MOApplication *aApplication, MOStateViewConstructor aCallback)
 {
 	MOState *state = calloc(1, sizeof (MOState));
-	COInitialize(state);
-	COSetDestructor(state, &_MOStateDestroy);
+	COInitialize(state, &MOStateClass);
 
 	state->application = aApplication;
 	state->view = aCallback(aApplication);

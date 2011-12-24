@@ -1,6 +1,10 @@
 #ifndef __MONET_MOBUTTON_H__
 #define __MONET_MOBUTTON_H__
 
+#include <Monet/Common.h>
+
+extern COClass MOButtonClass;
+
 #include <Monet/MOApplication.h>
 #include <Monet/MORect.h>
 #include <Monet/MOView.h>

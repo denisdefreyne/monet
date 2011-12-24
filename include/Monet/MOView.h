@@ -5,6 +5,8 @@
 
 typedef struct _MOView MOView;
 
+extern COClass MOViewClass;
+
 #include <Monet/MOApplication.h>
 #include <Monet/MOEvent.h>
 #include <Monet/MORect.h>

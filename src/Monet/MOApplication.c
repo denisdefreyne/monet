@@ -7,7 +7,7 @@
 
 struct _MOApplication
 {
-	COGuts            *guts;
+	COGuts            guts;
 
 	// Pool
 	SBAutoreleasePool *autoreleasePool;
@@ -232,11 +232,15 @@ void _MOApplicationHandleEvents(MOApplication *self)
 	}
 }
 
+COClass MOApplicationClass = {
+	.superclass = NULL,
+	.destructor = &_MOApplicationDestroy
+};
+
 MOApplication *MOApplicationCreate(void)
 {
 	MOApplication *application = calloc(1, sizeof (MOApplication));
-	COInitialize(application);
-	COSetDestructor(application, &_MOApplicationDestroy);
+	COInitialize(application, &MOApplicationClass);
 
 	application->stateStack         = SBArrayCreateWithCapacity(3);
 	application->gameTicksPerSecond = 30;
@@ -352,7 +356,7 @@ void MOApplicationOpenScreen(MOApplication *self)
 	}
 
 	// Set up texturing
-	if (!gluCheckExtension("GL_EXT_texture_rectangle", glGetString(GL_EXTENSIONS)))
+	if (!gluCheckExtension((const GLubyte *)"GL_EXT_texture_rectangle", glGetString(GL_EXTENSIONS)))
 	{
 		fprintf(stderr, "Unsupported OpenGL extension: GL_EXT_texture_rectangle\n");
 		exit(1);

@@ -4,18 +4,22 @@
 
 struct _MOSound
 {
-	COGuts    *guts;
+	COGuts    guts;
 
 	Mix_Chunk *chunk;
 };
 
 void _MOSoundDestroy(void *aSound);
 
+COClass MOSoundClass = {
+	.superclass = NULL,
+	.destructor = &_MOSoundDestroy
+};
+
 MOSound *MOSoundCreateFromFilename(char *aFilename)
 {
 	MOSound *sound = malloc(sizeof (MOSound));
-	COInitialize(sound);
-	COSetDestructor(sound, &_MOSoundDestroy);
+	COInitialize(sound, &MOSoundClass);
 
 	sound->chunk = Mix_LoadWAV(aFilename);
 

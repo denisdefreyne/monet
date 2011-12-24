@@ -6,7 +6,7 @@
 
 struct _MOEvent
 {
-	COGuts          *guts;
+	COGuts          guts;
 
 	MOEventType     type;
 	uint8_t         modifiers;
@@ -24,11 +24,15 @@ struct _MOEvent
 
 void _MOEventDestroy(void *aEvent);
 
+COClass MOEventClass = {
+	.superclass = NULL,
+	.destructor = &_MOEventDestroy
+};
+
 MOEvent *MOEventCreateKey(MOEventType aType, MOKeyModifierMask aModifiers, char *aCharacter, MOKey aKey)
 {
 	MOEvent *event = calloc(1, sizeof (MOEvent));
-	COInitialize(event);
-	COSetDestructor(event, &_MOEventDestroy);
+	COInitialize(event, &MOEventClass);
 
 	event->type      = aType;
 	event->modifiers = aModifiers;
@@ -42,8 +46,7 @@ MOEvent *MOEventCreateKey(MOEventType aType, MOKeyModifierMask aModifiers, char 
 MOEvent *MOEventCreateMouseButton(MOEventType aType, MOKeyModifierMask aModifiers, MOMouseButton aMouseButton, MOPoint aMouseLocation, uint8_t aClickCount)
 {
 	MOEvent *event = calloc(1, sizeof (MOEvent));
-	COInitialize(event);
-	COSetDestructor(event, &_MOEventDestroy);
+	COInitialize(event, &MOEventClass);
 
 	event->type          = aType;
 	event->modifiers     = aModifiers;
@@ -58,8 +61,7 @@ MOEvent *MOEventCreateMouseButton(MOEventType aType, MOKeyModifierMask aModifier
 MOEvent *MOEventCreateMouseMotion(MOKeyModifierMask aModifiers, MOPoint aMouseLocation, MOPoint aRelativeMouseMotion)
 {
 	MOEvent *event = calloc(1, sizeof (MOEvent));
-	COInitialize(event);
-	COSetDestructor(event, &_MOEventDestroy);
+	COInitialize(event, &MOEventClass);
 
 	event->type                = MOMouseMotionEventType;
 	event->modifiers           = aModifiers;
@@ -73,8 +75,7 @@ MOEvent *MOEventCreateMouseMotion(MOKeyModifierMask aModifiers, MOPoint aMouseLo
 MOEvent *MOEventCreateTimer(MOTimer *aTimer)
 {
 	MOEvent *event = calloc(1, sizeof (MOEvent));
-	COInitialize(event);
-	COSetDestructor(event, &_MOEventDestroy);
+	COInitialize(event, &MOEventClass);
 
 	event->type  = MOTimerFiredEventType;
 

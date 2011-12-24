@@ -7,9 +7,14 @@
 #include <Monet/MORect.h>
 #include <Monet/MOView.h>
 
+COClass MOButtonClass = {
+	.superclass = &MOViewClass,
+	.destructor = NULL // &_MOButtonDestroy;
+};
+
 struct _MOButtonExtra
 {
-	COGuts *guts;
+	COGuts guts;
 
 	bool   isMouseDown;
 	bool   isMouseInside;
@@ -54,7 +59,7 @@ MOView *MOButtonCreate(MORect aFrame, MOApplication *aApplication)
 	MOView *view = MOViewCreate(aFrame, aApplication);
 
 	MOButtonExtra *extra = calloc(1, sizeof (MOButtonExtra));
-	COInitialize(extra);
+	COInitialize(extra, NULL);
 	MOViewSetExtra(view, extra);
 
 	MOViewSetMouseButtonPressedCallback(view, &_MOButtonMouseButtonPressed);

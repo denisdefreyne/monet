@@ -5,6 +5,8 @@
 
 typedef struct _MOGraphicsContext MOGraphicsContext;
 
+extern COClass MOGraphicsContextClass;
+
 #include <Monet/MORect.h>
 
 SBArray *MOGraphicsContext_getStack(void);

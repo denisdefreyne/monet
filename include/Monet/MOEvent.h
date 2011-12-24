@@ -3,6 +3,8 @@
 
 #include <Monet/Common.h>
 
+extern COClass MOEventClass;
+
 typedef uint8_t MOEventType;
 typedef uint8_t MOMouseButton;
 typedef uint8_t MOKey;

@@ -4,7 +4,7 @@
 
 struct _MOTimer
 {
-	COGuts      *guts;
+	COGuts      guts;
 
 	SDL_TimerID	timerID;
 
@@ -15,6 +15,11 @@ struct _MOTimer
 };
 
 void _MOTimerDestroy(void *aTimer);
+
+COClass MOTimerClass = {
+	.superclass = NULL,
+	.destructor = &_MOTimerDestroy
+};
 
 Uint32 _MOTimerFired(uint32_t aInterval, void *aParam)
 {
@@ -31,8 +36,7 @@ Uint32 _MOTimerFired(uint32_t aInterval, void *aParam)
 MOTimer *MOTimerCreate(double aDuration, void *aUserInfo)
 {
 	MOTimer *timer = malloc(sizeof (MOTimer));
-	COInitialize(timer);
-	COSetDestructor(timer, &_MOTimerDestroy);
+	COInitialize(timer, &MOTimerClass);
 
 	timer->duration = aDuration;
 	timer->userInfo = aUserInfo;

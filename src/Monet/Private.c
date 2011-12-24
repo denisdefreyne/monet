@@ -1,15 +1,5 @@
 #include <Monet/Private.h>
 
-MOGraphicsContext *MOGraphicsContextCreate(MORect aRect)
-{
-	MOGraphicsContext *graphicsContext = malloc(sizeof (MOGraphicsContext));
-	COInitialize(graphicsContext);
-
-	graphicsContext->rect = aRect;
-
-	return graphicsContext;
-}
-
 MOKey MOSDLKeyToMOKey(SDLKey aKey)
 {
 	switch(aKey)
