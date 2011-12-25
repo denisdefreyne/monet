@@ -10,7 +10,7 @@ COClass MOGraphicsContextClass = {
 MOGraphicsContext *MOGraphicsContextCreate(MORect aRect)
 {
 	MOGraphicsContext *graphicsContext = malloc(sizeof (MOGraphicsContext));
-	COInitialize(graphicsContext, &MOGraphicsContextClass);
+	COInit(graphicsContext, &MOGraphicsContextClass);
 
 	graphicsContext->rect = aRect;
 

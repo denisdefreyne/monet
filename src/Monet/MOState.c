@@ -24,7 +24,7 @@ COClass MOStateClass = {
 MOState *MOStateCreate(MOApplication *aApplication, MOStateViewConstructor aCallback)
 {
 	MOState *state = calloc(1, sizeof (MOState));
-	COInitialize(state, &MOStateClass);
+	COInit(state, &MOStateClass);
 
 	state->application = aApplication;
 	state->view = aCallback(aApplication);

@@ -16,7 +16,7 @@ MOTiledImage *MOTiledImageCreateFromFile(char *aFilename, MOSize aTileSize)
 {
 	// Create tiled image
 	MOTiledImage *tiledImage = calloc(1, sizeof (MOTiledImage));
-	COInitialize(tiledImage, &MOTiledImageClass);
+	COInit(tiledImage, &MOTiledImageClass);
 
 	// Initialize
 	tiledImage->tileSize = aTileSize;

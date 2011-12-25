@@ -16,7 +16,7 @@ MOImage *MOImageCreateFromFile(char *aFilename)
 {
 	// Create image
 	MOImage *image = calloc(1, sizeof (MOImage));
-	COInitialize(image, &MOImageClass);
+	COInit(image, &MOImageClass);
 
 	// Load file
 	SDL_Surface *surface = IMG_Load(aFilename);
@@ -75,7 +75,7 @@ MOImage *MOImageCreateWithSize(MOSize aSize)
 {
 	// Create image
 	MOImage *image = calloc(1, sizeof (MOImage));
-	COInitialize(image, &MOImageClass);
+	COInit(image, &MOImageClass);
 
 	// Initalize
 	image->size = aSize;

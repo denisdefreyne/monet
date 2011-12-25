@@ -9,67 +9,57 @@
 
 COClass MOButtonClass = {
 	.superclass = &MOViewClass,
-	.destructor = NULL // &_MOButtonDestroy;
+	.destructor = NULL
 };
 
-struct _MOButtonExtra
+bool _MOButtonIsMousePressed(MOButton *aButton)
 {
-	COGuts guts;
+	MOView *view = (MOView *)aButton;
 
-	bool   isMouseDown;
-	bool   isMouseInside;
+	MORect bounds = MOViewGetBounds(view);
+	MOPoint untranslatedPoint = MOApplicationGetMouseLocation(MOViewGetApplication(view));
+	MOPoint point = MOViewConvertPointFromScreen(view, untranslatedPoint);
 
-	MOButtonClickedCallback clickedCallback;
-};
-typedef struct _MOButtonExtra MOButtonExtra;
-
-bool _MOButtonIsMousePressed(MOView *self)
-{
-	MOButtonExtra *extra = MOViewGetExtra(self);
-
-	MORect bounds = MOViewGetBounds(self);
-	MOPoint untranslatedPoint = MOApplicationGetMouseLocation(MOViewGetApplication(self));
-	MOPoint point = MOViewConvertPointFromScreen(self, untranslatedPoint);
-	return extra->isMouseDown && MORectContainsPoint(bounds, point);
+	return aButton->isMouseDown && MORectContainsPoint(bounds, point);
 }
 
-bool _MOButtonMouseButtonPressed(MOView *self, MOEvent *aEvent)
+bool _MOButtonMouseButtonPressed(MOView *aView, MOEvent *aEvent)
 {
-	MOButtonExtra *extra = MOViewGetExtra(self);
+	MOButton *button = (MOButton *)aView;
 
-	extra->isMouseDown = true;
+	button->isMouseDown = true;
 
 	return true;
 }
 
-bool _MOButtonMouseButtonReleased(MOView *self, MOEvent *aEvent)
+bool _MOButtonMouseButtonReleased(MOView *aView, MOEvent *aEvent)
 {
-	MOButtonExtra *extra = MOViewGetExtra(self);
+	MOButton *button = (MOButton *)aView;
 
-	if (_MOButtonIsMousePressed(self))
-		extra->clickedCallback(self);
+	if (_MOButtonIsMousePressed(button))
+		button->clickedCallback(button);
 
-	extra->isMouseDown = false;
+	button->isMouseDown = false;
 
 	return true;
 }
 
-MOView *MOButtonCreate(MORect aFrame, MOApplication *aApplication)
+void MOButtonInit(MOButton *aButton, MORect aFrame, MOApplication *aApplication)
 {
-	MOView *view = MOViewCreate(aFrame, aApplication);
+	MOView *view = MOButtonAsView(aButton);
 
-	MOButtonExtra *extra = calloc(1, sizeof (MOButtonExtra));
-	COInitialize(extra, NULL);
-	MOViewSetExtra(view, extra);
+	MOViewInit(view, aFrame, aApplication);
 
 	MOViewSetMouseButtonPressedCallback(view, &_MOButtonMouseButtonPressed);
 	MOViewSetMouseButtonReleasedCallback(view, &_MOButtonMouseButtonReleased);
-
-	return view;
 }
 
-void MOButtonSetClickedCallback(MOView *self, MOButtonClickedCallback aCallback)
+MOView *MOButtonAsView(MOButton *aButton)
 {
-	MOButtonExtra *extra = MOViewGetExtra(self);
-	extra->clickedCallback = aCallback;
+	return (MOView *)aButton;
+}
+
+void MOButtonSetClickedCallback(MOButton *aButton, MOButtonClickedCallback aCallback)
+{
+	aButton->clickedCallback = aCallback;
 }

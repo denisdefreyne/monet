@@ -7,59 +7,28 @@
 #include <Monet/MOGraphicsContext.h>
 #include <Monet/Private.h>
 
-struct _MOView
-{
-	COGuts                            guts;
-
-	MOApplication                     *application;
-
-	MOView                            *superview;
-	SBArray                           *subviews;
-
-	MORect                            frame;
-	MORect                            bounds;
-
-	MOGraphicsContext                 *graphicsContext;
-
-	MOViewDrawRectCallback            drawRectCallback;
-	MOViewTickCallback                tickCallback;
-
-	MOViewKeyPressedCallback          keyPressedCallback;
-	MOViewKeyReleasedCallback         keyReleasedCallback;
-	MOViewMouseButtonPressedCallback  mouseButtonPressedCallback;
-	MOViewMouseButtonReleasedCallback mouseButtonReleasedCallback;
-	MOViewMouseDraggedCallback        mouseDraggedCallback;
-	MOViewTimerFiredCallback          timerFiredCallback;
-
-	void                              *extra;
-};
-
 void _MOViewDestroy(void *self);
 
 COClass MOViewClass = {
+	.size       = sizeof (MOView),
 	.superclass = NULL,
 	.destructor = &_MOViewDestroy
 };
 
-MOView *MOViewCreate(MORect aFrame, MOApplication *aApplication)
+void MOViewInit(MOView *aView, MORect aFrame, MOApplication *aApplication)
 {
-	MOView *view = calloc(1, sizeof (MOView));
-	COInitialize(view, &MOViewClass);
+   	aView->frame       = aFrame;
+	aView->application = aApplication;
 
-	view->frame       = aFrame;
-	view->application = aApplication;
+	aView->bounds.w    = aView->frame.w;
+	aView->bounds.h    = aView->frame.h;
 
-	view->bounds.w    = view->frame.w;
-	view->bounds.h    = view->frame.h;
-
-	view->subviews    = SBArrayCreateWithCapacity(3);
-
-	return view;
+	aView->subviews    = SBArrayCreateWithCapacity(3);
 }
 
-void _MOViewDestroy(void *self)
+void _MOViewDestroy(void *aView)
 {
-	MOView *view = self;
+	MOView *view = aView;
 
 	CORelease(view->subviews);
 	CORelease(view->graphicsContext);
@@ -108,17 +77,6 @@ void MOViewSetTimerFiredCallback(MOView *self, MOViewTimerFiredCallback aCallbac
 MOApplication *MOViewGetApplication(MOView *self)
 {
 	return self->application;
-}
-
-void *MOViewGetExtra(MOView *self)
-{
-	return self->extra;
-}
-
-void MOViewSetExtra(MOView *self, void *aExtra)
-{
-	// FIXME retain or not?
-	self->extra = aExtra;
 }
 
 MOView *MOViewGetSuperview(MOView *self)

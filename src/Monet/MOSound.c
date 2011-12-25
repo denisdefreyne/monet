@@ -19,7 +19,7 @@ COClass MOSoundClass = {
 MOSound *MOSoundCreateFromFilename(char *aFilename)
 {
 	MOSound *sound = malloc(sizeof (MOSound));
-	COInitialize(sound, &MOSoundClass);
+	COInit(sound, &MOSoundClass);
 
 	sound->chunk = Mix_LoadWAV(aFilename);
 

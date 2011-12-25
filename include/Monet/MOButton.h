@@ -5,14 +5,27 @@
 
 extern COClass MOButtonClass;
 
+typedef struct _MOButton MOButton;
+
 #include <Monet/MOApplication.h>
 #include <Monet/MORect.h>
-#include <Monet/MOView.h>
 
-typedef void (*MOButtonClickedCallback)(MOView *self);
+typedef void (*MOButtonClickedCallback)(MOButton *self);
 
-MOView *MOButtonCreate(MORect aFrame, MOApplication *aApplication);
+struct _MOButton
+{
+	MOView view;
 
-void MOButtonSetClickedCallback(MOView *self, MOButtonClickedCallback aCallback);
+	bool isMouseDown;
+	bool isMouseInside;
+
+	MOButtonClickedCallback clickedCallback;
+};
+
+void MOButtonInit(MOButton *aButton, MORect aFrame, MOApplication *aApplication);
+
+MOView *MOButtonAsView(MOButton *aButton);
+
+void MOButtonSetClickedCallback(MOButton *self, MOButtonClickedCallback aCallback);
 
 #endif

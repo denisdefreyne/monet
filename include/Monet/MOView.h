@@ -3,12 +3,13 @@
 
 #include <Monet/Common.h>
 
-typedef struct _MOView MOView;
-
 extern COClass MOViewClass;
+
+typedef struct _MOView MOView;
 
 #include <Monet/MOApplication.h>
 #include <Monet/MOEvent.h>
+#include <Monet/MOGraphicsContext.h>
 #include <Monet/MORect.h>
 
 typedef void (*MOViewDrawRectCallback)(MOView *self, MORect aRect);
@@ -21,7 +22,32 @@ typedef bool (*MOViewMouseButtonReleasedCallback)(MOView *self, MOEvent *aEvent)
 typedef bool (*MOViewMouseDraggedCallback)(MOView *self, MOEvent *aEvent);
 typedef bool (*MOViewTimerFiredCallback)(MOView *self, MOEvent *aEvent);
 
-MOView *MOViewCreate(MORect aFrame, MOApplication *aApplication);
+struct _MOView
+{
+	COGuts                            guts;
+
+	MOApplication                     *application;
+
+	MOView                            *superview;
+	SBArray                           *subviews;
+
+	MORect                            frame;
+	MORect                            bounds;
+
+	MOGraphicsContext                 *graphicsContext;
+
+	MOViewDrawRectCallback            drawRectCallback;
+	MOViewTickCallback                tickCallback;
+
+	MOViewKeyPressedCallback          keyPressedCallback;
+	MOViewKeyReleasedCallback         keyReleasedCallback;
+	MOViewMouseButtonPressedCallback  mouseButtonPressedCallback;
+	MOViewMouseButtonReleasedCallback mouseButtonReleasedCallback;
+	MOViewMouseDraggedCallback        mouseDraggedCallback;
+	MOViewTimerFiredCallback          timerFiredCallback;
+};
+
+void MOViewInit(MOView *aSelf, MORect aFrame, MOApplication *aApplication);
 
 void MOViewSetDrawRectCallback(MOView *self, MOViewDrawRectCallback aCallback);
 void MOViewSetTickCallback(MOView *self, MOViewTickCallback aCallback);
@@ -34,8 +60,6 @@ void MOViewSetMouseDraggedCallback(MOView *self, MOViewMouseDraggedCallback aCal
 void MOViewSetTimerFiredCallback(MOView *self, MOViewTimerFiredCallback aCallback);
 
 MOApplication *MOViewGetApplication(MOView *self);
-void *MOViewGetExtra(MOView *self);
-void MOViewSetExtra(MOView *self, void *aExtra);
 
 MOView *MOViewGetSuperview(MOView *self);
 void MOViewSetSuperview(MOView *self, MOView *aSuperview);

@@ -36,7 +36,7 @@ Uint32 _MOTimerFired(uint32_t aInterval, void *aParam)
 MOTimer *MOTimerCreate(double aDuration, void *aUserInfo)
 {
 	MOTimer *timer = malloc(sizeof (MOTimer));
-	COInitialize(timer, &MOTimerClass);
+	COInit(timer, &MOTimerClass);
 
 	timer->duration = aDuration;
 	timer->userInfo = aUserInfo;

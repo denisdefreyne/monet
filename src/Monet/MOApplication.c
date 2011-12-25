@@ -240,7 +240,7 @@ COClass MOApplicationClass = {
 MOApplication *MOApplicationCreate(void)
 {
 	MOApplication *application = calloc(1, sizeof (MOApplication));
-	COInitialize(application, &MOApplicationClass);
+	COInit(application, &MOApplicationClass);
 
 	application->stateStack         = SBArrayCreateWithCapacity(3);
 	application->gameTicksPerSecond = 30;
