@@ -1,4 +1,5 @@
 #include <Monet/MOApplication.h>
+#include <Monet/MOBezierCurve.h>
 #include <Monet/MOButton.h>
 #include <Monet/MOColor.h>
 #include <Monet/MOEvent.h>

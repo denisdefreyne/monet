@@ -34,9 +34,9 @@ void _MOViewDestroy(void *aView)
 	CORelease(view->graphicsContext);
 }
 
-void MOViewSetDrawRectCallback(MOView *self, MOViewDrawRectCallback aCallback)
+void MOViewSetDrawCallback(MOView *self, MOViewDrawCallback aCallback)
 {
-	self->drawRectCallback = aCallback;
+	self->drawCallback = aCallback;
 }
 
 void MOViewSetTickCallback(MOView *self, MOViewTickCallback aCallback)
@@ -197,7 +197,7 @@ void MOViewDisplay(MOView *self)
 
 	// Draw this view
 	MOViewLockFocus(self);
-	MOViewDrawRect(self, MOViewGetBounds(self));
+	MOViewDraw(self);
 	MOViewUnlockFocus(self);
 
 	// Draw subviews
@@ -214,10 +214,10 @@ void MOViewClear(MOView *self)
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void MOViewDrawRect(MOView *self, MORect aRect)
+void MOViewDraw(MOView *self)
 {
-	if (self->drawRectCallback)
-		self->drawRectCallback(self, aRect);
+	if (self->drawCallback)
+		self->drawCallback(self);
 }
 
 void MOViewTick(MOView *self, double aSeconds)

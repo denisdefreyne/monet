@@ -12,7 +12,7 @@ typedef struct _MOView MOView;
 #include <Monet/MOGraphicsContext.h>
 #include <Monet/MORect.h>
 
-typedef void (*MOViewDrawRectCallback)(MOView *self, MORect aRect);
+typedef void (*MOViewDrawCallback)(MOView *self);
 typedef void (*MOViewTickCallback)(MOView *self, double aSeconds);
 
 typedef bool (*MOViewKeyPressedCallback)(MOView *self, MOEvent *aEvent);
@@ -36,7 +36,7 @@ struct _MOView
 
 	MOGraphicsContext                 *graphicsContext;
 
-	MOViewDrawRectCallback            drawRectCallback;
+	MOViewDrawCallback                drawCallback;
 	MOViewTickCallback                tickCallback;
 
 	MOViewKeyPressedCallback          keyPressedCallback;
@@ -49,7 +49,7 @@ struct _MOView
 
 void MOViewInit(MOView *aSelf, MORect aFrame, MOApplication *aApplication);
 
-void MOViewSetDrawRectCallback(MOView *self, MOViewDrawRectCallback aCallback);
+void MOViewSetDrawCallback(MOView *self, MOViewDrawCallback aCallback);
 void MOViewSetTickCallback(MOView *self, MOViewTickCallback aCallback);
 
 void MOViewSetKeyPressedCallback(MOView *self, MOViewKeyPressedCallback aCallback);
@@ -83,7 +83,7 @@ void MOViewUnlockFocus(MOView *self);
 void MOViewDisplay(MOView *self);
 void MOViewClear(MOView *self);
 
-void MOViewDrawRect(MOView *self, MORect aRect);
+void MOViewDraw(MOView *self);
 void MOViewTick(MOView *self, double aSeconds);
 
 bool MOViewKeyPressed(MOView *self, MOEvent *aEvent);
