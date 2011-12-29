@@ -1,3 +1,4 @@
+#include <Monet/MOAnimation.h>
 #include <Monet/MOApplication.h>
 #include <Monet/MOBezierCurve.h>
 #include <Monet/MOButton.h>
