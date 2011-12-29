@@ -40,7 +40,7 @@ MORect MOGraphicsContext_getCurrentRect(void)
 
 void MOGraphicsContext_push(MOGraphicsContext *aGraphicsContext)
 {
-	return SBArrayPush(MOGraphicsContext_getStack(), aGraphicsContext);
+	SBArrayPush(MOGraphicsContext_getStack(), aGraphicsContext);
 }
 
 void MOGraphicsContext_pop(void)
