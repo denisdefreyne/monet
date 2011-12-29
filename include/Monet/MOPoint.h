@@ -4,10 +4,10 @@
 #include <Monet/Common.h>
 
 typedef struct _MOPoint {
-	int16_t x;
-	int16_t y;
+	double x;
+	double y;
 } MOPoint;
 
-MOPoint MOPointMake(int16_t aX, int16_t aY);
+MOPoint MOPointMake(double aX, double aY);
 
 #endif

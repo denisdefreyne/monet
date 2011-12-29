@@ -1,6 +1,6 @@
 #include <Monet/MOPoint.h>
 
-MOPoint MOPointMake(int16_t aX, int16_t aY)
+MOPoint MOPointMake(double aX, double aY)
 {
 	MOPoint point;
 
