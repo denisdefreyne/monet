@@ -18,5 +18,6 @@ struct _MOBezierCurve
 void MOBezierCurveInit(MOBezierCurve *aBezierCurve, MOPoint a, MOPoint b, MOPoint c, MOPoint d);
 
 MOPoint MOBezierCurveAtDelta(MOBezierCurve *aBezierCurve, double aDelta);
+MOPoint MOBezierCurveDerivativeAtDelta(MOBezierCurve *aBezierCurve, double aDelta);
 
 #endif

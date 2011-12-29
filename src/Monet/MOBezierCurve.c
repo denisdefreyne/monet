@@ -18,7 +18,7 @@ void MOBezierCurveInit(MOBezierCurve *aBezierCurve, MOPoint a, MOPoint b, MOPoin
 	aBezierCurve->d = d;
 }
 
-double _MOBezierCurveAtDelta1D(double a, double b, double c, double d, double t)
+static double _MOBezierCurveAtDelta1D(double a, double b, double c, double d, double t)
 {
 	double s = 1 - t;
 
@@ -32,10 +32,32 @@ double _MOBezierCurveAtDelta1D(double a, double b, double c, double d, double t)
 	return abc*s + bcd*t;
 }
 
+static double _MOBezierCurveDerivativeAtDelta1D(double a, double b, double c, double d, double t)
+{
+	double newA = b - a;
+	double newB = c - b;
+	double newC = d - c;
+
+	double s = 1 - t;
+
+	double ab = newA*s + newB*t;
+	double bc = newB*s + newC*t;
+
+	return ab*s + bc*t;
+}
+
 MOPoint MOBezierCurveAtDelta(MOBezierCurve *aBezierCurve, double aDelta)
 {
 	MOBezierCurve *c = aBezierCurve;
 	return MOPointMake(
 		_MOBezierCurveAtDelta1D(c->a.x, c->b.x, c->c.x, c->d.x, aDelta),
 		_MOBezierCurveAtDelta1D(c->a.y, c->b.y, c->c.y, c->d.y, aDelta));
+}
+
+MOPoint MOBezierCurveDerivativeAtDelta(MOBezierCurve *aBezierCurve, double aDelta)
+{
+	MOBezierCurve *c = aBezierCurve;
+	return MOPointMake(
+		_MOBezierCurveDerivativeAtDelta1D(c->a.x, c->b.x, c->c.x, c->d.x, aDelta),
+		_MOBezierCurveDerivativeAtDelta1D(c->a.y, c->b.y, c->c.y, c->d.y, aDelta));
 }
