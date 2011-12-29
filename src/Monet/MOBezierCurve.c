@@ -20,16 +20,16 @@ void MOBezierCurveInit(MOBezierCurve *aBezierCurve, MOPoint a, MOPoint b, MOPoin
 
 double _MOBezierCurveAtDelta1D(double a, double b, double c, double d, double t)
 {
-    double s = 1 - t;
+	double s = 1 - t;
 
-    double ab = a*s + b*t;
-    double bc = b*s + c*t;
-    double cd = c*s + d*t;
+	double ab = a*s + b*t;
+	double bc = b*s + c*t;
+	double cd = c*s + d*t;
 
-    double abc = ab*s + bc*t;
-    double bcd = bc*s + cd*t;
+	double abc = ab*s + bc*t;
+	double bcd = bc*s + cd*t;
 
-    return abc*s + bcd*t;
+	return abc*s + bcd*t;
 }
 
 MOPoint MOBezierCurveAtDelta(MOBezierCurve *aBezierCurve, double aDelta)
