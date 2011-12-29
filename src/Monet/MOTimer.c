@@ -46,7 +46,7 @@ MOTimer *MOTimerCreate(double aDuration, void *aUserInfo)
 
 void _MOTimerDestroy(void *aTimer)
 {
-	MOTimer *timer = (MOTimer *)timer;
+	MOTimer *timer = (MOTimer *)aTimer;
 
 	MOTimerStop(timer);
 }
