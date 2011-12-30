@@ -6,6 +6,7 @@
 #include <Monet/MOEvent.h>
 #include <Monet/MOGraphicsContext.h>
 #include <Monet/MOImage.h>
+#include <Monet/MOLineSegmentArray.h>
 #include <Monet/MOPoint.h>
 #include <Monet/MORect.h>
 #include <Monet/MOSize.h>
