@@ -48,7 +48,7 @@ void MOLineSegmentArrayInitNoCopy(MOLineSegmentArray *self, MOPoint *aPoints, si
 	self->isCopied = false;
 }
 
-MOPoint MOLineSegmentArrayGetPointAtDelta(MOLineSegmentArray *self, float aDelta)
+MOPoint MOLineSegmentArrayGetPointAtDelta(MOLineSegmentArray *self, float aDelta, float *aoRelativeDelta)
 {
 	float desiredDistance = aDelta * self->totalLength;
 	assert(desiredDistance >= 0.0);
@@ -66,6 +66,8 @@ MOPoint MOLineSegmentArrayGetPointAtDelta(MOLineSegmentArray *self, float aDelta
 			float fraction = (desiredDistance - distanceTravelled) / currentLineSegmentLength;
 			MOPoint prevPoint = self->points[i];
 			MOPoint nextPoint = self->points[i+1];
+			if (aoRelativeDelta)
+				*aoRelativeDelta = (i + fraction) / self->count;
 			return MOPointMake(
 				prevPoint.x + (nextPoint.x - prevPoint.x) * fraction,
 				prevPoint.y + (nextPoint.y - prevPoint.y) * fraction);

@@ -25,6 +25,6 @@ struct _MOLineSegmentArray
 void MOLineSegmentArrayInit(MOLineSegmentArray *aLineSegmentArray, MOPoint *aPoints, size_t aCount);
 void MOLineSegmentArrayInitNoCopy(MOLineSegmentArray *aLineSegmentArray, MOPoint *aPoints, size_t aCount);
 
-MOPoint MOLineSegmentArrayGetPointAtDelta(MOLineSegmentArray *aLineSegmentArray, float aDelta);
+MOPoint MOLineSegmentArrayGetPointAtDelta(MOLineSegmentArray *aLineSegmentArray, float aDelta, float *aoRelativeDelta);
 
 #endif
