@@ -10,4 +10,9 @@ static inline MOPoint MOPointMake(float aX, float aY)
 	return vec2_create(aX, aY);
 }
 
+static inline float MOPointDistanceTo(MOPoint aPoint1, MOPoint aPoint2)
+{
+	return vec2_dist(aPoint1, aPoint2);
+}
+
 #endif
