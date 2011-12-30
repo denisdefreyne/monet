@@ -3,12 +3,11 @@
 
 #include <Monet/Common.h>
 
-struct _MOSize {
-	uint16_t w;
-	uint16_t h;
-};
-typedef struct _MOSize MOSize;
+typedef vec2_t MOSize;
 
-MOSize MOSizeMake(uint16_t aW, uint16_t aH);
+static inline MOSize MOSizeMake(uint16_t aW, uint16_t aH)
+{
+	return vec2_create(aW, aH);
+}
 
 #endif

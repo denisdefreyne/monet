@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include <cobject/cobject.h>
+#include <GLMath/GLMath.h>
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <SDL/SDL.h>

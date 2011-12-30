@@ -6,12 +6,6 @@
 #include <Monet/MOGraphicsContext.h>
 #include <Monet/Private.h>
 
-MORect MORectMake(int16_t aX, int16_t aY, uint16_t aW, uint16_t aH)
-{
-	MORect rect = { aX, aY, aW, aH };
-	return rect;
-}
-
 // FIXME this does not take the graphics context into account
 void MORectFill(MORect aRect, MOColor aColor)
 {
@@ -49,21 +43,4 @@ void MORectStroke(MORect aRect, MOColor aColor)
 
 	// Restore
 	glPopAttrib();
-}
-
-bool MORectContainsPoint(MORect aRect, MOPoint aPoint)
-{
-	return	(aPoint.x >= aRect.x && aPoint.x < aRect.x + aRect.w) &&
-			(aPoint.y >= aRect.y && aPoint.y < aRect.y + aRect.h);
-}
-
-bool MORectIntersectsRect(MORect aRect1, MORect aRect2)
-{
-	if (aRect1.x + aRect1.w <= aRect2.x || aRect2.x + aRect2.w <= aRect1.x)
-		return false;
-
-	if (aRect1.y + aRect1.h <= aRect2.y || aRect2.y + aRect2.h <= aRect1.y)
-		return false;
-
-	return true;
 }

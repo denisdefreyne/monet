@@ -8,16 +8,18 @@ extern COClass MOBezierCurveClass;
 typedef struct _MOBezierCurve MOBezierCurve;
 
 #include <Monet/MOPoint.h>
+#include <GLMath/GLMath.h>
 
 struct _MOBezierCurve
 {
 	COGuts guts;
-	MOPoint a, b, c, d;
+	bezier_t glmBezierCurve;
 };
 
 void MOBezierCurveInit(MOBezierCurve *aBezierCurve, MOPoint a, MOPoint b, MOPoint c, MOPoint d);
 
-MOPoint MOBezierCurveAtDelta(MOBezierCurve *aBezierCurve, double aDelta);
-MOPoint MOBezierCurveDerivativeAtDelta(MOBezierCurve *aBezierCurve, double aDelta);
+MOPoint MOBezierCurveGetPointAtDelta(MOBezierCurve *aBezierCurve, float aDelta);
+MOPoint MOBezierCurveGetTangentAtDelta(MOBezierCurve *aBezierCurve, float aDelta);
+MOPoint MOBezierCurveGetOffsetPointAtDelta(MOBezierCurve *aBezierCurve, float aOffset, float aDelta);
 
 #endif

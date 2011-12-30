@@ -3,21 +3,27 @@
 
 #include <Monet/Common.h>
 
-struct _MORect {
-	int16_t x, y;
-	uint16_t w, h;
-};
-typedef struct _MORect MORect;
+typedef rect_t MORect;
 
 #include <Monet/MOColor.h>
 #include <Monet/MOPoint.h>
 
-MORect MORectMake(int16_t aX, int16_t aY, uint16_t aW, uint16_t aH);
+static inline MORect MORectMake(float aX, float aY, float aW, float aH)
+{
+	return rect_createWithSize(vec2_create(aX, aY), vec2_create(aW, aH));
+}
 
 void MORectFill(MORect aRect, MOColor aColor);
 void MORectStroke(MORect aRect, MOColor aColor);
 
-bool MORectContainsPoint(MORect aRect, MOPoint aPoint);
-bool MORectIntersectsRect(MORect aRect1, MORect aRect2);
+static inline bool MORectContainsPoint(MORect aRect, MOPoint aPoint)
+{
+	return rect_containsPoint(aRect, aPoint);
+}
+
+static inline bool MORectIntersectsRect(MORect aRect1, MORect aRect2)
+{
+	return rect_intersects(aRect1, aRect2);
+}
 
 #endif

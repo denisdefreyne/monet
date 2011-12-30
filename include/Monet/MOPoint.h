@@ -3,11 +3,11 @@
 
 #include <Monet/Common.h>
 
-typedef struct _MOPoint {
-	double x;
-	double y;
-} MOPoint;
+typedef vec2_t MOPoint;
 
-MOPoint MOPointMake(double aX, double aY);
+static inline MOPoint MOPointMake(float aX, float aY)
+{
+	return vec2_create(aX, aY);
+}
 
 #endif

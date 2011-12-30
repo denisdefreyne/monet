@@ -12,52 +12,27 @@ COClass MOBezierCurveClass = {
 
 void MOBezierCurveInit(MOBezierCurve *aBezierCurve, MOPoint a, MOPoint b, MOPoint c, MOPoint d)
 {
-	aBezierCurve->a = a;
-	aBezierCurve->b = b;
-	aBezierCurve->c = c;
-	aBezierCurve->d = d;
+	aBezierCurve->glmBezierCurve = bezier_create(
+		vec3_create(a.x, a.y, 0.0),
+		vec3_create(b.x, b.y, 0.0),
+		vec3_create(c.x, c.y, 0.0),
+		vec3_create(d.x, d.y, 0.0));
 }
 
-static double _MOBezierCurveAtDelta1D(double a, double b, double c, double d, double t)
+MOPoint MOBezierCurveGetPointAtDelta(MOBezierCurve *aBezierCurve, float aDelta)
 {
-	double s = 1 - t;
-
-	double ab = a*s + b*t;
-	double bc = b*s + c*t;
-	double cd = c*s + d*t;
-
-	double abc = ab*s + bc*t;
-	double bcd = bc*s + cd*t;
-
-	return abc*s + bcd*t;
+	vec3_t res = bezier_getPoint(aBezierCurve->glmBezierCurve, aDelta);
+	return vec2_create(res.x, res.y);
 }
 
-static double _MOBezierCurveDerivativeAtDelta1D(double a, double b, double c, double d, double t)
+MOPoint MOBezierCurveGetTangentAtDelta(MOBezierCurve *aBezierCurve, float aDelta)
 {
-	double newA = b - a;
-	double newB = c - b;
-	double newC = d - c;
-
-	double s = 1 - t;
-
-	double ab = newA*s + newB*t;
-	double bc = newB*s + newC*t;
-
-	return ab*s + bc*t;
+	vec3_t res = bezier_firstDerivative(aBezierCurve->glmBezierCurve, aDelta);
+	return vec2_create(res.x, res.y);
 }
 
-MOPoint MOBezierCurveAtDelta(MOBezierCurve *aBezierCurve, double aDelta)
+MOPoint MOBezierCurveGetOffsetPointAtDelta(MOBezierCurve *aBezierCurve, float aOffset, float aDelta)
 {
-	MOBezierCurve *c = aBezierCurve;
-	return MOPointMake(
-		_MOBezierCurveAtDelta1D(c->a.x, c->b.x, c->c.x, c->d.x, aDelta),
-		_MOBezierCurveAtDelta1D(c->a.y, c->b.y, c->c.y, c->d.y, aDelta));
-}
-
-MOPoint MOBezierCurveDerivativeAtDelta(MOBezierCurve *aBezierCurve, double aDelta)
-{
-	MOBezierCurve *c = aBezierCurve;
-	return MOPointMake(
-		_MOBezierCurveDerivativeAtDelta1D(c->a.x, c->b.x, c->c.x, c->d.x, aDelta),
-		_MOBezierCurveDerivativeAtDelta1D(c->a.y, c->b.y, c->c.y, c->d.y, aDelta));
+	vec3_t res = bezier_getPointWithOffset(aBezierCurve->glmBezierCurve, aDelta, vec3_create(aOffset, aOffset, 0.0));
+	return vec2_create(res.x, res.y);
 }
