@@ -67,7 +67,7 @@ MOPoint MOLineSegmentArrayGetPointAtDelta(MOLineSegmentArray *self, float aDelta
 			MOPoint prevPoint = self->points[i];
 			MOPoint nextPoint = self->points[i+1];
 			if (aoRelativeDelta)
-				*aoRelativeDelta = (i + fraction) / self->count;
+				*aoRelativeDelta = ((float)i + fraction) / ((float)self->count-1.0);
 			return MOPointMake(
 				prevPoint.x + (nextPoint.x - prevPoint.x) * fraction,
 				prevPoint.y + (nextPoint.y - prevPoint.y) * fraction);
