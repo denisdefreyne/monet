@@ -117,6 +117,8 @@ void _MOApplicationHandleEvents(MOApplication *self)
 						event.button.x,
 						self->screenSize.h-event.button.y-1);
 					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
+					if (MOUnknownMouseButton == mouseButton)
+						break;
 					uint8_t modifiers			= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
 					// Find deepest subview
@@ -162,6 +164,8 @@ void _MOApplicationHandleEvents(MOApplication *self)
 						event.button.x,
 						self->screenSize.h-event.button.y-1);
 					MOMouseButton mouseButton	= MOSDLMouseButtonToMOMouseButton(event.button.button);
+					if (MOUnknownMouseButton == mouseButton)
+						break;
 					uint8_t modifiers			= MOSDLModToMOKeyModifierMask(SDL_GetModState());
 
 					// Find subview
