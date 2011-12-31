@@ -46,9 +46,9 @@ enum {
 enum {
 	MOUnknownMouseButton = 0,
 
-	MOLeftMouseButton,
-	MOMiddleMouseButton,
-	MORightMouseButton
+	MOLeftMouseButton   = 1,
+	MOMiddleMouseButton = 2,
+	MORightMouseButton  = 3
 };
 
 enum {
