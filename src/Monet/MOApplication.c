@@ -352,7 +352,7 @@ void MOApplicationOpenScreen(MOApplication *self)
 
 	// Create screen
 	Uint32 flags = SDL_OPENGL | (self->isFullscreen ? SDL_FULLSCREEN : 0);
-	self->surface = SDL_SetVideoMode(self->screenSize.w, self->screenSize.h, 0, flags);
+	self->surface = SDL_SetVideoMode(self->screenSize.w, self->screenSize.h, 32, flags);
 	if (!self->surface)
 	{
 		fprintf(stderr, "SDL_SetVideoMode failed: %s\n", SDL_GetError());
