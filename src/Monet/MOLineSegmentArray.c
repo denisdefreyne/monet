@@ -50,9 +50,12 @@ void MOLineSegmentArrayInitNoCopy(MOLineSegmentArray *self, MOPoint *aPoints, si
 
 MOPoint MOLineSegmentArrayGetPointAtDelta(MOLineSegmentArray *self, float aDelta, float *aoRelativeDelta)
 {
+	if (aDelta < 0.0)
+		return self->points[0];
+	else if (aDelta > 1.0)
+		return self->points[self->count-1];
+
 	float desiredDistance = aDelta * self->totalLength;
-	assert(desiredDistance >= 0.0);
-	assert(desiredDistance <= self->totalLength);
 
 	float distanceTravelled = 0.0;
 	for (int i = 0; i < self->count-1; ++i)
